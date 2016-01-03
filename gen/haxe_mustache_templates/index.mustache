@@ -1,0 +1,152 @@
+import js.npm.Express;
+import js.npm.express.*;
+import js.Node;
+import js.Node.*;
+import js.npm.sequelize.Sequelize;
+import js.node.Fs;
+
+import Conf; // credentials and stuff
+import Business;   // business logic goes and stays here
+
+class Main {
+
+  private static var initCache    = Node.require('sequelize-redis-cache');
+  private static var redis        = Node.require('redis');
+  private static var session      = Node.require('express-session');
+  private static var vm           = Node.require('vm');
+  private static var swaggerTools = Node.require('swagger-tools');
+  private static var jsyaml       = Node.require('js-yaml');
+
+  private static var options = {
+    controllers: './',
+    useStubs: false
+  };
+
+  public static function main() {
+    
+    //  CONFIGURATION
+    var conf = new Conf('local');
+
+    if (process.env.exists("ENV") && process.env['ENV'] == 'production')
+      conf = new Conf('production');
+
+    // REDIS
+    var redisStore = Node.require('connect-redis')(session);
+    var redisclient = redis.createClient(conf.REDIS_PORT,conf.REDIS_HOST);
+
+    // DATABASE
+    var db = new Sequelize(conf.DB_NAME, conf.DB_USER, conf.DB_PASSWORD, 
+      conf.DB_OPTIONS);
+
+    /// CACHE(S)
+
+    var dbcacher = initCache(db, redisclient);
+    var cacheo = Node.require('express-redis-cache')({
+        client : redisclient,
+        expire : 60,
+        prefix : 'app'
+    });
+
+    var dn = Node.__dirname;
+    
+    // SWAGGER
+    var spec = Fs.readFileSync(dn+'/../app/api.yaml', 'utf8');
+    var swaggerDoc = jsyaml.safeLoad(spec);
+
+    swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+
+      // EXPRESS
+      var app : Application = new js.npm.Express();
+
+      app.use(new CookieParser('M4NU'));
+      var ars= untyped __js__("new redisStore( { client: redisclient, ttl :  conf.SESSION_TTL})");
+      
+      app.use(
+        session(
+          {
+            secret: 'M4NU',
+            cookie: { maxAge: 60000 },
+            store: ars, 
+            saveUninitialized: true,
+            resave: true,
+            rolling: true
+          })
+      );
+      
+      app.use(BodyParser.json());
+      app.use(BodyParser.urlencoded({extended: true}));
+
+
+      // SWAGGER API DOC
+      app.use('/doc', new js.npm.express.Static(dn+'/../doc'));
+      app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
+      app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
+
+      // ROUTES SCAFOLDING FROM DOC 
+      /**************************************************/
+      // YOU CAN WRITE your BUSINESS CODE IN Business Class
+      // ie : Business.get_method = function(req,res) {...}
+      /**************************************************/
+      {{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}
+
+      // Hacks.. use summary to keep ttl and use 'X' to avoid auto camelcasing
+      // {{nickname}} contains the name of the operationId (yaml)
+
+      var sums : String = "{{summary}}";
+      sums = StringTools.replace(sums,'&#39;','"');
+      var sumArgs  : Dynamic = haxe.Json.parse(sums);
+      var s : String = "{{nickname}}";
+      s   = StringTools.replace(s,'X','/');
+      s   = StringTools.replace(s,'_1','');
+
+      // process yaml {param} to express :param and prepare to send values to business logic
+      var txt = '{{path}}';
+
+      var r = ~/\{([^}]+)\}/g;
+      var urlParams = [];
+      r.map(txt, function(r) {
+        var match = r.matched(0);
+        switch (match) {
+            default: 
+              var f = match;
+              f   = StringTools.replace(f,'{',':');
+              f   = StringTools.replace(f,'}','');
+              urlParams.push(f); 
+              return match;
+        };
+      });
+
+      txt   = StringTools.replace(txt,'{',':');
+      txt   = StringTools.replace(txt,'}','');
+
+      // extra will hold all our query parameters
+      var extra = { 'url_params' : urlParams , 'ttl' : sumArgs.ttl, 'xttl' : sumArgs.xttl, 'cachekey' :  sumArgs.cachekey, 'xcachekey' : sumArgs.xcachekey };
+
+
+      if (sumArgs.ttl == '0') {
+          app.{{httpMethod}}(
+              conf.BASE_URL+txt, 
+              function(req : Request, res : Response){ 
+                untyped Business.{{httpMethod}}_{{nickname}}(db,req,res,dbcacher,cacheo,extra);
+              }
+          );
+      } else {
+          app.{{httpMethod}}(
+              conf.BASE_URL+txt, 
+              cacheo.route({ expire: sumArgs.ttl }),
+              function(req : Request, res : Response){ 
+                untyped Business.{{httpMethod}}_{{nickname}}(db,req,res,dbcacher,cacheo,extra);
+              }
+          );
+      }
+      {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}} 
+
+      app.use(middleware.swaggerMetadata());
+      app.use(middleware.swaggerValidator());
+    
+      app.listen(conf.API_PORT);
+      trace('api running on port '+conf.API_PORT);
+
+    });
+  }
+}

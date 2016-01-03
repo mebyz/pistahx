@@ -1,0 +1,24 @@
+{
+  "name": "orms",
+  "version": "1.0.0",
+  "description": "design-first haxe web api",
+  "main": "",
+  "private": false,
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mebyz/orms.git"
+  },
+  "keywords": [
+    "orms"
+  ],
+  "author": "emmanuel.botros@gmail.com",
+  "license": "CC BY-SA 3.0 FR",
+  "bugs": {
+    "url": "https://github.com/mebyz/orms/issues"
+  },
+  "homepage": "https://github.com/mebyz/orms#readme",
+  "dependencies": {
+  }
+}

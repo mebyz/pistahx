@@ -1,0 +1,225 @@
+
+<br>  => Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Mssql, Redis (caching strategies, sessions,..)
+
+
+# ORMS : A Design-First Haxe Web API
+- **PERFORMANCE : ORMS is heavily based on caching mechanisms**
+
+  - Secure sessions caching
+   
+  - Basic and custom cache rules tuning based on spec
+
+  - Proactive caching invalidation strategy
+  
+  - Orm caching : use cache to store entities and queries
+
+- **DESIGN FIRST : with ORMS, your API description/spec can be easily changed using a simple language paradigm (yaml)**
+
+- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha (via swagger-test) do the magic !**
+
+- **AUTOMATIC DOCGEN : an interactive documentation is automatically generated from the spec**
+
+- **AUTOMATIC CODEGEN : API server code (routing, server core...) is automatically generated from the spec**
+
+- **CODE LOGIC SEPARATION : Business logic is separated from the server core code**
+
+- **STRONGLY TYPED CODE : The business logic is written in Haxe (type checking helps the code to stay clean and secure), before being transpiled to nodejs code**
+
+- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK: ORMS can be set up, modified and deployed  everywhere nodejs code can run. Unix/Linux, Windows, OSx, ...**
+
+- **PROMISES-FULL : Use the mighty power of Promises using a simple Haxe (Promhx) workflow :**
+
+- **DB PROMISES: SEQUELIZE too handles parallel db querying strategies :**
+
+# BUILD YOUR API USING ORMS
+**remider: orms is meant to be used as a dependency !!**
+
+**1 . you'll need to fork orms-sample-app as a bootstrap for your new api.**
+
+**=> Fork https://github.com/mebyz/orms-sample-app to bootstrap you own orms app !**
+ 
+2 . you'll need a running database server (mssql for now)
+
+3 . you'll also need to run a **redis server** locally :
+
+`redis-server`
+
+(install with `brew install redis` on mac)
+
+4 . you'll need **Haxe**, and some **haxe libs** :
+
+- Haxe libs are listed in a hxml file at the root directory (./libs.hxml) and are available in the haxe repository. 
+You can install them by typing the folowing command:
+
+`haxelib install ./gen/libs.hxml`
+
+- haxe-js-kit need to be installed through git:
+
+`(sudo) haxelib git js-kit https://github.com/clemos/haxe-js-kit.git haxelib`
+
+5 . then you can design and code your api : 
+
+ - Define your api spec in the **./app/api.yaml** file
+
+ - Define your business logic in the **./app/Business/** folder
+ - Use the **./conf/Conf.hx** file to set your configuration (db user/pass, redis host...)
+ 
+**NOW YOU CAN Compile and run your api using the run.sh script**
+
+# End-to-End TESTS
+
+**REMINDER : TESTS (AND MOCK DATAS) ARE DEFINED IN YOUR PROJECT'S API.YAML FILE**
+
+=> For each route defined in the spec, you can/should add a `x-amples` key in wich you can write new tests.
+
+```yaml
+paths:
+  /users/me/status:
+    get:
+      ...
+      ...
+      x-amples:
+      - title: TEST1 - fail to auth user 1
+        description: "fail to auth user"
+        request: {}
+        response:
+          status: 401
+      - title: TEST2 - fail to auth user 2
+        description: "fail to auth user"
+        request: 
+          headers: 
+            Authorization: "Basic bad_auth_hash_key"
+        response:
+          status: 401
+      - title: TEST3 - auth user ok
+        description: "auth user ok"
+        request: 
+          headers: 
+            Authorization: "Basic ZDSGOJGDFJKLGFJKSFLDGJLJGSFKLFDJGSLJFDGSLJ="
+        response:
+          status: 200
+          body: ''
+```
+
+**--- run tests locally:**
+
+1 . You will need to change the host value in the api.yaml file to `localhost:3000` 
+
+api.yaml:
+
+```yaml
+---
+swagger: "2.0"
+info:
+  description: "orms API"
+  version: "1.0.0"
+  title: API
+host:  localhost:3000 
+```
+2 . then you can run tests using mocha **(run this from the project's root folder, NOT from the ./distrib/ folder !)** :
+
+`npm install`
+
+`mocha test.js`
+
+# ORMS INSIGHTS : code
+
+**SAMPLE CODE : SWAGGER YAML ROUTE DEFINITION**
+
+```yaml
+paths:
+  /cars:
+    get:
+      operationId: cars
+      tags:
+      - "Stores"
+      summary: "{'ttl':3600,'xttl':3600,'cachekey':'','xcachekey':''}"
+      description: "The Cars List returns information about cars"
+      parameters:
+      - name: "AccessKeyId"
+        in: "header"
+        description: "Access Key Id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "An array of cars"
+          schema:
+            $ref: "#/definitions/Cars"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+```
+
+**SAMPLE CODE : HAXE PROMISES**
+
+```			
+    public static function firstPromise(/* some args here, such as "myArg : Int" */) : Promise</* return type here, such as "String"*/>{
+      var p = new Deferred<String>();
+        some.async.Method(/* some params */, function(err,data){
+          p.resolve(data);
+        });
+      return p.promise();
+    }
+  
+    public static function secondPromise(/* some args here, such as "myArg : Int" */) : Promise</* return type here, such as "String"*/>{
+      var p = new Deferred<String>();
+        some.async.OtherMethod(/* some params */, function(err,data){
+          p.resolve(data);
+        });
+      return p.promise();
+    }
+
+    public static function finalPromise(	myArg1 : /* return type of firstPromise */, 
+					myArg2 : /* return type of secondPromise */
+				   ) : Promise</* return type here, such as "String"*/> {
+      var p = new Deferred<String>();
+      	 // do something with the results
+        some.async.FinalMethod(myArg1, myArg2 , function(err,data){
+	  // here is our final result
+          p.resolve(data);
+        });
+      return p.promise();
+    }
+
+    // NOW YOU CAN USE YOUR PROMISES AS FOLLOWS : 
+
+    // TRIGGER YOUR FIRST PROMISE => try to fullfill 2 subpromises (parallel)
+    Promise.when(			
+      firstPromise(/* some args for this first promise */), 
+      secondPromise(/* some args for this second promise */)
+    )
+    .then(
+      // WHEN BOTH SUBPROMISES HAVE BEEN FULFILLED :
+      // TRIGGER 2ND PROMISE => gather fulfilled sub-promises results and process them
+      function(a,b) return finalPromise(a,b)
+    )
+    .then(function(b) {
+	    trace("everything went ok. rainbow.");
+    });
+```
+
+**SAMPLE CODE : PARALLEL QUERIES USING PROMISES**
+
+```		
+     // PARALLEL CALL SOME QUERIES USING SEQUELIZE PROMISES
+      var SPromise = untyped Sequelize.Promise;
+      SPromise.map([
+          sql1,
+          sql2
+      ], function runQuery(query) {
+          return db.query(query);
+      }).then(function(result) {
+      		// result now contains data from sql1 AND sql2 execution
+          trace(result);
+      });
+```		
+
+# DOCS
+
+- **api description** resides in your project's `./app/api.yaml` file
+
+- **api interactive doc** can be seen here : `http://[host]/doc`
+
+- **haxedoc** can be seen here : `http://[host]/haxedoc`
