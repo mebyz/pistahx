@@ -1,5 +1,5 @@
 
-<br>  => Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Mssql, Redis (caching strategies, sessions,..)
+<br>  ORMS Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
 
 # ORMS : A Design-First Haxe Web API
@@ -27,6 +27,8 @@
 
 - **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK: ORMS can be set up, modified and deployed  everywhere nodejs code can run. Unix/Linux, Windows, OSx, ...**
 
+- **MULTIDB: ORMS uses Sequlize, which alllows you to connect to mssql, mysql, pgsql, sqlite,... databases**
+
 - **PROMISES-FULL : Use the mighty power of Promises using a simple Haxe (Promhx) workflow :**
 
 - **DB PROMISES: SEQUELIZE too handles parallel db querying strategies :**
@@ -34,37 +36,25 @@
 # BUILD YOUR API USING ORMS
 **remider: orms is meant to be used as a dependency !!**
 
-**1 . you'll need to fork orms-sample-app as a bootstrap for your new api.**
+**STEP BY STEP :**
 
-**=> Fork https://github.com/mebyz/orms-sample-app to bootstrap you own orms app !**
+**1 .Fork https://github.com/mebyz/orms-sample-app to bootstrap you own orms app !**
  
-2 . you'll need a running database server (mssql for now)
+2 . You'll need **Haxe** installed on your system
 
-3 . you'll also need to run a **redis server** locally :
-
-`redis-server`
-
-(install with `brew install redis` on mac)
-
-4 . you'll need **Haxe**, and some **haxe libs** :
-
-- Haxe libs are listed in a hxml file at the root directory (./libs.hxml) and are available in the haxe repository. 
-You can install them by typing the folowing command:
-
-`haxelib install ./gen/libs.hxml`
-
-- haxe-js-kit need to be installed through git:
-
-`(sudo) haxelib git js-kit https://github.com/clemos/haxe-js-kit.git haxelib`
-
-5 . then you can design and code your api : 
+3 . Design and implement your api : 
 
  - Define your api spec in the **./app/api.yaml** file
 
- - Define your business logic in the **./app/Business/** folder
- - Use the **./conf/Conf.hx** file to set your configuration (db user/pass, redis host...)
+ - Code your business logic in the **./app/Business/** folder
+
+ - Use the **./conf/Conf.hx** file to set your configuration (db user/pass, ...)
+
+4 . you'll need a running database server
+
+5 . you'll need a running **redis server** ( locally : `redis-server` )
  
-**NOW YOU CAN Compile and run your api using the run.sh script**
+**=> NOW you can compile and run your api using :** `./run.sh`
 
 # End-to-End TESTS
 
@@ -103,20 +93,11 @@ paths:
 
 **--- run tests locally:**
 
-1 . You will need to change the host value in the api.yaml file to `localhost:3000` 
+1 . Change the host value in the api.yaml file to `localhost:3000` 
 
-api.yaml:
+2 . You will need a running api (local)
 
-```yaml
----
-swagger: "2.0"
-info:
-  description: "orms API"
-  version: "1.0.0"
-  title: API
-host:  localhost:3000 
-```
-2 . then you can run tests using mocha **(run this from the project's root folder, NOT from the ./distrib/ folder !)** :
+3 . Run the test suite using mocha **(run this from the project's root folder, NOT from the ./distrib/ folder !)** :
 
 `npm install`
 
