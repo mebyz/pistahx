@@ -2,7 +2,7 @@
 <br>  ORMS Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
 
-# ORMS : A Design-First Haxe Web API
+# ORMS : Design-First Haxe Web API Framework
 - **PERFORMANCE : ORMS is heavily based on caching mechanisms**
 
   - Secure sessions caching
