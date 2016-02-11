@@ -20,5 +20,6 @@
   },
   "homepage": "https://github.com/mebyz/orms#readme",
   "dependencies": {
+    "swagxtache": "git://github.com/mebyz/swagxtache.git"
   }
 }
