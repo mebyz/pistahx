@@ -1,9 +1,10 @@
 {
-  "name": "orms api",
+  "name": "ormsapi",
   "version": "1.0",
   "description": "orms api",
   "main": "",
   "private": false,
+  "license": "ISC"
   "scripts": {
   },
   "repository": {
