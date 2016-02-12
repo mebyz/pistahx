@@ -7,6 +7,10 @@ rm -rf $prj/distrib/promhx
 rm -rf $prj/distrib/haxe-js-kit
 rm -rf $prj/distrib/api.js
 mkdir -p $prj/distrib/
+mkdir -p $prj/distrib/src/
+cp -rf ./gen/build.hxml $prj/distrib/build.hxml
+cp -rf ./gen/package.json $prj/distrib/package.json
+cp -rf ./gen/README.md $prj/distrib/README.md
 prj=$prj ./gen/codegen.sh
 prj=$prj ./gen/build.sh
 cd $prj/distrib/
