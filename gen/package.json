@@ -4,7 +4,7 @@
   "description": "orms api",
   "main": "",
   "private": false,
-  "license": "ISC"
+  "license": "ISC",
   "scripts": {
   },
   "repository": {
