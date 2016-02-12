@@ -87,7 +87,7 @@ class Main {
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
       // ie : Business.get_method = function(req,res) {...}
       /**************************************************/
-      {{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}
+      {{#operations}}{{#operation}}
 
       // Hacks.. use summary to keep ttl and use 'X' to avoid auto camelcasing
       // {{nickname}} contains the name of the operationId (yaml)
@@ -139,7 +139,7 @@ class Main {
               }
           );
       }
-      {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}} 
+      {{/operation}}{{/operations}}
 
       app.use(middleware.swaggerMetadata());
       app.use(middleware.swaggerValidator());
