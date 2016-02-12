@@ -1,7 +1,7 @@
 {
-  "name": "{{projectName}}",
-  "version": "{{appVersion}}",
-  "description": "{{{appDescription}}}",
+  "name": "orms api",
+  "version": "1.0",
+  "description": "orms api",
   "main": "",
   "private": false,
   "scripts": {
