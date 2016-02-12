@@ -87,20 +87,20 @@ class Main {
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
       // ie : Business.get_method = function(req,res) {...}
       /**************************************************/
-      {{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}
+      {{#operations}}{{#operation}}
 
       // Hacks.. use summary to keep ttl and use 'X' to avoid auto camelcasing
-      // {{nickname}} contains the name of the operationId (yaml)
 
       var sums : String = "{{summary}}";
       sums = StringTools.replace(sums,'&#39;','"');
       var sumArgs  : Dynamic = haxe.Json.parse(sums);
-      var s : String = "{{nickname}}";
+      var s : String = "{{operationId}}";
       s   = StringTools.replace(s,'X','/');
       s   = StringTools.replace(s,'_1','');
 
       // process yaml {param} to express :param and prepare to send values to business logic
       var txt = '{{path}}';
+      txt = StringTools.replace(txt, '&#x2F;', '/');
 
       var r = ~/\{([^}]+)\}/g;
       var urlParams = [];
@@ -127,7 +127,7 @@ class Main {
           app.{{httpMethod}}(
               conf.BASE_URL+txt, 
               function(req : Request, res : Response){ 
-                untyped Business.{{httpMethod}}_{{nickname}}(db,req,res,dbcacher,cacheo,extra);
+                untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
               }
           );
       } else {
@@ -135,11 +135,11 @@ class Main {
               conf.BASE_URL+txt, 
               cacheo.route({ expire: sumArgs.ttl }),
               function(req : Request, res : Response){ 
-                untyped Business.{{httpMethod}}_{{nickname}}(db,req,res,dbcacher,cacheo,extra);
+                untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
               }
           );
       }
-      {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}} 
+      {{/operation}}{{/operations}}
 
       app.use(middleware.swaggerMetadata());
       app.use(middleware.swaggerValidator());

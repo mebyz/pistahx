@@ -1,9 +1,10 @@
 {
-  "name": "{{projectName}}",
-  "version": "{{appVersion}}",
-  "description": "{{{appDescription}}}",
+  "name": "ormsapi",
+  "version": "0.0.1",
+  "description": "orms api",
   "main": "",
   "private": false,
+  "license": "ISC",
   "scripts": {
   },
   "repository": {

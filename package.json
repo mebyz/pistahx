@@ -4,6 +4,7 @@
   "description": "design-first haxe web api",
   "main": "",
   "private": false,
+  "license": "ISC",
   "scripts": {
   },
   "repository": {
@@ -20,5 +21,6 @@
   },
   "homepage": "https://github.com/mebyz/orms#readme",
   "dependencies": {
+    "swagxtache": "git://github.com/mebyz/swagxtache.git"
   }
 }
