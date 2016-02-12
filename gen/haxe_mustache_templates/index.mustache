@@ -100,6 +100,7 @@ class Main {
 
       // process yaml {param} to express :param and prepare to send values to business logic
       var txt = '{{path}}';
+      txt = StringTools.replace(txt, '&#x2F;', '/');
 
       var r = ~/\{([^}]+)\}/g;
       var urlParams = [];
