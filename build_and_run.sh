@@ -6,6 +6,7 @@ haxelib install ./gen/libs.hxml
 rm -rf $prj/distrib/promhx
 rm -rf $prj/distrib/haxe-js-kit
 rm -rf $prj/distrib/api.js
+mkdir -p $prj/distrib/
 prj=$prj ./gen/codegen.sh
 prj=$prj ./gen/build.sh
 cd $prj/distrib/
