@@ -90,12 +90,11 @@ class Main {
       {{#operations}}{{#operation}}
 
       // Hacks.. use summary to keep ttl and use 'X' to avoid auto camelcasing
-      // {{nickname}} contains the name of the operationId (yaml)
 
       var sums : String = "{{summary}}";
       sums = StringTools.replace(sums,'&#39;','"');
       var sumArgs  : Dynamic = haxe.Json.parse(sums);
-      var s : String = "{{nickname}}";
+      var s : String = "{{operationId}}";
       s   = StringTools.replace(s,'X','/');
       s   = StringTools.replace(s,'_1','');
 
@@ -127,7 +126,7 @@ class Main {
           app.{{httpMethod}}(
               conf.BASE_URL+txt, 
               function(req : Request, res : Response){ 
-                untyped Business.{{httpMethod}}_{{nickname}}(db,req,res,dbcacher,cacheo,extra);
+                untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
               }
           );
       } else {
@@ -135,7 +134,7 @@ class Main {
               conf.BASE_URL+txt, 
               cacheo.route({ expire: sumArgs.ttl }),
               function(req : Request, res : Response){ 
-                untyped Business.{{httpMethod}}_{{nickname}}(db,req,res,dbcacher,cacheo,extra);
+                untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
               }
           );
       }
