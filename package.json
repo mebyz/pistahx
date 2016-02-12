@@ -4,6 +4,7 @@
   "description": "design-first haxe web api",
   "main": "",
   "private": false,
+  "license": "ISC",
   "scripts": {
   },
   "repository": {
