@@ -1,8 +1,9 @@
-![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
 > ---
 
 > * We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! 
+> 
+![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
 > * We are thrilled to give you the opportunity to attend to the first and live full presentation of ORMS (40 min talk)
 
