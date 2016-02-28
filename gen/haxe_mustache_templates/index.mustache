@@ -89,56 +89,28 @@ class Main {
       /**************************************************/
       {{#operations}}{{#operation}}
 
-      // Hacks.. use summary to keep ttl and use 'X' to avoid auto camelcasing
+      // Hacks.. use summary to keep ttl and other stuff
+      var apiOp = new ApiOperation("{{& path}}", "{{& summary}}");
 
-      var sums : String = "{{summary}}";
-      sums = StringTools.replace(sums,'&#39;','"');
-      var sumArgs  : Dynamic = haxe.Json.parse(sums);
-      var s : String = "{{operationId}}";
-      s   = StringTools.replace(s,'X','/');
-      s   = StringTools.replace(s,'_1','');
+      var args  = apiOp.getArgs();
+      var extra = apiOp.getExtraParams();
+      var path  = apiOp.getPath();
 
-      // process yaml {param} to express :param and prepare to send values to business logic
-      var txt = '{{path}}';
-      txt = StringTools.replace(txt, '&#x2F;', '/');
+      var cacheExpire = function(req, res, next) {
+        next();
+      };
 
-      var r = ~/\{([^}]+)\}/g;
-      var urlParams = [];
-      r.map(txt, function(r) {
-        var match = r.matched(0);
-        switch (match) {
-            default: 
-              var f = match;
-              f   = StringTools.replace(f,'{',':');
-              f   = StringTools.replace(f,'}','');
-              urlParams.push(f); 
-              return match;
-        };
-      });
-
-      txt   = StringTools.replace(txt,'{',':');
-      txt   = StringTools.replace(txt,'}','');
-
-      // extra will hold all our query parameters
-      var extra = { 'url_params' : urlParams , 'ttl' : sumArgs.ttl, 'xttl' : sumArgs.xttl, 'cachekey' :  sumArgs.cachekey, 'xcachekey' : sumArgs.xcachekey };
-
-
-      if (sumArgs.ttl == '0') {
-          app.{{httpMethod}}(
-              conf.BASE_URL+txt, 
-              function(req : Request, res : Response){ 
-                untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
-              }
-          );
-      } else {
-          app.{{httpMethod}}(
-              conf.BASE_URL+txt, 
-              cacheo.route({ expire: sumArgs.ttl }),
-              function(req : Request, res : Response){ 
-                untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
-              }
-          );
-      }
+      if (args.ttl != '0') 
+        cacheExpire = cacheo.route({ expire: args.ttl });
+      
+      app.{{httpMethod}}(
+          conf.BASE_URL+path, 
+          untyped cacheExpire,
+          function(req : Request, res : Response){ 
+            untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
+          }
+      );
+      
       {{/operation}}{{/operations}}
 
       app.use(middleware.swaggerMetadata());
@@ -149,4 +121,55 @@ class Main {
 
     });
   }
+}
+
+class ApiOperation {
+
+  var txtArgs   : String;
+  var args      : Dynamic;
+  var path      : String;
+  var urlParams : Dynamic;
+  var extraParams     : Dynamic; 
+
+  public function new(pathParam, argsParam) {
+
+    path = pathParam;
+    txtArgs = argsParam;
+    txtArgs   = StringTools.replace(txtArgs,"'",'"');
+    args = haxe.Json.parse(txtArgs);
+    
+    var r = ~/\{([^}]+)\}/g;
+    urlParams = [];
+    r.map(path, function(r) {
+      var match = r.matched(0);
+      switch (match) {
+          default: 
+            var f = match;
+            f   = StringTools.replace(f,'{',':');
+            f   = StringTools.replace(f,'}','');
+            urlParams.push(f); 
+            return match;
+      };
+    });
+
+    path   = StringTools.replace(path,'{',':');
+    path   = StringTools.replace(path,'}','');
+
+    // extraParams will hold all our query parameters
+    extraParams = { 'url_params' : urlParams , 'ttl' : args.ttl, 'xttl' : args.xttl, 'cachekey' :  args.cachekey, 'xcachekey' : args.xcachekey };
+ 
+  }
+
+  public function getArgs() {
+    return args;
+  }
+
+  public function getExtraParams() {
+    return extraParams;
+  }
+
+  public function getPath() {
+    return path;
+  }
+
 }
