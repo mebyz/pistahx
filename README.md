@@ -1,8 +1,26 @@
+![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
-<br>  ORMS Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
+> ---
+
+> * We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! 
+
+> * We are thrilled to give you the opportunity to attend to the first and live full presentation of ORMS (40 min talk)
+
+> ---
 
 
 # ORMS : Design-First Haxe Web API Framework
+
+
+```
+
+ORMS Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, 
+Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, 
+Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
+
+```
+
+
 - **PERFORMANCE : ORMS is heavily based on caching mechanisms**
 
   - Secure sessions caching
