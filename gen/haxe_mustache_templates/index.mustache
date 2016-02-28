@@ -81,7 +81,8 @@ class Main {
       app.use('/doc', new js.npm.express.Static(dn+'/../node_modules/orms/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
-
+      app.use('/site', new js.npm.express.Static(dn+'/../site'));
+      
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
