@@ -13,8 +13,8 @@ cp -rf ./gen/build.hxml $prj/distrib/build.hxml
 cp -rf ./gen/package.json $prj/distrib/package.json
 cp -rf ./gen/README.md $prj/distrib/README.md
 prj=$prj ./gen/codegen.sh
-prj=$prj ./gen/build.sh
 fi
+prj=$prj ./gen/build.sh
 cd $prj/distrib/
 haxelib run dox -i xml
 node api.js
