@@ -81,37 +81,34 @@ class Main {
       app.use('/doc', new js.npm.express.Static(dn+'/../node_modules/orms/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
-      app.use('/site', new js.npm.express.Static(dn+'/../site'));
-      
+      var sp = '{{& site}}';
+      if (sp != '') 
+        app.use('/', new js.npm.express.Static(dn+'/..'+sp));
+      else
+        app.use('/', new js.npm.express.Static(dn+'/../site'));
+        
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
       // ie : Business.get_method = function(req,res) {...}
       /**************************************************/
-      {{#operations}}{{#operation}}
-
       // Hacks.. use summary to keep ttl and other stuff
+      
+      {{#operations}}{{#operation}}
       var apiOp = new ApiOperation("{{& path}}", "{{& summary}}");
-
       var args  = apiOp.getArgs();
       var extra = apiOp.getExtraParams();
       var path  = apiOp.getPath();
-
       var cacheExpire = function(req, res, next) {
         next();
       };
-
       if (args.ttl != '0') 
         cacheExpire = cacheo.route({ expire: args.ttl });
-      
-      app.{{httpMethod}}(
-          conf.BASE_URL+path, 
-          untyped cacheExpire,
+      app.{{httpMethod}}( conf.BASE_URL+path, untyped cacheExpire,
           function(req : Request, res : Response){ 
             untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
           }
       );
-      
       {{/operation}}{{/operations}}
 
       app.use(middleware.swaggerMetadata());
