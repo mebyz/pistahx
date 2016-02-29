@@ -11,7 +11,11 @@ if [ "$mode" = "build" ] ; then
 echo "$VERT" "#ORMS: installing nodejs dependencies" "$NORMAL"
 npm install
 echo "$VERT" "#ORMS: installing Haxe dependencies" "$NORMAL"
-haxelib install ./gen/libs.hxml
+
+# we are disabling this for now (manual step blocking a full automatic build)
+# no problem to run it manually upon first build.)
+# haxelib install ./gen/libs.hxml
+
 echo "$VERT" "#ORMS: cleaning workspace" "$NORMAL"
 rm -rf $prj/distrib/promhx
 rm -rf $prj/distrib/haxe-js-kit
