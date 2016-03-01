@@ -52,9 +52,10 @@ echo "$VERT" "#ORMS: generating haxe doc (dox)" "$NORMAL"
 cd $prj/distrib/
 haxelib run dox -i xml
 cd ..
-fi
-
+else
 echo "$VERT" "#ORMS: trying to start API" "$NORMAL"
 cd $prj/distrib/
 node api.js
+fi
+
 fi
