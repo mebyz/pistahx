@@ -7,6 +7,7 @@ ROUGE="\\033[1;31m"
 
 echo "$VERT" "#ORMS: running in mode:$mode" "$NORMAL"
 if [ -z "$root" ]; then echo "project root folder is unset, see README.md file"; else
+
 if [ "$mode" = "build" ] ; then 
 echo "$VERT" "#ORMS: installing nodejs dependencies" "$NORMAL"
 npm install
@@ -26,6 +27,10 @@ echo "$VERT" "#ORMS: preparing distrib folder" "$NORMAL"
 cp -rf ./gen/build.hxml $prj/distrib/build.hxml
 cp -rf ./gen/package.json $prj/distrib/package.json
 cp -rf ./gen/README.md $prj/distrib/README.md
+fi
+
+rm -rf $prj/distrib/api.js
+
 echo "$VERT" "#ORMS: codegen from yaml to haxe" "$NORMAL"
 prj=$prj ./gen/codegen.sh
 
@@ -34,7 +39,6 @@ echo "$ROUGE" "#ORMS: ERROR when generating Haxe code from yaml" "$NORMAL"
 exit 1
 fi
 
-fi
 echo "$VERT" "#ORMS: building from haxe to target" "$NORMAL"
 mode=$mode prj=$prj ./gen/build.sh
 
