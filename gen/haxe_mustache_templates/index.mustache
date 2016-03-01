@@ -83,9 +83,9 @@ class Main {
       app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
       var sp = '{{& site}}';
       if (sp != '') 
-        app.use('/', new js.npm.express.Static(dn+'/..'+sp));
+        app.use('/site', new js.npm.express.Static(dn+'/..'+sp));
       else
-        app.use('/', new js.npm.express.Static(dn+'/../site'));
+        app.use('/site', new js.npm.express.Static(dn+'/../site'));
         
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
