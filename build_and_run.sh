@@ -30,10 +30,16 @@ echo "$VERT" "#ORMS: codegen from yaml to haxe" "$NORMAL"
 prj=$prj ./gen/codegen.sh
 fi
 echo "$VERT" "#ORMS: building from haxe to target" "$NORMAL"
-prj=$prj ./gen/build.sh
+mode=$mode prj=$prj ./gen/build.sh
+
+if [ "$mode" = "build" ] ; then
 echo "$VERT" "#ORMS: generating haxe doc (dox)" "$NORMAL"
 cd $prj/distrib/
 haxelib run dox -i xml
+cd ..
+fi
+
 echo "$VERT" "#ORMS: trying to start API" "$NORMAL"
+cd $prj/distrib/
 node api.js
 fi
