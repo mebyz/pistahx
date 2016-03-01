@@ -28,9 +28,20 @@ cp -rf ./gen/package.json $prj/distrib/package.json
 cp -rf ./gen/README.md $prj/distrib/README.md
 echo "$VERT" "#ORMS: codegen from yaml to haxe" "$NORMAL"
 prj=$prj ./gen/codegen.sh
+
+if [ "$?" != "0" ] ; then
+echo "$ROUGE" "#ORMS: ERROR when generating Haxe code from yaml" "$NORMAL"
+exit 1
+fi
+
 fi
 echo "$VERT" "#ORMS: building from haxe to target" "$NORMAL"
 mode=$mode prj=$prj ./gen/build.sh
+
+if [ "$?" != "0" ] ; then
+echo "$ROUGE" "#ORMS: ERROR when transpiling Haxe code to target" "$NORMAL"
+exit 1
+fi
 
 if [ "$mode" = "build" ] ; then
 echo "$VERT" "#ORMS: generating haxe doc (dox)" "$NORMAL"
