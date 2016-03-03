@@ -30,6 +30,9 @@ class Main {
     if (process.env.exists("ENV") && process.env['ENV'] == 'production')
       conf = new Conf('production');
 
+    if (process.env.exists("ENV") && process.env['ENV'] == 'docker')
+      conf = new Conf('docker');
+
     // REDIS
     var redisStore = Node.require('connect-redis')(session);
     var redisclient = redis.createClient(conf.REDIS_PORT,conf.REDIS_HOST);

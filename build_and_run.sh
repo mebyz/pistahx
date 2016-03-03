@@ -29,6 +29,11 @@ cp -rf ./gen/package.json $prj/distrib/package.json
 cp -rf ./gen/README.md $prj/distrib/README.md
 fi
 
+
+echo "$VERT" "#ORMS: add Dockerfile and deploy script to application" "$NORMAL"
+cp ./gen/Dockerfile $prj/
+cp ./gen/docker.sh $prj/
+
 rm -rf $prj/distrib/api.js
 
 echo "$VERT" "#ORMS: codegen from yaml to haxe" "$NORMAL"
@@ -52,10 +57,18 @@ echo "$VERT" "#ORMS: generating haxe doc (dox)" "$NORMAL"
 cd $prj/distrib/
 haxelib run dox -i xml
 cd ..
-else
+fi
+
+if [ "$mode" = "run" ] ; then
 echo "$VERT" "#ORMS: trying to start API" "$NORMAL"
 cd $prj/distrib/
 node api.js
+fi
+
+if [ "$mode" = "docker" ] ; then
+echo "$VERT" "#ORMS: trying to dockerise, and start API" "$NORMAL"
+cd $prj/
+./docker.sh
 fi
 
 fi
