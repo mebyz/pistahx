@@ -52,6 +52,8 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
 - **DB PROMISES: SEQUELIZE too handles parallel db querying strategies :**
 
+- **CONTAINER READY: ORMS gives you a native docker container environment for your app. You're finally able deploy everywhere**
+
 # BUILD YOUR API USING ORMS
 **remider: orms is meant to be used as a dependency !!**
 
@@ -73,7 +75,13 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
 5 . you'll need a running **redis server** ( locally : `redis-server` )
  
-**=> NOW you can compile and run your api using :** `./run.sh`
+**=> NOW you can compile using :** `./build.sh`
+
+**=> now AFTER building the api :**
+
+**=> You can simply run your api using :** `./run.sh`
+
+**=> or deploy a local docker container and run your api from here :** `./docker.sh`
 
 # End-to-End TESTS
 
