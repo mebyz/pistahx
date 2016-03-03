@@ -31,7 +31,7 @@ class Main {
       conf = new Conf('production');
 
     if (process.env.exists("ENV") && process.env['ENV'] == 'docker')
-      conf = new Conf('docker');
+      conf = new Conf('docker', process.env);
 
     // REDIS
     var redisStore = Node.require('connect-redis')(session);
