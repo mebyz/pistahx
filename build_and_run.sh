@@ -11,6 +11,9 @@ if [ -z "$root" ]; then echo "project root folder is unset, see README.md file";
 if [ "$mode" = "build" ] ; then 
 echo "$VERT" "#ORMS: installing nodejs dependencies" "$NORMAL"
 npm install
+echo "$VERT" "#ORMS: updating nodejs dependencies" "$NORMAL"
+npm update
+
 echo "$VERT" "#ORMS: installing Haxe dependencies" "$NORMAL"
 
 # we are disabling this for now (manual step blocking a full automatic build)
