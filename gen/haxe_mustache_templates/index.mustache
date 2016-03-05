@@ -79,8 +79,13 @@ class Main {
           })
       );
       
+      // DEFAULT NO AUTH ON FRONT
+      var websiteAuth = untyped function(req, res, next) {
+          next(); 
+      };
 
       // PASSPORT / GOOGLE TOKEN AUTH   
+
       if (untyped __js__('conf.GOOGLE_CLIENT_ID != undefined')) {
         var google_strategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -132,6 +137,16 @@ class Main {
             res.redirect('/');
         });
 
+        // ACTIVATE FRONT AUTH
+        websiteAuth = untyped function(req, res, next) {
+        if (req.session.status== true) {
+          next(); 
+        } else {
+
+          res.redirect("/"); 
+        }
+      };
+
       }
 
       app.use(BodyParser.json());
@@ -144,14 +159,7 @@ class Main {
       app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
  
       // COMPANION WEBSITE
-      app.use('/site', untyped function(req, res, next) {
-        if (req.session.status== true) {
-          next(); 
-        } else {
-
-          res.redirect("/"); 
-        }
-      }, new js.npm.express.Static(dn+'/../site'));
+      app.use('/site', websiteAuth , new js.npm.express.Static(dn+'/../site'));
 
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
