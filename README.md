@@ -1,3 +1,4 @@
+# ORMS : Design-First Haxe Web API Framework
 
 > ---
 
@@ -8,9 +9,6 @@
 > * We are thrilled to give you the opportunity to attend to the first and live full presentation of ORMS (40 min talk)
 
 > ---
-
-
-# ORMS : Design-First Haxe Web API Framework
 
 
 ```
@@ -24,13 +22,21 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
 - **PERFORMANCE : ORMS is heavily based on caching mechanisms**
 
-  - Secure sessions caching
+  - Secure Auth Session / Token caching
    
   - Basic and custom cache rules tuning based on spec
 
   - Proactive caching invalidation strategy
   
   - Orm caching : use cache to store entities and queries
+
+-**SECURITY : ORMS offers you multiple authentication strategies, which you can easily activate from your configuration file (/your/app/conf/Conf.hx) : 
+
+  - JSON Web Tokens (JWT) : if your concerns include RestFULL-ness APIs or if you have to deal with cookie-less clients
+
+  - Standard but fast and secure sessions strategy (based on cookies) if you plan to develop a RestFULL service
+
+  - ORMS also implements Passport.js (includes 300+ more auth strategies) !
 
 - **DESIGN FIRST : with ORMS, your API description/spec can be easily changed using a simple language paradigm (yaml)**
 
