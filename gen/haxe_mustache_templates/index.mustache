@@ -35,9 +35,8 @@ class Main {
     if (process.env.exists("ENV") && process.env['ENV'] == 'docker')
       conf = new Conf('docker', process.env);
 
-    // REDIS
-    var redisStore = Node.require('connect-redis')(session);
-    var redisclient = redis.createClient(conf.REDIS_PORT,conf.REDIS_HOST);
+    // REDIS CLIENT
+    var redisClient = redis.createClient(conf.REDIS_PORT,conf.REDIS_HOST);
 
     // DATABASE
     var db = new Sequelize(conf.DB_NAME, conf.DB_USER, conf.DB_PASSWORD, 
@@ -45,11 +44,11 @@ class Main {
 
     /// CACHE(S)
 
-    var dbcacher = initCache(db, redisclient);
+    var dbcacher = initCache(db, redisClient);
     var cacheo = Node.require('express-redis-cache')({
-        client : redisclient,
-        expire : 60,
-        prefix : 'app'
+        client : redisClient,
+        expire : conf.CACHE_OUT_TTL_DEFAULT,
+        prefix : 'cacheout:app:'
     });
 
     var dn = Node.__dirname;
@@ -60,25 +59,88 @@ class Main {
 
     swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
-      // EXPRESS
-      var app : Application = new js.npm.Express();
+    // EXPRESS
+    var app : Application = new js.npm.Express();
 
-      // SESSION
-      app.use(new CookieParser('M4NU'));
-      var ars= untyped __js__("new redisStore( { client: redisclient, ttl :  conf.SESSION_TTL})");
+
+
+    if (untyped __js__('conf.SESSION_TTL != undefined')) {
+
+        var redisStore = Node.require('connect-redis')(session);
+
+        // SESSION
+        app.use(new CookieParser('M4NU'));
+        var ars= untyped __js__("new redisStore( { client: redisClient, ttl :  conf.SESSION_TTL})");
+        app.use(
+          session(
+            {
+              secret: 'orms_app',
+              cookie: { maxAge: conf.SESSION_TTL },
+              store: ars, 
+              saveUninitialized: true,
+              resave: true,
+              rolling: true
+            })
+        );
       
-      app.use(
-        session(
-          {
-            secret: 'orms_app',
-            cookie: { maxAge: 60000 },
-            store: ars, 
-            saveUninitialized: true,
-            resave: true,
-            rolling: true
-          })
-      );
-      
+    }
+
+    // JWT
+
+    if (untyped __js__('conf.JWT_SECRET != undefined')) {
+
+            var JWTRedisSession = require("jwt-redis-session");
+    
+            app.use(JWTRedisSession({
+                client: redisClient,
+                secret: conf.JWT_SECRET,
+                keyspace: "jwt:", 
+                maxAge: conf.JWT_TTL,
+                algorithm: "HS256",
+                requestKey: "jwtSession",
+                requestArg: "jwtToken"
+            }));
+
+            var handleRequest = function(req, res){
+
+                var user : Dynamic= { id : 1 };
+
+                req.jwtSession.user = haxe.Json.stringify(user); 
+
+                // this will be attached to the JWT
+                var claims = {
+                    iss: "my application name",
+                    aud: "myapplication.com"
+                };
+
+                req.jwtSession.create(claims, function(error, token){
+
+                    res.json({ token: token });
+
+                });
+
+            };
+
+            app.get('/jwt', untyped handleRequest);
+              
+            var handleRequest2 = function(req, res){
+
+                console.log("Request JWT session data: ", 
+                    req.jwtSession.id, 
+                    req.jwtSession.claims, 
+                    req.jwtSession.jwt
+                );
+
+                res.json(req.jwtSession.toJSON());
+
+            };
+            
+            app.get('/jwt2', untyped handleRequest2);
+              
+
+      }
+
+
       // DEFAULT NO AUTH ON FRONT
       var websiteAuth = untyped function(req, res, next) {
           next(); 
@@ -87,65 +149,65 @@ class Main {
       // PASSPORT / GOOGLE TOKEN AUTH   
 
       if (untyped __js__('conf.GOOGLE_CLIENT_ID != undefined')) {
-        var google_strategy = require('passport-google-oauth').OAuth2Strategy;
+              var google_strategy = require('passport-google-oauth').OAuth2Strategy;
 
-        app.use(passport.initialize());
-          app.use(passport.session());
+              app.use(passport.initialize());
+                app.use(passport.session());
 
-        passport.serializeUser(function(user, done) {
-          done(null, user);
-        });
+              passport.serializeUser(function(user, done) {
+                done(null, user);
+              });
 
-        passport.deserializeUser(function(obj, done) {
-          done(null, obj);
-        });
-    
-        untyped __js__("Main.passport.use(new google_strategy({
-         clientID: conf.GOOGLE_CLIENT_ID,
-          clientSecret: conf.GOOGLE_CLIENT_SECRET,
-          callbackURL: conf.GOOGLE_CALLBACK_URL,
-          scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
-        },
-        function(accessToken, refreshToken, profile, done) {
-          if (profile._json.domain == '{{userDomain}}') 
-           return done(null,profile);
-           else
-           return done(new Error('something bad happened'));
-         }
-        ))");
-    
-        app.get('/',
-        untyped function(req, res) {
-          res.send('<a href="/google">login with google</>');
-        });
+              passport.deserializeUser(function(obj, done) {
+                done(null, obj);
+              });
+          
+              untyped __js__("Main.passport.use(new google_strategy({
+               clientID: conf.GOOGLE_CLIENT_ID,
+                clientSecret: conf.GOOGLE_CLIENT_SECRET,
+                callbackURL: conf.GOOGLE_CALLBACK_URL,
+                scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
+              },
+              function(accessToken, refreshToken, profile, done) {
+                if (profile._json.domain == '{{userDomain}}') 
+                 return done(null,profile);
+                 else
+                 return done(new Error('something bad happened'));
+               }
+              ))");
+          
+              app.get('/',
+              untyped function(req, res) {
+                res.send('<a href="/google">login with google</>');
+              });
 
-        app.get('/google',
-        passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
-        untyped function(req, res){
-        });
+              app.get('/google',
+              passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
+              untyped function(req, res){
+              });
 
-        app.get('/callback', 
-        passport.authenticate('google', untyped { failureRedirect: '/logout' }),
-        untyped function(req, res) {
-          req.session.status = true;
-          res.redirect('/site');
-        });
+              app.get('/callback', 
+              passport.authenticate('google', untyped { failureRedirect: '/logout' }),
+              untyped function(req, res) {
+                req.session.status = true;
+                res.redirect('/site');
+              });
 
-        app.get('/logout',
-        untyped function(req, res) {
-            req.session.status = false;
-            res.redirect('/');
-        });
+              app.get('/logout',
+              untyped function(req, res) {
+                  req.session.status = false;
+                  res.redirect('/');
+              });
 
-        // ACTIVATE FRONT AUTH
-        websiteAuth = untyped function(req, res, next) {
-        if (req.session.status== true) {
-          next(); 
-        } else {
+              // ACTIVATE FRONT AUTH
+              websiteAuth = untyped function(req, res, next) {
+              if (req.session.status== true) {
+                next(); 
+              } else {
 
-          res.redirect("/"); 
-        }
-      };
+                res.redirect("/"); 
+              }
+            };
 
       }
 
