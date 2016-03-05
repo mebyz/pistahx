@@ -36,6 +36,8 @@
     "express-session": "1.12.1",
     "sequelize-redis-cache": "1.1.1",
     "express-redis-cache": "0.2.0",
-    "paybox": "0.0.8"
+    "paybox": "0.0.8",
+    "passport": "*",
+    "passport-google-oauth": "*"
   }
 }

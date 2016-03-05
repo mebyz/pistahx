@@ -16,6 +16,8 @@ class Main {
   private static var vm           = Node.require('vm');
   private static var swaggerTools = Node.require('swagger-tools');
   private static var jsyaml       = Node.require('js-yaml');
+  private static var passport     = Node.require('passport');
+
 
   private static var options = {
     controllers: './',
@@ -61,13 +63,14 @@ class Main {
       // EXPRESS
       var app : Application = new js.npm.Express();
 
+      // SESSION
       app.use(new CookieParser('M4NU'));
       var ars= untyped __js__("new redisStore( { client: redisclient, ttl :  conf.SESSION_TTL})");
       
       app.use(
         session(
           {
-            secret: 'M4NU',
+            secret: 'orms_app',
             cookie: { maxAge: 60000 },
             store: ars, 
             saveUninitialized: true,
@@ -76,6 +79,59 @@ class Main {
           })
       );
       
+
+      // PASSPORT / GOOGLE TOKEN AUTH   
+
+      var google_strategy = require('passport-google-oauth').OAuth2Strategy;
+
+      app.use(passport.initialize());
+        app.use(passport.session());
+
+      passport.serializeUser(function(user, done) {
+        done(null, user);
+      });
+
+      passport.deserializeUser(function(obj, done) {
+        done(null, obj);
+      });
+  
+      untyped __js__("Main.passport.use(new google_strategy({
+       clientID: conf.GOOGLE_CLIENT_ID,
+        clientSecret: conf.GOOGLE_CLIENT_SECRET,
+        callbackURL: conf.GOOGLE_CALLBACK_URL,
+        scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
+      },
+      function(accessToken, refreshToken, profile, done) {
+        if (profile._json.domain == '{{x-domain}}') 
+         return done(null,profile);
+         else
+         return done(new Error('something bad happened'));
+       }
+      ))");
+  
+      app.get('/',
+      untyped function(req, res) {
+        res.send('<a href="/google">login with google</>');
+      });
+
+      app.get('/google',
+      passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
+      untyped function(req, res){
+      });
+
+      app.get('/callback', 
+      passport.authenticate('google', untyped { failureRedirect: '/logout' }),
+      untyped function(req, res) {
+        req.session.status = true;
+        res.redirect('/site');
+      });
+
+      app.get('/logout',
+      untyped function(req, res) {
+          req.session.status = false;
+          res.redirect('/');
+      });
+
       app.use(BodyParser.json());
       app.use(BodyParser.urlencoded({extended: true}));
 
@@ -84,12 +140,17 @@ class Main {
       app.use('/doc', new js.npm.express.Static(dn+'/../node_modules/orms/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
-      var sp = '{{& site}}';
-      if (sp != '') 
-        app.use('/site', new js.npm.express.Static(dn+'/..'+sp));
-      else
-        app.use('/site', new js.npm.express.Static(dn+'/../site'));
-        
+ 
+      // COMPANION WEBSITE
+      app.use('/site', untyped function(req, res, next) {
+        if (req.session.status== true) {
+          next(); 
+        } else {
+
+          res.redirect("/"); 
+        }
+      }, new js.npm.express.Static(dn+'/../site'));
+
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
