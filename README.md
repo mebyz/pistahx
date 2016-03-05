@@ -34,7 +34,7 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
   - JSON Web Tokens (JWT) : if your concerns include RestFULL-ness APIs or if you have to deal with cookie-less clients
 
-  - Standard but fast and secure sessions strategy (based on cookies) if you plan to develop a RestFULL service
+  - Standard but fast and secure sessions strategy (based on cookies) if you plan to develop a RestLESS service
 
   - ORMS also implements Passport.js (includes 300+ more auth strategies) !
 
