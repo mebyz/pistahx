@@ -81,56 +81,58 @@ class Main {
       
 
       // PASSPORT / GOOGLE TOKEN AUTH   
+      if (untyped __js__('conf.GOOGLE_CLIENT_ID != undefined')) {
+        var google_strategy = require('passport-google-oauth').OAuth2Strategy;
 
-      var google_strategy = require('passport-google-oauth').OAuth2Strategy;
+        app.use(passport.initialize());
+          app.use(passport.session());
 
-      app.use(passport.initialize());
-        app.use(passport.session());
+        passport.serializeUser(function(user, done) {
+          done(null, user);
+        });
 
-      passport.serializeUser(function(user, done) {
-        done(null, user);
-      });
+        passport.deserializeUser(function(obj, done) {
+          done(null, obj);
+        });
+    
+        untyped __js__("Main.passport.use(new google_strategy({
+         clientID: conf.GOOGLE_CLIENT_ID,
+          clientSecret: conf.GOOGLE_CLIENT_SECRET,
+          callbackURL: conf.GOOGLE_CALLBACK_URL,
+          scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
+        },
+        function(accessToken, refreshToken, profile, done) {
+          if (profile._json.domain == '{{userDomain}}') 
+           return done(null,profile);
+           else
+           return done(new Error('something bad happened'));
+         }
+        ))");
+    
+        app.get('/',
+        untyped function(req, res) {
+          res.send('<a href="/google">login with google</>');
+        });
 
-      passport.deserializeUser(function(obj, done) {
-        done(null, obj);
-      });
-  
-      untyped __js__("Main.passport.use(new google_strategy({
-       clientID: conf.GOOGLE_CLIENT_ID,
-        clientSecret: conf.GOOGLE_CLIENT_SECRET,
-        callbackURL: conf.GOOGLE_CALLBACK_URL,
-        scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
-      },
-      function(accessToken, refreshToken, profile, done) {
-        if (profile._json.domain == '{{userDomain}}') 
-         return done(null,profile);
-         else
-         return done(new Error('something bad happened'));
-       }
-      ))");
-  
-      app.get('/',
-      untyped function(req, res) {
-        res.send('<a href="/google">login with google</>');
-      });
+        app.get('/google',
+        passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
+        untyped function(req, res){
+        });
 
-      app.get('/google',
-      passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
-      untyped function(req, res){
-      });
+        app.get('/callback', 
+        passport.authenticate('google', untyped { failureRedirect: '/logout' }),
+        untyped function(req, res) {
+          req.session.status = true;
+          res.redirect('/site');
+        });
 
-      app.get('/callback', 
-      passport.authenticate('google', untyped { failureRedirect: '/logout' }),
-      untyped function(req, res) {
-        req.session.status = true;
-        res.redirect('/site');
-      });
+        app.get('/logout',
+        untyped function(req, res) {
+            req.session.status = false;
+            res.redirect('/');
+        });
 
-      app.get('/logout',
-      untyped function(req, res) {
-          req.session.status = false;
-          res.redirect('/');
-      });
+      }
 
       app.use(BodyParser.json());
       app.use(BodyParser.urlencoded({extended: true}));
