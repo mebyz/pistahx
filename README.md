@@ -30,7 +30,7 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
   
   - Orm caching : use cache to store entities and queries
 
--**SECURITY : ORMS offers you multiple authentication strategies, which you can easily activate from your configuration file (/your/app/conf/Conf.hx) : 
+- **SECURITY : ORMS offers you multiple authentication strategies, which you can easily activate from your configuration file ( ./your_orms_app/conf/Conf.hx ) :** 
 
   - JSON Web Tokens (JWT) : if your concerns include RestFULL-ness APIs or if you have to deal with cookie-less clients
 
