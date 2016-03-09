@@ -5,8 +5,8 @@ import js.Node.*;
 import js.npm.sequelize.Sequelize;
 import js.node.Fs;
 
-import Conf; // credentials and stuff
-import Business;   // business logic goes and stays here
+import Conf;        // credentials and stuff
+import Business;    // business logic goes and stays here
 
 class Main {
 
@@ -23,6 +23,12 @@ class Main {
     controllers: './',
     useStubs: false
   };
+
+  public static function getConf(conf : Dynamic, key : String, def : Dynamic) { 
+	if (untyped __js__('conf[key] != undefined'))
+            return untyped __js__('conf[key]')
+	else return def ;
+  }
 
   public static function main() {
     
@@ -44,10 +50,12 @@ class Main {
 
     /// CACHE(S)
 
+    var coTTL = getConf(conf,'CACHE_OUT_TTL_DEFAULT',3600);
+
     var dbcacher = initCache(db, redisClient);
     var cacheo = Node.require('express-redis-cache')({
         client : redisClient,
-        expire : conf.CACHE_OUT_TTL_DEFAULT,
+        expire : coTTL,
         prefix : 'cacheout:app:'
     });
 
@@ -66,16 +74,18 @@ class Main {
 
     if (untyped __js__('conf.SESSION_TTL != undefined')) {
 
+	var sessTTL = conf.SESSION_TTL;
+
         var redisStore = Node.require('connect-redis')(session);
 
         // SESSION
         app.use(new CookieParser('M4NU'));
-        var ars= untyped __js__("new redisStore( { client: redisClient, ttl :  conf.SESSION_TTL})");
+        var ars= untyped __js__("new redisStore( { client: redisClient, ttl :  sessTTL})");
         app.use(
           session(
             {
               secret: 'orms_app',
-              cookie: { maxAge: conf.SESSION_TTL },
+              cookie: { maxAge: sessTTL },
               store: ars, 
               saveUninitialized: true,
               resave: true,
@@ -88,14 +98,17 @@ class Main {
     // JWT
 
     if (untyped __js__('conf.JWT_SECRET != undefined')) {
+	    
+    	    var jwtSecret = getConf(conf,'JWT_SECRET','');
+            var jwtTTL = getConf(conf,'conf.JWT_TTL','');
 
             var JWTRedisSession = require("jwt-redis-session");
     
             app.use(JWTRedisSession({
                 client: redisClient,
-                secret: conf.JWT_SECRET,
+                secret: jwtSecret,
                 keyspace: "jwt:", 
-                maxAge: conf.JWT_TTL,
+                maxAge: jwtTTL,
                 algorithm: "HS256",
                 requestKey: "jwtSession",
                 requestArg: "jwtToken"
@@ -149,6 +162,11 @@ class Main {
       // PASSPORT / GOOGLE TOKEN AUTH   
 
       if (untyped __js__('conf.GOOGLE_CLIENT_ID != undefined')) {
+		
+	      var gClientId = getConf(conf,'GOOGLE_CLIENT_ID','');
+              var gClientSecret = getConf(conf,'GOOGLE_CLIENT_SECRET','');
+              var gCbUrl = getConf(conf,'GOOGLE_CALLBACK_URL','');
+
               var google_strategy = require('passport-google-oauth').OAuth2Strategy;
 
               app.use(passport.initialize());
@@ -163,9 +181,9 @@ class Main {
               });
           
               untyped __js__("Main.passport.use(new google_strategy({
-               clientID: conf.GOOGLE_CLIENT_ID,
-                clientSecret: conf.GOOGLE_CLIENT_SECRET,
-                callbackURL: conf.GOOGLE_CALLBACK_URL,
+               clientID: gClientId,
+                clientSecret: gClientSecret,
+                callbackURL: gCbUrl,
                 scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
               },
               function(accessToken, refreshToken, profile, done) {
