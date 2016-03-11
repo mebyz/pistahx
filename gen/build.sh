@@ -15,5 +15,8 @@ fi
 
 echo "$VERT" "#ORMS: Haxe transpilation" "$NORMAL"
 haxe build.hxml
+if [ "$?" != "0" ] ; then
+exit 1
+fi
 cd -
 fi
