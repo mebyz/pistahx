@@ -34,11 +34,11 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
 - **SECURITY : ORMS offers you multiple authentication strategies, which you can easily activate from your configuration file ( ./your_orms_app/conf/Conf.hx ) :** 
 
-  - JSON Web Tokens (JWT) : if your concerns include RestFULL-ness APIs or if you have to deal with cookie-less clients
+  - JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients
 
-  - Standard but fast and secure sessions strategy (based on cookies) if you plan to develop a RestLESS service
+  - Standard but fast and secure sessions strategy if you're setting up a service targeting Web browsers supporting cookies
 
-  - ORMS also implements Passport.js (includes 300+ more auth strategies) !
+  - ORMS also implements Passport.js (which includes 300+ more auth strategies) !
 
 - **DESIGN FIRST : with ORMS, your API description/spec can be easily changed using a simple language paradigm (yaml)**
 
