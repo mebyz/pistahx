@@ -20,15 +20,17 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 ```
 
 
-- **PERFORMANCE : ORMS is heavily based on caching mechanisms**
+- **PERFORMANCE : ORMS heavily relies on it's multiple cache layers**
 
-  - Secure Auth Session / Token caching
+  - Custom output cache for each route based on your api specs
+
+  - Secure Cookie based Session / Auth token Redis store
    
-  - Basic and custom cache rules tuning based on spec
-
-  - Proactive caching invalidation strategy
+  - Pro-active cascading cache invalidation strategies
   
-  - Orm caching : use cache to store entities and queries
+  - Db caching (via Sequelize) : use cache to store entities and queries
+  
+  - Define your own caching strategies for fine tuning
 
 - **SECURITY : ORMS offers you multiple authentication strategies, which you can easily activate from your configuration file ( ./your_orms_app/conf/Conf.hx ) :** 
 
