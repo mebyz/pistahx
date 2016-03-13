@@ -11,16 +11,8 @@
 > ---
 
 
-```
-
-ORMS Building blocks : Haxe, Nodejs, Mustache, Yaml, Bash scripts, 
-Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, 
-Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
-
-```
-
+# ORMS Building blocks
 ![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-mini.png)
-
 
 - **PERFORMANCE : ORMS heavily relies on it's multiple cache layers**
 
