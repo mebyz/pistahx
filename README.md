@@ -40,6 +40,8 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis,...
 
   - ORMS also implements Passport.js (which includes 300+ more auth strategies) !
 
+- **MONITORING: ORMS offers you instantaneaous monitoring with the support of the gorgious ELK stack and Appmetrics library. Simply fill ELK_SERVER parameter in conf file and you're good to go !**
+
 - **DESIGN FIRST : with ORMS, your API description/spec can be easily changed using a simple language paradigm (yaml)**
 
 - **MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha (via swagger-test) do the magic !**
