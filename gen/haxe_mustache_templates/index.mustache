@@ -43,6 +43,16 @@ class Main {
     if (process.env.exists("ENV") && process.env['ENV'] == 'docker')
       conf = new Conf('docker', process.env);
 
+    // MONITORING
+    if (Reflect.field(conf, "ELK_SERVER")!=null){
+	var config = {
+    	    hosts: [getConf(conf,'ELK_SERVER','')],
+    	    index: 'nodedata',
+	    applicationName: getConf(conf,'APP_NAME','app')
+    	}
+ 
+	var appmetrics = require('appmetrics-elk').monitor(config);    
+    }
     // REDIS CLIENT
     var redisClient = redis.createClient(conf.REDIS_PORT,conf.REDIS_HOST);
 
@@ -58,7 +68,7 @@ class Main {
     var cacheo = Node.require('express-redis-cache')({
         client : redisClient,
         expire : coTTL,
-        prefix : 'cacheout:app:'
+        prefix : 'cacheout:'+getConf(conf,'APP_NAME','app')+':'
     });
 
     var dn = Node.__dirname;
@@ -101,8 +111,8 @@ class Main {
 
     if (Reflect.field(conf, "JWT_SECRET")!=null) {
 
-        trace('#app : using standard session');
-  	    var jwtSecret = getConf(conf,'JWT_SECRET','');
+          trace('#app : using standard session');
+  	  var jwtSecret = getConf(conf,'JWT_SECRET','');
           var jwtTTL = getConf(conf,'conf.JWT_TTL','');
 
           var JWTRedisSession = require("jwt-redis-session");

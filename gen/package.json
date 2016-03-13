@@ -39,6 +39,8 @@
     "paybox": "0.0.8",
     "passport": "*",
     "passport-google-oauth": "*",
-    "jwt-redis-session": "1.0.4"
+    "jwt-redis-session": "1.0.4",
+    "appmetrics":"*",
+    "appmetrics-elk":"*"
   }
 }
