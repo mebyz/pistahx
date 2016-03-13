@@ -11,8 +11,8 @@
 > ---
 
 
-# ORMS Building blocks
-![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-mini.png)
+### ORMS Building blocks
+![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-micro.png)
 
 - **PERFORMANCE : ORMS heavily relies on it's multiple cache layers**
 
