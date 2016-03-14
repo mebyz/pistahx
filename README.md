@@ -225,7 +225,7 @@ paths:
 
 ```		
      // PARALLEL CALL SOME QUERIES USING SEQUELIZE PROMISES
-      var SPromise = untyped Sequelize.Promise;
+      var SPromise = Sequelize.Promise;
       SPromise.map([
           sql1,
           sql2
