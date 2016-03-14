@@ -16,8 +16,8 @@
 ```
 
 Haxe, Nodejs, Mustache, Yaml, Bash scripts, 
-Haxe/Node gems ... including thx.*, PromHx, Express, Sequelize, Tedious, 
-Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis, ELK, ...
+Haxe/Node gems including thx.*, PromHx, Express, Sequelize, Tedious, 
+Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 ```
 
@@ -47,7 +47,7 @@ Crypto, Dox ... + Swagger (spec,codegen,doc ui,..), Redis, ELK, ...
 
 - **DESIGN FIRST : with ORMS, your API description/spec can be easily changed using a simple language paradigm (yaml)**
 
-- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha (via swagger-test) do the magic !**
+- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha do the magic !**
 
 - **AUTOMATIC DOCGEN : an interactive documentation is automatically generated from the spec**
 
@@ -145,7 +145,7 @@ paths:
 
 # ORMS INSIGHTS : code
 
-**SAMPLE CODE : SWAGGER YAML ROUTE DEFINITION**
+**SAMPLE CODE : OPEN API YAML ROUTE DEFINITION**
 
 ```yaml
 paths:
