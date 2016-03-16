@@ -21,7 +21,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 ```
 
-![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-micro.png)
+![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-mini.png)
 
 - **PERFORMANCE : ORMS heavily relies on it's multiple cache layers**
 
