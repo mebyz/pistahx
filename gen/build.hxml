@@ -4,6 +4,7 @@
 -lib promhx
 -lib mustache
 -lib hxnodejs
+-lib thx.core
 -cp src
 -cp ../app/conf
 -cp ../app/Business
