@@ -23,7 +23,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 ![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-mini.png)
 
-- **PERFORMANCE : ORMS heavily relies on it's multiple cache layers**
+- **PERFORMANCE : ORMS heavily relies on many cache layers, and let you define your own cache invalidation strategies.**
 
   - Custom output cache for each route based on your api specs
 
@@ -35,7 +35,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
   
   - Define your own caching strategies for fine tuning
 
-- **SECURITY : ORMS offers you multiple authentication strategies, which you can easily activate from your configuration file ( ./your_orms_app/conf/Conf.hx ) :** 
+- **SECURITY : ORMS offers you multiple authentication strategies. activation is done in your configuration file ./conf/Conf.hx :** 
 
   - JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients
 
@@ -43,9 +43,9 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
   - ORMS also implements Passport.js (which includes 300+ more auth strategies) !
 
-- **MONITORING: ORMS offers you instantaneaous monitoring with the support of the gorgious ELK stack and Appmetrics library. Simply fill ELK_SERVER parameter in conf file and you're good to go !**
+- **MONITORING: ORMS implements monitoring natively, with the support of the gorgious ELK stack + appmetrics. use ELK_SERVER parameter in Conf.hx file and you're good to go !**
 
-- **DESIGN FIRST : with ORMS, your API description/spec can be easily changed using a simple language paradigm (yaml)**
+- **DESIGN FIRST : with ORMS, your API specification can be easily changed using a simple language paradigm (yaml)**
 
 - **MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha do the magic !**
 
@@ -53,22 +53,22 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 - **AUTOMATIC CODEGEN : API server code (routing, server core...) is automatically generated from the spec**
 
-- **CODE LOGIC SEPARATION : Business logic is separated from the server core code**
+- **CORE / BUSINESS CODE LOGIC SEPARATION : Business logic is separated from the server core code**
 
-- **STRONGLY TYPED CODE : The business logic is written in Haxe (type checking helps the code to stay clean and secure), before being transpiled to nodejs code**
+- **STRONGLY TYPED CODE : Write your business logic in Haxe Lang (type checking helps the code to stay clean and secure). target is nodejs for now**
 
-- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK: ORMS can be set up, modified and deployed  everywhere nodejs code can run. Unix/Linux, Windows, OSx, ...**
+- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK: ORMS can be set up (within minutes), modified and deployed anywhere nodejs can : Unix/Linux, Windows, OSx, ...**
 
-- **MULTIDB: ORMS uses Sequlize, which alllows you to connect to mssql, mysql, pgsql, sqlite,... databases**
+- **MULTIDB: ORMS uses Sequelize : connect to mssql, mysql, pgsql, sqlite,... databases**
 
-- **PROMISES-FULL : Use the mighty power of Promises using a simple Haxe (Promhx) workflow :**
+- **PROMISES-FULL : Use the great power of promises using a simple Haxe (Promhx, Thx.*) workflow**
 
-- **DB PROMISES: SEQUELIZE too handles parallel db querying strategies :**
+- **DB PROMISES: ORMS handles parallel db querying strategies**
 
-- **CONTAINER READY: ORMS gives you a native docker container environment for your app. You're finally able deploy everywhere**
+- **CONTAINER READY: ORMS gives you a native docker container environment for your app. You can now trully deploy anywhere !**
 
 # BUILD YOUR API USING ORMS
-**remider: orms is meant to be used as a dependency !!**
+**remider: ORMS is meant to be used as a dependency !!**
 
 **STEP BY STEP :**
 
