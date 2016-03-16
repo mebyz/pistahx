@@ -2,3 +2,4 @@
 -lib mustache
 -lib dox
 -lib promhx
+-lib thx.core

@@ -18,7 +18,7 @@ echo "$VERT" "#ORMS: installing Haxe dependencies" "$NORMAL"
 
 # we are disabling this for now (manual step blocking a full automatic build)
 # no problem to run it manually upon first build.)
-# haxelib install ./gen/libs.hxml
+ haxelib install ./gen/libs.hxml
 
 echo "$VERT" "#ORMS: cleaning workspace" "$NORMAL"
 rm -rf $prj/distrib/promhx
