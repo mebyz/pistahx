@@ -5,6 +5,8 @@ import js.Node.*;
 import js.npm.sequelize.Sequelize;
 import js.node.Fs;
 
+import haxe.ds.Option;
+
 import yaml.Yaml;
 import yaml.Parser;
 import yaml.Renderer;
@@ -15,7 +17,7 @@ import Business;    // business logic goes and stays here
 
 class Main {
 
-  private static var initCache    = Node.require('sequelize-redis-cache');
+  private static var initDbCache    = Node.require('sequelize-redis-cache');
   private static var redis        = Node.require('redis');
   private static var session      = Node.require('express-session');
   private static var vm           = Node.require('vm');
@@ -29,102 +31,125 @@ class Main {
     useStubs: false
   };
 
-  public static function getConf(conf : Dynamic, key : String, def : Dynamic) { 
-	if (untyped __js__('conf[key] != undefined'))
-            return untyped __js__('conf[key]')
-	else return def ;
+  public static function getConfKey(conf : Dynamic, key : String) : Option<String> {
+    if (conf.get(key) == null)
+      return None;
+    else 
+      return Some(conf.get(key));
   }
 
-  public static function main() {
+  public static function initMonitoring(conf: Dynamic) {
+    switch (getConfKey(conf, 'ELK_SERVER')) {
+        case None: {
+          trace("#app : no monitoring");
+        }
+        case Some(s): {
+          trace("#app : add monitoring");
+          var config = {
+               hosts: [ conf.get('ELK_SERVER') ],
+               index: 'nodedata',
+               applicationName: conf.get('APP_NAME')
+          }
+          var appmetrics = require('appmetrics-elk').monitor(config); 
+        }
+    }
+  }
 
-    trace('#app : starting');
-
+  public static function loadSpec() : String {
     var dn = Node.__dirname;
-    var spec = Fs.readFileSync(dn+'/../app/api.yaml', 'utf8');
+    var specPath = dn+'/../app/api.yaml';
+    return Fs.readFileSync(specPath, 'utf8');
+  }
 
-    // TODO : yaml parsing
-    var data = Yaml.parse(spec); 
-    trace(data.get('info'));
-
-
-    //  CONFIGURATION
-    var conf = new Conf('local');
-
-    if (process.env.exists("ENV") && process.env['ENV'] == 'production')
-      conf = new Conf('production');
-
-    if (process.env.exists("ENV") && process.env['ENV'] == 'docker')
-      conf = new Conf('docker', process.env);
-
-    // MONITORING
-    if (Reflect.field(conf, "ELK_SERVER")!=null){
-	var config = {
-    	    hosts: [getConf(conf,'ELK_SERVER','')],
-    	    index: 'nodedata',
-	    applicationName: getConf(conf,'APP_NAME','app')
-    	}
- 
-	var appmetrics = require('appmetrics-elk').monitor(config);    
+  public static function loadConfiguration() : Dynamic {
+    var dn = Node.__dirname;
+    var pEnv = 'local';
+    if(process.env.exists("ENV")) {
+       pEnv = process.env['ENV'];
+       trace('#app : setting env to : '+pEnv);
     }
-    // REDIS CLIENT
-    var redisClient = redis.createClient(conf.REDIS_PORT,conf.REDIS_HOST);
-
-    // DATABASE
-    var db = new Sequelize(conf.DB_NAME, conf.DB_USER, conf.DB_PASSWORD, 
-      conf.DB_OPTIONS);
-
-    /// CACHE(S)
-
-    var coTTL = getConf(conf,'CACHE_OUT_TTL_DEFAULT',3600);
-
-    var dbcacher = initCache(db, redisClient);
-    var cacheo = Node.require('express-redis-cache')({
-        client : redisClient,
-        expire : coTTL,
-        prefix : 'cacheout:'+getConf(conf,'APP_NAME','app')+':'
-    });
-
-    
-    // SWAGGER
-    var swaggerDoc = jsyaml.safeLoad(spec);
-
-    swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
-
-    // EXPRESS
-    var app : Application = new js.npm.Express();
-
-
-
-    if (Reflect.field(conf, "SESSION_TTL")!=null){
-
-    	  trace('#app : using standard session');
-        var sessTTL = conf.SESSION_TTL;
-        var redisStore = Node.require('connect-redis')(session);
-
-        // SESSION
-        app.use(new CookieParser('M4NU'));
-        var ars= untyped __js__("new redisStore( { client: redisClient, ttl :  sessTTL})");
-        app.use(
-          session(
-            {
-              secret: 'orms_app',
-              cookie: { maxAge: sessTTL },
-              store: ars, 
-              saveUninitialized: true,
-              resave: true,
-              rolling: true
-            })
-        );
-      
+    else {
+      trace('#app : ENV is not defined. using local env by default!');
     }
 
-    // JWT
+    var confPath = dn+'/../app/conf/'+pEnv+'.yaml';
+    var confFile = Fs.readFileSync(confPath, 'utf8');
+    trace('#app : using '+ pEnv +'.yaml conf file');
+    return Yaml.parse(confFile);
+  }
 
-    if (Reflect.field(conf, "JWT_SECRET")!=null) {
+  public static function initDb (conf : Dynamic) {
 
+    var dbOpts = conf.get('DB_OPTIONS');
+    var poolOpts = dbOpts.get('pool');
+    var dialectOps = dbOpts.get('dialectOptions');
+    var opts = {
+        host: dbOpts.get('host'),
+        dialect: dbOpts.get('dialect'),
+        pool: {
+          max: poolOpts.get('max'),
+          min: poolOpts.get('min'),
+          idle: poolOpts.get('idle')
+        },
+        dialectOptions: {
+          encrypt: dialectOps.get('encrypt')
+        },
+        logging: dbOpts.get('logging')
+      };
+    return new Sequelize(conf.get('DB_NAME'), conf.get('DB_USER'), conf.get('DB_PASSWORD'), untyped opts);
+  }
+
+  public static function initCacheClient (conf : Dynamic) {
+      return redis.createClient(conf.get('REDIS_PORT'),conf.get('REDIS_HOST'));  
+  }
+
+  public static function initOutputCache (conf : Dynamic, redisClient : Dynamic) {
+      var coTTL = conf.get('CACHE_OUT_TTL_DEFAULT');
+      return Node.require('express-redis-cache')({
+          client : redisClient,
+          expire : coTTL,
+          prefix : 'cacheout:'+conf.get('APP_NAME')+':'
+      });
+  }
+
+  public static function initSession (conf : Dynamic, app: Dynamic, redisClient : Dynamic) {
+      switch (getConfKey(conf, 'SESSION_TTL')) {
+        case None: {
+          trace("#app : no session");
+        }
+        case Some(s): {
           trace('#app : using standard session');
-  	  var jwtSecret = getConf(conf,'JWT_SECRET','');
-          var jwtTTL = getConf(conf,'conf.JWT_TTL','');
+          var sessTTL = conf.get('SESSION_TTL');
+          var redisStore = Node.require('connect-redis')(session);
+
+          // SESSION
+          app.use(new CookieParser(conf.get('APP_NAME')+'cookiekey'));
+          var ars= untyped __js__("new redisStore( { client: redisClient, ttl :  sessTTL})");
+          app.use(
+            session(
+              {
+                secret: conf.get('APP_NAME')+'secretsessionkey',
+                cookie: { maxAge: sessTTL },
+                store: ars, 
+                saveUninitialized: true,
+                resave: true,
+                rolling: true
+              })
+          ); 
+        }
+    }
+  }
+
+  public static function initJWT (conf : Dynamic, app: Dynamic, redisClient : Dynamic) {
+
+      switch (getConfKey(conf, 'JWT_SECRET')) {
+        case None: {
+          trace("#app : no jwt");
+        }
+        case Some(s): {
+          trace('#app : using JSON WEB TOKENs');
+          var jwtSecret = conf.get('JWT_SECRET');
+          var jwtTTL    = conf.get('JWT_TTL');
 
           var JWTRedisSession = require("jwt-redis-session");
   
@@ -146,12 +171,11 @@ class Main {
 
               // this will be attached to the JWT
               var claims = {
-                  iss: "my application name",
-                  aud: "myapplication.com"
+                  iss: conf.get('APP_NAME'),
+                  aud: "dummy.com"
               };
 
               req.jwtSession.create(claims, function(error, token){
-
                   res.json({ token: token });
 
               });
@@ -173,98 +197,142 @@ class Main {
           };
           
           app.get('/jwt2', untyped handleRequest2);
-            
 
-      }
+        }
+    }
+  }
 
+  public static function initGAuth (conf : Dynamic, app: Dynamic, redisClient : Dynamic) : Dynamic {
 
-      // DEFAULT NO AUTH ON FRONT
-      var websiteAuth = untyped function(req, res, next) {
-          next(); 
-      };
+      switch (getConfKey(conf, 'GOOGLE_CLIENT_ID')) {
+        case None: {
+          trace("#app : no GAuth");
+          return untyped function(req, res, next) { next(); }
+        }
+        case Some(s): {
+          
+          trace('#app : using Passport GAuth');    
+          var gClientId = conf.get('GOOGLE_CLIENT_ID');
+          var gClientSecret = conf.get('GOOGLE_CLIENT_SECRET');
+          var gCbUrl = conf.get('GOOGLE_CALLBACK_URL');
 
-      // PASSPORT / GOOGLE TOKEN AUTH   
-      if (Reflect.field(conf, "GOOGLE_CLIENT_ID")!=null) {
+          var google_strategy = require('passport-google-oauth').OAuth2Strategy;
 
-          trace('#app : using Passport auth');		
-  	      var gClientId = getConf(conf,'GOOGLE_CLIENT_ID','');
-            var gClientSecret = getConf(conf,'GOOGLE_CLIENT_SECRET','');
-            var gCbUrl = getConf(conf,'GOOGLE_CALLBACK_URL','');
+          app.use(passport.initialize());
+            app.use(passport.session());
 
-            var google_strategy = require('passport-google-oauth').OAuth2Strategy;
+          passport.serializeUser(function(user, done) {
+            done(null, user);
+          });
 
-            app.use(passport.initialize());
-              app.use(passport.session());
+          passport.deserializeUser(function(obj, done) {
+            done(null, obj);
+          });
+      
+          untyped __js__("Main.passport.use(new google_strategy({
+           clientID: gClientId,
+            clientSecret: gClientSecret,
+            callbackURL: gCbUrl,
+            scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
+          },
+          function(accessToken, refreshToken, profile, done) {
+            if (profile._json.domain == '{{userDomain}}') 
+             return done(null,profile);
+             else
+             return done(new Error('something bad happened'));
+           }
+          ))");
+      
+          app.get('/',
+          untyped function(req, res) {
+            res.send('<a href="/google">login with google</>');
+          });
 
-            passport.serializeUser(function(user, done) {
-              done(null, user);
-            });
+          app.get('/google',
+          passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
+          untyped function(req, res){
+          });
 
-            passport.deserializeUser(function(obj, done) {
-              done(null, obj);
-            });
-        
-            untyped __js__("Main.passport.use(new google_strategy({
-             clientID: gClientId,
-              clientSecret: gClientSecret,
-              callbackURL: gCbUrl,
-              scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
-            },
-            function(accessToken, refreshToken, profile, done) {
-              if (profile._json.domain == '{{userDomain}}') 
-               return done(null,profile);
-               else
-               return done(new Error('something bad happened'));
-             }
-            ))");
-        
-            app.get('/',
-            untyped function(req, res) {
-              res.send('<a href="/google">login with google</>');
-            });
+          app.get('/callback', 
+          passport.authenticate('google', untyped { failureRedirect: '/logout' }),
+          untyped function(req, res) {
+            req.session.status = true;
+            res.redirect('/site');
+          });
 
-            app.get('/google',
-            passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
-            untyped function(req, res){
-            });
+          app.get('/logout',
+          untyped function(req, res) {
+              req.session.status = false;
+              res.redirect('/');
+          });
 
-            app.get('/callback', 
-            passport.authenticate('google', untyped { failureRedirect: '/logout' }),
-            untyped function(req, res) {
-              req.session.status = true;
-              res.redirect('/site');
-            });
-
-            app.get('/logout',
-            untyped function(req, res) {
-                req.session.status = false;
-                res.redirect('/');
-            });
-
-            // ACTIVATE FRONT AUTH
-            websiteAuth = untyped function(req, res, next) {
+          // ACTIVATE FRONT AUTH
+          return untyped function(req, res, next) {
             if (req.session.status== true) {
               next(); 
             } else {
-
               res.redirect("/"); 
             }
           };
+        }
+    }
+  }
 
-      }
+  public static function main() {
+
+    trace('#app : starting');
+    var dn = Node.__dirname;
+    
+    // LOAD API SPEC
+    var spec = loadSpec();
+
+    // LOAD CONFIGURATION
+    var conf = loadConfiguration();
+
+    // INIT MONITORING
+    initMonitoring(conf);
+
+    // INIT DATABASE
+    var db = initDb(conf);
+
+    // INIT REDIS CLIENT
+    var redisClient = initCacheClient(conf);
+
+    /// INIT CACHE LEVELS
+    //     DB CACHE
+    var dbcacher = initDbCache(db, redisClient);
+
+    //    OUTPUT CACHE
+    var cacheo = initOutputCache(conf, redisClient);
+    
+    // INIT SWAGGER MIDDLEWARE
+    var swaggerDoc = jsyaml.safeLoad(spec);
+    swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+
+      // EXPRESS
+      var app : Application = new js.npm.Express();
+      
+      // INIT SESSION (optionnal)
+      initSession(conf, app, redisClient);
+
+      // INIT JWT (optionnal)
+      initJWT(conf, app, redisClient);
+
+      // PASSPORT / GOOGLE TOKEN AUTH (optionnal). 
+      // otherwise websiteAuth will be an empty middleware (only containing next();)
+      var websiteAuth = initGAuth(conf, app, redisClient);
+
+      // COMPANION WEBSITE
+      app.use('/site', websiteAuth , new js.npm.express.Static(dn+'/../site'));
 
       app.use(BodyParser.json());
       app.use(BodyParser.urlencoded({extended: true}));
-
 
       // SWAGGER API DOC
       app.use('/doc', new js.npm.express.Static(dn+'/../node_modules/orms/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/../app/api.yaml'));
  
-      // COMPANION WEBSITE
-      app.use('/site', websiteAuth , new js.npm.express.Static(dn+'/../site'));
-
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
@@ -282,7 +350,7 @@ class Main {
       };
       if (args.ttl != '0') 
         cacheExpire = cacheo.route({ expire: args.ttl });
-      app.{{httpMethod}}( conf.BASE_URL+path, untyped cacheExpire,
+      app.{{httpMethod}}( conf.get('BASE_URL')+path, untyped cacheExpire,
           function(req : Request, res : Response){ 
             untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
           }
@@ -292,8 +360,9 @@ class Main {
       app.use(middleware.swaggerMetadata());
       app.use(middleware.swaggerValidator());
     
-      app.listen(conf.API_PORT);
-      trace('api running on port '+conf.API_PORT);
+      var apiPort = Std.parseInt(conf.get('API_PORT'));
+      app.listen(apiPort);
+      trace('api running on port '+apiPort);
 
     });
   }
