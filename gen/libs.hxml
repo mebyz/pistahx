@@ -3,3 +3,5 @@
 -lib dox
 -lib promhx
 -lib thx.core
+-lib yaml
+-lib hxnodejs

@@ -5,6 +5,11 @@ import js.Node.*;
 import js.npm.sequelize.Sequelize;
 import js.node.Fs;
 
+import yaml.Yaml;
+import yaml.Parser;
+import yaml.Renderer;
+import yaml.util.ObjectMap;
+
 import Conf;        // credentials and stuff
 import Business;    // business logic goes and stays here
 
@@ -31,8 +36,16 @@ class Main {
   }
 
   public static function main() {
-    
+
     trace('#app : starting');
+
+    var dn = Node.__dirname;
+    var spec = Fs.readFileSync(dn+'/../app/api.yaml', 'utf8');
+
+    // TODO : yaml parsing
+    var data = Yaml.parse(spec); 
+    trace(data.get('info'));
+
 
     //  CONFIGURATION
     var conf = new Conf('local');
@@ -71,10 +84,8 @@ class Main {
         prefix : 'cacheout:'+getConf(conf,'APP_NAME','app')+':'
     });
 
-    var dn = Node.__dirname;
     
     // SWAGGER
-    var spec = Fs.readFileSync(dn+'/../app/api.yaml', 'utf8');
     var swaggerDoc = jsyaml.safeLoad(spec);
 
     swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {

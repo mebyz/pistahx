@@ -5,6 +5,7 @@
 -lib mustache
 -lib hxnodejs
 -lib thx.core
+-lib yaml
 -cp src
 -cp ../app/conf
 -cp ../app/Business
