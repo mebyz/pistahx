@@ -1,4 +1,4 @@
-# ORMS : Design-First Haxe Web API Framework
+# ORMS : Design-First Haxe Web API Framework 
 
 > ---
 
@@ -9,7 +9,6 @@
 > * We are thrilled to give you the opportunity to attend to the first and live full presentation of ORMS (40 min talk)
 
 > ---
-
 
 - **ORMS Building blocks :**
 
@@ -35,7 +34,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
   
   - Define your own caching strategies for fine tuning
 
-- **SECURITY : ORMS offers you multiple authentication strategies. activation is done in your configuration file ./conf/Conf.hx :** 
+- **SECURITY : ORMS offers you multiple authentication strategies. activation is done in your configuration file ./app/conf/[env].yaml :** 
 
   - JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients
 
@@ -43,7 +42,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
   - ORMS also implements Passport.js (which includes 300+ more auth strategies) !
 
-- **MONITORING: ORMS implements monitoring natively, with the support of the gorgious ELK stack + appmetrics. use ELK_SERVER parameter in Conf.hx file and you're good to go !**
+- **MONITORING: ORMS implements monitoring natively, with the support of the gorgious ELK stack + appmetrics. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !**
 
 - **DESIGN FIRST : with ORMS, your API specification can be easily changed using a simple language paradigm (yaml)**
 
@@ -82,7 +81,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
  - Code your business logic in the **./app/Business/** folder
 
- - Use the **./conf/Conf.hx** file to set your configuration (db user/pass, ...)
+ - Use the **./app/conf/[env].yaml** file to set your configuration (db user/pass, ...)
 
 4 . you'll need a running database server
 
