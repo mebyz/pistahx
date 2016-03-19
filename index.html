@@ -20,7 +20,7 @@
 
     <section class="main-content">
       <h1>
-<a id="orms-design-first-haxe-web-api-framework" class="anchor" href="#orms-design-first-haxe-web-api-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ORMS: Design-First Haxe Web API Framework</h1>
+<a id="orms--design-first-haxe-web-api-framework" class="anchor" href="#orms--design-first-haxe-web-api-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ORMS : Design-First Haxe Web API Framework</h1>
 
 <blockquote>
 <hr>
@@ -53,7 +53,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 <ul>
 <li>
-<p><strong>PERFORMANCE : ORMS heavily relies on many cache layers, and let you define your own cache invalidation strategies.</strong></p>
+<p><strong>PERFORMANCE :</strong> ORMS heavily relies on <strong>many cache layers</strong>, and let you define your own <strong>cache invalidation strategies</strong></p>
 
 <ul>
 <li><p>Custom output cache for each route based on your api specs</p></li>
@@ -64,7 +64,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 </ul>
 </li>
 <li>
-<p><strong>SECURITY : ORMS offers you multiple authentication strategies. activation is done in your configuration file ./conf/Conf.hx :</strong> </p>
+<p><strong>SECURITY :</strong> ORMS offers you <strong>multiple authentication strategies</strong> activate them in your configuration file ./app/conf/[env].yaml </p>
 
 <ul>
 <li><p>JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients</p></li>
@@ -72,18 +72,18 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 <li><p>ORMS also implements Passport.js (which includes 300+ more auth strategies) !</p></li>
 </ul>
 </li>
-<li><p><strong>MONITORING: ORMS implements monitoring natively, with the support of the gorgious ELK stack + appmetrics. use ELK_SERVER parameter in Conf.hx file and you're good to go !</strong></p></li>
-<li><p><strong>DESIGN FIRST : with ORMS, your API specification can be easily changed using a simple language paradigm (yaml)</strong></p></li>
-<li><p><strong>MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha do the magic !</strong></p></li>
-<li><p><strong>AUTOMATIC DOCGEN : an interactive documentation is automatically generated from the spec</strong></p></li>
-<li><p><strong>AUTOMATIC CODEGEN : API server code (routing, server core...) is automatically generated from the spec</strong></p></li>
-<li><p><strong>CORE / BUSINESS CODE LOGIC SEPARATION : Business logic is separated from the server core code</strong></p></li>
-<li><p><strong>STRONGLY TYPED CODE : Write your business logic in Haxe Lang (type checking helps the code to stay clean and secure). target is nodejs for now</strong></p></li>
-<li><p><strong>OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK: ORMS can be set up (within minutes), modified and deployed anywhere nodejs can : Unix/Linux, Windows, OSx, ...</strong></p></li>
-<li><p><strong>MULTIDB: ORMS uses Sequelize : connect to mssql, mysql, pgsql, sqlite,... databases</strong></p></li>
-<li><p><strong>PROMISES-FULL : Use the great power of promises using a simple Haxe (Promhx, Thx.*) workflow</strong></p></li>
-<li><p><strong>DB PROMISES: ORMS handles parallel db querying strategies</strong></p></li>
-<li><p><strong>CONTAINER READY: ORMS gives you a native docker container environment for your app. You can now trully deploy anywhere !</strong></p></li>
+<li><p><strong>MONITORING :</strong> ORMS implements monitoring natively, with the support of the gorgious <strong>ELK stack + appmetrics</strong>. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !</p></li>
+<li><p><strong>DESIGN FIRST :</strong> ORMS follows the <strong>openapi</strong> specification. creating and modifying your api is done using <strong>yaml language</strong></p></li>
+<li><p><strong>MOCK YOUR TESTS IN THE SPEC DESCRIPTION :</strong> simply mock some test cases (a request and its response) in the <strong>yaml specification</strong> file  and let <strong>mocha</strong> do the magic !</p></li>
+<li><p><strong>AUTOMATIC DOCGEN :</strong> an <strong>interactive documentation</strong> is automatically generated from the spec file </p></li>
+<li><p><strong>AUTOMATIC CODEGEN :</strong> API server code (routing, server core...) is <strong>automatically generated</strong> from the spec file</p></li>
+<li><p><strong>CORE / BUSINESS CODE LOGIC SEPARATION :</strong> your business logic <strong>is separated from</strong> orms server core are during the whole life af your project.</p></li>
+<li><p><strong>STRONGLY TYPED CODE :</strong> Write your business logic using <strong>Haxe language</strong> (type checking helps the code to stay clean and secure). target is nodejs for now</p></li>
+<li><p><strong>OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :</strong> ORMS can be set up (within minutes), modified and deployed <strong>anywhere nodejs can run</strong> : Unix/Linux, Windows, OSx, ...</p></li>
+<li><p><strong>MULTIDB :</strong> ORMS uses <strong>Sequelize</strong> : connect to mssql, mysql, pgsql, sqlite,... databases</p></li>
+<li><p><strong>PROMISES-FULL :</strong> Use the great power of promises using a simple Haxe ( <strong>Promhx, Thx.*,..</strong> ) workflow</p></li>
+<li><p><strong>DB PROMISES :</strong> ORMS handles <strong>parallel db querying strategies</strong></p></li>
+<li><p><strong>CONTAINER READY :</strong> ORMS comes with a <strong>native docker container environment</strong> for your app. You can now trully <strong>deploy anywhere !</strong></p></li>
 </ul>
 
 <h1>
@@ -102,7 +102,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 <ul>
 <li><p>Define your api spec in the <strong>./app/api.yaml</strong> file</p></li>
 <li><p>Code your business logic in the <strong>./app/Business/</strong> folder</p></li>
-<li><p>Use the <strong>./conf/Conf.hx</strong> file to set your configuration (db user/pass, ...)</p></li>
+<li><p>Use the <strong>./app/conf/[env].yaml</strong> file to set your configuration (db user/pass, ...)</p></li>
 </ul>
 
 <p>4 . you'll need a running database server</p>
