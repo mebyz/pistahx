@@ -125,7 +125,8 @@ paths:
 
 **YAML CONFIGURATION : example here : ./app/conf/local.yaml**
 
-```APP_NAME: orms_sample_app
+```yaml
+APP_NAME: orms_sample_app
 ENV_NAME: local
 #ELK_SERVER: to be defined
 #JWT_SECRET: local_secret_key
