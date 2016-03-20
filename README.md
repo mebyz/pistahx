@@ -22,7 +22,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 ![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-mini.png)
 
-- **PERFORMANCE : ORMS heavily relies on many cache layers, and let you define your own cache invalidation strategies.**
+- **PERFORMANCE :** ORMS heavily relies on **many cache layers**, and let you define your own **cache invalidation strategies**
 
   - Custom output cache for each route based on your api specs
 
@@ -34,7 +34,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
   
   - Define your own caching strategies for fine tuning
 
-- **SECURITY : ORMS offers you multiple authentication strategies. activation is done in your configuration file ./app/conf/[env].yaml :** 
+- **SECURITY :** ORMS offers you **multiple authentication strategies** activate them in your configuration file ./app/conf/[env].yaml 
 
   - JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients
 
@@ -42,29 +42,29 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
   - ORMS also implements Passport.js (which includes 300+ more auth strategies) !
 
-- **MONITORING: ORMS implements monitoring natively, with the support of the gorgious ELK stack + appmetrics. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !**
+- **MONITORING :** ORMS implements monitoring natively, with the support of the gorgious **ELK stack + appmetrics**. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !
 
-- **DESIGN FIRST : with ORMS, your API specification can be easily changed using a simple language paradigm (yaml)**
+- **DESIGN FIRST :** ORMS follows the **openapi** specification. creating and modifying your api is done using **yaml language**
 
-- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION : simply mock some test cases (a request and its response) in the YAML spec and let mocha do the magic !**
+- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION :** simply mock some test cases (a request and its response) in the **yaml specification** file  and let **mocha** do the magic !
 
-- **AUTOMATIC DOCGEN : an interactive documentation is automatically generated from the spec**
+- **AUTOMATIC DOCGEN :** an **interactive documentation** is automatically generated from the spec file 
 
-- **AUTOMATIC CODEGEN : API server code (routing, server core...) is automatically generated from the spec**
+- **AUTOMATIC CODEGEN :** API server code (routing, server core...) is **automatically generated** from the spec file
 
-- **CORE / BUSINESS CODE LOGIC SEPARATION : Business logic is separated from the server core code**
+- **CORE / BUSINESS CODE LOGIC SEPARATION :** your business logic **is separated from** orms server core are during the whole life af your project.
 
-- **STRONGLY TYPED CODE : Write your business logic in Haxe Lang (type checking helps the code to stay clean and secure). target is nodejs for now**
+- **STRONGLY TYPED CODE :** Write your business logic using **Haxe language** (type checking helps the code to stay clean and secure). target is nodejs for now
 
-- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK: ORMS can be set up (within minutes), modified and deployed anywhere nodejs can : Unix/Linux, Windows, OSx, ...**
+- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :** ORMS can be set up (within minutes), modified and deployed **anywhere nodejs can run** : Unix/Linux, Windows, OSx, ...
 
-- **MULTIDB: ORMS uses Sequelize : connect to mssql, mysql, pgsql, sqlite,... databases**
+- **MULTIDB :** ORMS uses **Sequelize** : connect to mssql, mysql, pgsql, sqlite,... databases
 
-- **PROMISES-FULL : Use the great power of promises using a simple Haxe (Promhx, Thx.*) workflow**
+- **PROMISES-FULL :** Use the great power of promises using a simple Haxe ( **Promhx, Thx.*,..** ) workflow
 
-- **DB PROMISES: ORMS handles parallel db querying strategies**
+- **DB PROMISES :** ORMS handles **parallel db querying strategies**
 
-- **CONTAINER READY: ORMS gives you a native docker container environment for your app. You can now trully deploy anywhere !**
+- **CONTAINER READY :** ORMS comes with a **native docker container environment** for your app. You can now trully **deploy anywhere !**
 
 # BUILD YOUR API USING ORMS
 **remider: ORMS is meant to be used as a dependency !!**
