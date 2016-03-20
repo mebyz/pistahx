@@ -357,6 +357,21 @@ class Main {
       );
       {{/operation}}{{/operations}}
 
+      //LEGACY API BOOSTER
+      if ("{{&legacyDomain}}"!="") { 
+        // !TODO: we set a ridiculously long default caching time : 10 days. 
+        //cache invalidation should be done using event subscriptions in your yaml file !
+        var legacyCacheExpire = cacheo.route(untyped { expire: 3600*24*10 });
+        app.use('/api/legacy', untyped legacyCacheExpire, untyped function(req : Request, res : Response){ 
+          var request = require('request');
+          var url= "{{&legacyDomain}}"+req.url;
+          var pipe  = req.pipe(request(url));
+          pipe.on('end',function() { 
+            res.send(pipe.response);
+          });
+        });
+      }
+
       app.use(middleware.swaggerMetadata());
       app.use(middleware.swaggerValidator());
     

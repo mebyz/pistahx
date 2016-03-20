@@ -41,6 +41,8 @@
     "passport-google-oauth": "*",
     "jwt-redis-session": "1.0.4",
     "appmetrics":"*",
-    "appmetrics-elk":"*"
+    "appmetrics-elk":"*",
+    "pipe": "^1.1.0",
+    "request": "^2.69.0"
   }
 }
