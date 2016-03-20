@@ -87,13 +87,11 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 5 . you'll need a running **redis server** ( locally : `redis-server` )
  
-**=> NOW you can compile using :** `./build.sh`
+**=> compile using :** `./build.sh`
 
-**=> now AFTER building the api :**
+**- You can then simply run your api using :** `./run.sh`
 
-**=> You can simply run your api using :** `./run.sh`
-
-**=> or deploy a local docker container and run your api from here :** `./docker.sh`
+**- or deploy a local docker container and run your api from here :** `./docker.sh`
 
 # ORMS INSIGHTS : code
 
