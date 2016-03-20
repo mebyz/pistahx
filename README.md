@@ -95,53 +95,6 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 **=> or deploy a local docker container and run your api from here :** `./docker.sh`
 
-# End-to-End TESTS
-
-**REMINDER : TESTS (AND MOCK DATAS) ARE DEFINED IN YOUR PROJECT'S API.YAML FILE**
-
-=> For each route defined in the spec, you can/should add a `x-amples` key in wich you can write new tests.
-
-```yaml
-paths:
-  /users/me/status:
-    get:
-      ...
-      ...
-      x-amples:
-      - title: TEST1 - fail to auth user 1
-        description: "fail to auth user"
-        request: {}
-        response:
-          status: 401
-      - title: TEST2 - fail to auth user 2
-        description: "fail to auth user"
-        request: 
-          headers: 
-            Authorization: "Basic bad_auth_hash_key"
-        response:
-          status: 401
-      - title: TEST3 - auth user ok
-        description: "auth user ok"
-        request: 
-          headers: 
-            Authorization: "Basic ZDSGOJGDFJKLGFJKSFLDGJLJGSFKLFDJGSLJFDGSLJ="
-        response:
-          status: 200
-          body: ''
-```
-
-**--- run tests locally:**
-
-1 . Change the host value in the api.yaml file to `localhost:3000` 
-
-2 . You will need a running api (local)
-
-3 . Run the test suite using mocha **(run this from the project's root folder, NOT from the ./distrib/ folder !)** :
-
-`npm install`
-
-`mocha test.js`
-
 # ORMS INSIGHTS : code
 
 **SAMPLE CODE : OPEN API YAML ROUTE DEFINITION**
@@ -170,6 +123,39 @@ paths:
           description: "Unexpected error"
           schema:
             $ref: "#/definitions/Error"
+```
+
+**YAML CONFIGURATION : example here : ./app/conf/local.yaml**
+
+```APP_NAME: orms_sample_app
+ENV_NAME: local
+#ELK_SERVER: to be defined
+#JWT_SECRET: local_secret_key
+#JWT_TTL: 3600
+CACHE_OUT_TTL_DEFAULT: 60
+#GOOGLE_CLIENT_ID: to be defined
+#GOOGLE_CLIENT_SECRET: to be defined
+#GOOGLE_CALLBACK_URL: http://localhost:3000/callback
+REDIS_HOST: localhost
+REDIS_PORT: 6379
+DB_HOST:
+DB_USER:
+DB_PASSWORD:
+DB_NAME:
+DB_OPTIONS: 
+  dialect: sqlite
+  storage: ../db.sqlite
+  pool: 
+    max: 5
+    min: 0
+    idle: 10000
+  dialectOptions:
+    encrypt: true
+  logging: false
+SESSION_TTL: 3600
+BASE_URL: /api/v1
+API_PORT: 3000
+API_ROUTE_STATUS: /users/me/status
 ```
 
 **SAMPLE CODE : HAXE PROMISES**
@@ -235,6 +221,53 @@ paths:
           trace(result);
       });
 ```		
+
+# End-to-End TESTS
+
+**REMINDER : TESTS (AND MOCK DATAS) ARE DEFINED IN YOUR PROJECT'S API.YAML FILE**
+
+=> For each route defined in the spec, you can/should add a `x-amples` key in wich you can write new tests.
+
+```yaml
+paths:
+  /users/me/status:
+    get:
+      ...
+      ...
+      x-amples:
+      - title: TEST1 - fail to auth user 1
+        description: "fail to auth user"
+        request: {}
+        response:
+          status: 401
+      - title: TEST2 - fail to auth user 2
+        description: "fail to auth user"
+        request: 
+          headers: 
+            Authorization: "Basic bad_auth_hash_key"
+        response:
+          status: 401
+      - title: TEST3 - auth user ok
+        description: "auth user ok"
+        request: 
+          headers: 
+            Authorization: "Basic ZDSGOJGDFJKLGFJKSFLDGJLJGSFKLFDJGSLJFDGSLJ="
+        response:
+          status: 200
+          body: ''
+```
+
+**--- run tests locally:**
+
+1 . Change the host value in the api.yaml file to `localhost:3000` 
+
+2 . You will need a running api (local)
+
+3 . Run the test suite using mocha **(run this from the project's root folder, NOT from the ./distrib/ folder !)** :
+
+`npm install`
+
+`mocha test.js`
 
 # DOCS
 
