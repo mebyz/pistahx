@@ -65,7 +65,7 @@ fi
 if [ "$mode" = "run" ] ; then
 echo "$VERT" "#ORMS: trying to start API" "$NORMAL"
 cd $prj/distrib/out
-node api.js
+node app.js
 fi
 
 if [ "$mode" = "docker" ] ; then
