@@ -6,6 +6,7 @@
   "private": false,
   "license": "ISC",
   "scripts": {
+    "start":"node api.js"
   },
   "repository": {
     "type": "git",

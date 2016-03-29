@@ -23,7 +23,8 @@ cd -
 echo "$VERT" "#ORMS: your project output will reside in ./distrib/out/" "$NORMAL"
 rm -rf $prj/distrib/out
 mkdir $prj/distrib/out
-cp -rf $prj/app/api.yaml $prj/distrib/out/api.yaml 2>/dev/null || :
+cp -rf $prj/app/api.yaml $prj/distrib/out/ 2>/dev/null || :
+cp -rf $prj/distrib/package.json $prj/distrib/out/ 2>/dev/null || :
 cp -rf $prj/distrib/api.js $prj/distrib/out/ 2>/dev/null || :
 cp -rf $prj/distrib/node_modules $prj/distrib/out/ 2>/dev/null || :
 cp -rf $prj/node_modules/orms/doc $prj/distrib/out/ 2>/dev/null || :
