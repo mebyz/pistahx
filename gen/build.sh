@@ -8,6 +8,11 @@ cd $prj/distrib/
 if [ "$mode" = "build" ] ; then
 echo "$VERT" "#ORMS: installing distribution dependencies" "$NORMAL"
 npm install
+
+npm install -g microtime
+npm install -g sqlite3
+npm install -g appmetrics
+
 echo "$VERT" "#ORMS: cloning clemos/haxe-js-kit" "$NORMAL"
 rm -rf haxe-js-kit/
 git clone https://github.com/clemos/haxe-js-kit.git haxe-js-kit
