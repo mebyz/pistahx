@@ -64,7 +64,7 @@ fi
 
 if [ "$mode" = "run" ] ; then
 echo "$VERT" "#ORMS: trying to start API" "$NORMAL"
-cd $prj/distrib/
+cd $prj/distrib/out
 node api.js
 fi
 

@@ -19,4 +19,17 @@ if [ "$?" != "0" ] ; then
 exit 1
 fi
 cd -
+
+echo "$VERT" "#ORMS: your project output will reside in ./distrib/out/" "$NORMAL"
+rm -rf $prj/distrib/out
+mkdir $prj/distrib/out
+cp -rf $prj/app/api.yaml $prj/distrib/out/api.yaml
+cp -rf $prj/distrib/api.js $prj/distrib/out/
+cp -rf $prj/distrib/node_modules $prj/distrib/out/
+cp -rf $prj/node_modules/orms/doc $prj/distrib/out/
+cp -rf $prj/site $prj/distrib/out/
+cp -rf $prj/app/conf $prj/distrib/out/
+cp -rf $prj/app/Business/sql $prj/distrib/out/
+cp -rf $prj/db.sqlite $prj/distrib/out/
+
 fi
