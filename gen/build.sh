@@ -11,7 +11,8 @@ npm install
 
 npm install -g microtime
 npm install -g sqlite3
-npm install -g appmetrics
+npm install -g git://github.com/RuntimeTools/appmetrics
+npm install -g appmetrics-elk
 
 echo "$VERT" "#ORMS: cloning clemos/haxe-js-kit" "$NORMAL"
 rm -rf haxe-js-kit/
