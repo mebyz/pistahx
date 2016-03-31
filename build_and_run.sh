@@ -57,9 +57,9 @@ fi
 
 if [ "$mode" = "build" ] ; then
 echo "$VERT" "#ORMS: generating haxe doc (dox)" "$NORMAL"
-cd $prj/distrib/out/
-haxelib run dox -i xml
-cd ../../
+cd $prj/distrib/
+haxelib run dox -i xml -o ./out/pages
+cd ..
 fi
 
 if [ "$mode" = "run" ] ; then
