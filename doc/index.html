@@ -64,7 +64,7 @@
             hljs.highlightBlock(e)
           });
 
-          addApiKeyAuthorization();
+          //addApiKeyAuthorization();
         },
         onFailure: function(data) {
           log("Unable to Load SwaggerUI");
@@ -74,7 +74,7 @@
         defaultModelRendering: 'schema',
         showRequestHeaders: false
       });
-
+/*
       function addApiKeyAuthorization(){
         var key = encodeURIComponent($('#input_apiKey')[0].value);
         if(key && key.trim() != "") {
@@ -85,7 +85,7 @@
       }
 
       $('#input_apiKey').change(addApiKeyAuthorization);
-
+*/
       // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
       /*
         var apiKey = "myApiKeyXXXX123456789";
