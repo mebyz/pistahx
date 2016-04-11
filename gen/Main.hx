@@ -4,7 +4,7 @@ import js.Node;
 import js.Node.*;
 import js.npm.sequelize.Sequelize;
 import js.node.Fs;
-
+import mustache.Mustache;
 import haxe.ds.Option;
 
 import yaml.Yaml;
@@ -12,8 +12,28 @@ import yaml.Parser;
 import yaml.Renderer;
 import yaml.util.ObjectMap;
 
+using Lambda;
+using thx.Nulls;
+using thx.Functions;
+
 import Business;    // business logic goes and stays here
 
+typedef ApiBinding = {
+    site            : String, 
+    localhost       : String, 
+    operations      : Array<Dynamic>,
+    userDomain      : String ,
+    legacyDomain    : String
+
+}
+
+typedef Operation = {
+    ?httpMethod     : String,
+    ?path           : String,
+    ?summary        : String,
+    ?operationId    : String
+}
+  
 class Main {
 
   private static var initDbCache    = Node.require('sequelize-redis-cache');
@@ -35,6 +55,88 @@ class Main {
       return None;
     else 
       return Some(conf.get(key));
+  }
+  
+  public static function getCacheKey(conf : Dynamic, key : String) : Option<String> {
+    if (conf.get(key) == null)
+      return None;
+    else 
+      return Some(conf.get(key));
+  }
+
+  public static function initApiBinding(spec : String) : ApiBinding {
+  
+    var nativeObject = Yaml.parse(spec, Parser.options().useObjects());
+   
+    var info = Reflect.field(nativeObject, 'info');
+        
+    var sitePath = '';
+    if (Reflect.hasField(info, 'x-website'))
+        sitePath = Reflect.field(info, 'x-website');
+
+    var localHost = '';
+    if (Reflect.hasField(info, 'x-website'))
+            localHost = Reflect.field(info, 'x-localhost');
+
+    var userDomain = '';
+    if (Reflect.hasField(info, 'x-domain'))
+            userDomain = Reflect.field(info, 'x-domain');
+
+    var legacyDomain = '';
+    if (Reflect.hasField(info, 'x-legacy'))
+            legacyDomain = Reflect.field(info, 'x-legacy');
+
+    var paths  = Reflect.field(nativeObject, 'paths');
+  
+    var opPaths = [];
+    var preparePath = Reflect.fields(nativeObject.paths);
+    for (p in preparePath){
+        var op = Reflect.field(nativeObject.paths,p);
+        op.path = p;
+        opPaths.push(op);
+    }
+
+    var operations = [];
+       
+    Lambda.map(opPaths, function(op) {
+        var opex = Reflect.fields(op);
+
+        var rPath = Reflect.field(op, 'path');
+        Lambda.map(opex, function(opx) {
+            var operation : Operation = {};
+            switch(opx){
+                case 'path' : operation.path = opx; 
+                case _ : {
+                    
+                    operation.httpMethod = opx;
+                    operation.path = rPath; 
+                    operation.summary = '';
+                    operation.operationId = '';
+                   
+                    var methodargs = Reflect.field(op, opx);      
+                    var methodargsMap = Reflect.fields(methodargs);
+                 
+                    methodargsMap
+                    .map(function (patharg) {
+                        var val = Reflect.field(methodargs, patharg);
+                        switch(patharg) {
+                            case 'summary': operation.summary=val;
+                            case 'operationId': operation.operationId=val;
+                        }
+                    }); 
+                    operations.push({operation:operation});
+                }
+            }
+        });
+    });    
+
+    return {
+        site : sitePath, 
+        localhost: localHost, 
+        operations : operations, 
+        userDomain : userDomain ,
+        legacyDomain : legacyDomain
+    }
   }
 
   public static function initMonitoring(conf: Dynamic) {
@@ -202,7 +304,7 @@ class Main {
     }
   }
 
-  public static function initGAuth (conf : Dynamic, app: Dynamic, redisClient : Dynamic) : Dynamic {
+  public static function initGAuth (conf : Dynamic, app: Dynamic, redisClient : Dynamic, apiBind : ApiBinding) : Dynamic {
 
       switch (getConfKey(conf, 'GOOGLE_CLIENT_ID')) {
         case None: {
@@ -236,7 +338,7 @@ class Main {
             scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]
           },
           function(accessToken, refreshToken, profile, done) {
-            if (profile._json.domain == '{{userDomain}}') 
+            if (profile._json.domain == apiBind.userDomain) 
              return done(null,profile);
              else
              return done(new Error('something bad happened'));
@@ -281,10 +383,14 @@ class Main {
   public static function main() {
 
     trace('#app : starting');
+
     var dn = Node.__dirname;
     
     // LOAD API SPEC
-    var spec = loadSpec();
+    var spec = loadSpec();        
+
+    // Bind API yaml values to ApiBinding typedef
+    var apiBind = initApiBinding(spec);
 
     // LOAD CONFIGURATION
     var conf = loadConfiguration();
@@ -317,17 +423,17 @@ class Main {
 
       // INIT JWT (optionnal)
       initJWT(conf, app, redisClient);
-
+      
       // PASSPORT / GOOGLE TOKEN AUTH (optionnal). 
       // otherwise websiteAuth will be an empty middleware (only containing next();)
-      var websiteAuth = initGAuth(conf, app, redisClient);
-
+      var websiteAuth = initGAuth(conf, app, redisClient, apiBind);
+      
       // COMPANION WEBSITE
       app.use('/site', websiteAuth , new js.npm.express.Static(dn+'/site'));
 
       app.use(BodyParser.json());
       app.use(BodyParser.urlencoded({extended: true}));
-
+      
       // SWAGGER API DOC
       app.use('/doc', new js.npm.express.Static(dn+'/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
@@ -339,32 +445,50 @@ class Main {
       // ie : Business.get_method = function(req,res) {...}
       /**************************************************/
       // Hacks.. use summary to keep ttl and other stuff
+       
+      apiBind
+      .operations
+      .map( function(operation) {
+            var apiOp = new ApiOperation(operation);
+            var args  = apiOp.getCacheArgs();
+            var extra = apiOp.getExtraParams();
+            var path  = apiOp.getPath();
+            var opId = operation.operation.operationId;
+            var opMethod = operation.operation.httpMethod + '_' + opId;
+            
+            var cacheExpire = function(req, res, next) {
+                next();
+            };
+            
+            if (args.ttl != '0') 
+                cacheExpire = cacheo.route({ expire: args.ttl });
+              
+            var verb   = Reflect.field(app, operation.operation.httpMethod );    
+            var method = Reflect.field(Business, opMethod );  
+            
+            trace('publising api route : ' + path + ' binds ' + opMethod);
+            
+            Reflect.callMethod(
+                app, 
+                verb, 
+                [
+                    conf.get('BASE_URL')+path, 
+                    untyped cacheExpire,
+                    function(req : Request, res : Response){ 
+                        Reflect.callMethod(Business, method, [ db, req, res, dbcacher, cacheo, extra ]);
+                    }
+                ]
+            );           
+      });	
       
-      {{#operations}}{{#operation}}
-      var apiOp = new ApiOperation("{{& path}}", "{{& summary}}");
-      var args  = apiOp.getArgs();
-      var extra = apiOp.getExtraParams();
-      var path  = apiOp.getPath();
-      var cacheExpire = function(req, res, next) {
-        next();
-      };
-      if (args.ttl != '0') 
-        cacheExpire = cacheo.route({ expire: args.ttl });
-      app.{{httpMethod}}( conf.get('BASE_URL')+path, untyped cacheExpire,
-          function(req : Request, res : Response){ 
-            untyped Business.{{httpMethod}}_{{operationId}}(db,req,res,dbcacher,cacheo,extra);
-          }
-      );
-      {{/operation}}{{/operations}}
-
       //LEGACY API BOOSTER
-      if ("{{&legacyDomain}}"!="") { 
+      if (apiBind.legacyDomain!='') { 
         // !TODO: we set a ridiculously long default caching time : 10 days. 
         //cache invalidation should be done using event subscriptions in your yaml file !
         var legacyCacheExpire = cacheo.route(untyped { expire: 3600*24*10 });
         app.use('/api/legacy', untyped legacyCacheExpire, untyped function(req : Request, res : Response){ 
           var request = require('request');
-          var url= "{{&legacyDomain}}"+req.url;
+          var url= ""+req.url;
           var pipe  = req.pipe(request(url));
           pipe.on('end',function() { 
             res.send(pipe.response);
@@ -384,19 +508,18 @@ class Main {
 }
 
 class ApiOperation {
-
+    
   var txtArgs   : String;
-  var args      : Dynamic;
+  var original       : Dynamic;
   var path      : String;
   var urlParams : Dynamic;
   var extraParams     : Dynamic; 
+  var summary : Dynamic;
 
-  public function new(pathParam, argsParam) {
-
-    path = pathParam;
-    txtArgs = argsParam;
-    txtArgs   = StringTools.replace(txtArgs,"'",'"');
-    args = haxe.Json.parse(txtArgs);
+  public function new(t : Dynamic){
+    original = t;
+	path =  original.operation.path;     
+    summary = haxe.Json.parse(StringTools.replace(original.operation.summary,"'",'"'));
     
     var r = ~/\{([^}]+)\}/g;
     urlParams = [];
@@ -411,17 +534,16 @@ class ApiOperation {
             return match;
       };
     });
-
+    
     path   = StringTools.replace(path,'{',':');
     path   = StringTools.replace(path,'}','');
-
+    
     // extraParams will hold all our query parameters
-    extraParams = { 'url_params' : urlParams , 'ttl' : args.ttl, 'xttl' : args.xttl, 'cachekey' :  args.cachekey, 'xcachekey' : args.xcachekey };
- 
+    extraParams = { 'url_params' : urlParams , 'ttl' : summary.ttl, 'xttl' : summary.xttl, 'cachekey' :  summary.cachekey, 'xcachekey' : summary.xcachekey };    
   }
-
-  public function getArgs() {
-    return args;
+ 
+  public function getCacheArgs() {
+    return summary;
   }
 
   public function getExtraParams() {
