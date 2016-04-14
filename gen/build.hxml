@@ -9,6 +9,7 @@
 -cp src
 -cp ../app/conf
 -cp ../app/Business
+-cp ../app/Business/models
 -main Main
 -D nodejs
 -js api.js
