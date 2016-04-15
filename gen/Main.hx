@@ -11,6 +11,7 @@ import yaml.Yaml;
 import yaml.Parser;
 import yaml.Renderer;
 import yaml.util.ObjectMap;
+import js.npm.express.Middleware;
 
 using Lambda;
 using thx.Nulls;
@@ -265,11 +266,11 @@ class Main {
               requestArg: "jwtToken"
           }));
 
-          var handleRequest = function(req, res){
+          var handleRequest = function(req: Request, res: Response){
 
               var user : Dynamic= { id : 1 };
 
-              req.jwtSession.user = haxe.Json.stringify(user); 
+              untyped req.jwtSession.user = haxe.Json.stringify(user); 
 
               // this will be attached to the JWT
               var claims = {
@@ -277,28 +278,28 @@ class Main {
                   aud: "dummy.com"
               };
 
-              req.jwtSession.create(claims, function(error, token){
+              untyped req.jwtSession.create(claims, function(error, token){
                   res.json({ token: token });
 
               });
 
           };
 
-          app.get('/jwt', untyped handleRequest);
+          app.get('/jwt', handleRequest);
             
-          var handleRequest2 = function(req, res){
+          var handleRequest2 = function(req: Request, res: Response){
 
               console.log("Request JWT session data: ", 
-                  req.jwtSession.id, 
-                  req.jwtSession.claims, 
-                  req.jwtSession.jwt
+                  untyped req.jwtSession.id, 
+                  untyped req.jwtSession.claims, 
+                  untyped req.jwtSession.jwt
               );
 
-              res.json(req.jwtSession.toJSON());
+              res.json(untyped req.jwtSession.toJSON());
 
           };
           
-          app.get('/jwt2', untyped handleRequest2);
+          app.get('/jwt2', handleRequest2);
 
         }
     }
@@ -309,7 +310,7 @@ class Main {
       switch (getConfKey(conf, 'GOOGLE_CLIENT_ID')) {
         case None: {
           trace("#app : no GAuth");
-          return untyped function(req, res, next) { next(); }
+          return function(req: Request, res: Response, next : MiddlewareNext) { next(); }
         }
         case Some(s): {
           
@@ -346,31 +347,31 @@ class Main {
           ))");
       
           app.get('/',
-          untyped function(req, res) {
+          function(req: Request, res: Response) {
             res.send('<a href="/google">login with google</>');
           });
 
           app.get('/google',
           passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
-          untyped function(req, res){
+          function(req: Request, res: Response){
           });
 
           app.get('/callback', 
           passport.authenticate('google', untyped { failureRedirect: '/logout' }),
-          untyped function(req, res) {
-            req.session.status = true;
+          function(req: Request, res: Response) {
+            untyped req.session.status = true;
             res.redirect('/site');
           });
 
           app.get('/logout',
-          untyped function(req, res) {
-              req.session.status = false;
+          function(req: Request, res: Response) {
+              untyped req.session.status = false;
               res.redirect('/');
           });
 
           // ACTIVATE FRONT AUTH
-          return untyped function(req, res, next) {
-            if (req.session.status== true) {
+          return function(req: Request, res: Response, next : MiddlewareNext) {
+            if (untyped req.session.status== true) {
               next(); 
             } else {
               res.redirect("/"); 
@@ -456,7 +457,7 @@ class Main {
             var opId = operation.operation.operationId;
             var opMethod = operation.operation.httpMethod + '_' + opId;
             
-            var cacheExpire = function(req, res, next) {
+            var cacheExpire = function(req : Request, res : Response, next : MiddlewareNext) {
                 next();
             };
             
