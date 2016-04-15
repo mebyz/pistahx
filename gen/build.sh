@@ -40,5 +40,6 @@ cp -rf $prj/app/conf $prj/distrib/out/ 2>/dev/null || :
 cp -rf $prj/app/Business/sql $prj/distrib/out/ 2>/dev/null || :
 cp -rf $prj/db.sqlite $prj/distrib/out/ 2>/dev/null || :
 cp -rf $prj/.ebignore $prj/distrib/out/ 2>/dev/null || :
-
+mkdir $prj/distrib/out/doc
+cp -rf $prj/node_modules/pistahx/doc/* $prj/distrib/out/doc/
 fi
