@@ -231,7 +231,7 @@ class Main {
             session(
               {
                 secret: conf.get('APP_NAME')+'secretsessionkey',
-                cookie: { maxAge: sessTTL },
+                cookie: { maxAge: sessTTL * 1000 },
                 store: ars, 
                 saveUninitialized: true,
                 resave: true,
