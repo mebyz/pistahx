@@ -71,7 +71,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 **STEP BY STEP :**
 
-**1 .Fork https://github.com/mebyz/pistahx-sample-app to bootstrap you own pistahx app !**
+**1 .Fork https://github.com/mebyz/pistahx-app to bootstrap you own pistahx app !**
  
 2 . You'll need **Haxe** installed on your system
 
