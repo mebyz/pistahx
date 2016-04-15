@@ -1,7 +1,7 @@
 {
-  "name": "ormsapi",
+  "name": "pistahx api",
   "version": "0.0.1",
-  "description": "orms api",
+  "description": "pistahx design first type safe haxe api",
   "main": "",
   "private": false,
   "license": "ISC",
@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mebyz/worms.git"
+    "url": "git+https://github.com/mebyz/pistahx.git"
   },
   "keywords": [
     "webapi"
   ],
   "author": "emmanuel.botros@gmail.com",
   "bugs": {
-    "url": "https://github.com/mebyz/worms/issues"
+    "url": "https://github.com/mebyz/pistahx/issues"
   },
-  "homepage": "https://github.com/mebyz/worms#readme",
+  "homepage": "https://github.com/mebyz/pistahx#readme",
   "dependencies": {
     "connect": "3.2.0",
     "js-yaml": "3.3.0",
