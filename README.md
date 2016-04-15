@@ -1,4 +1,4 @@
-# ORMS : Design-First Haxe Web API Framework 
+# pistahx.io : Design-First Type-Safe Haxe Web API Framework 
 
 > ---
 
@@ -6,11 +6,11 @@
 > 
 ![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
-> * We are thrilled to give you the opportunity to attend to the first and live full presentation of ORMS (40 min talk)
+> * We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)
 
 > ---
 
-- **ORMS Building blocks :**
+- **pistahx Building blocks :**
 
 ```
 
@@ -20,9 +20,9 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 ```
 
-![] (https://raw.githubusercontent.com/mebyz/orms/master/ORMS-stack-mini.png)
+![] (https://raw.githubusercontent.com/mebyz/pistahx/master/pistahx-stack-mini.png)
 
-- **PERFORMANCE :** ORMS heavily relies on **many cache layers**, and let you define your own **cache invalidation strategies**
+- **PERFORMANCE :** pistahx heavily relies on **many cache layers**, and let you define your own **cache invalidation strategies**
 
   - Custom output cache for each route based on your api specs
 
@@ -34,17 +34,17 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
   
   - Define your own caching strategies for fine tuning
 
-- **SECURITY :** ORMS offers you **multiple authentication strategies** activate them in your configuration file ./app/conf/[env].yaml 
+- **SECURITY :** pistahx offers you **multiple authentication strategies** activate them in your configuration file ./app/conf/[env].yaml 
 
   - JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients
 
   - Standard but fast and secure sessions strategy if you're setting up a service targeting Web browsers supporting cookies
 
-  - ORMS also implements Passport.js (which includes 300+ more auth strategies) !
+  - pistahx also implements Passport.js (which includes 300+ more auth strategies) !
 
-- **MONITORING :** ORMS implements monitoring natively, with the support of the gorgious **ELK stack + appmetrics**. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !
+- **MONITORING :** pistahx implements monitoring natively, with the support of the gorgious **ELK stack + appmetrics**. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !
 
-- **DESIGN FIRST :** ORMS follows the **openapi** specification. creating and modifying your api is done using **yaml language**
+- **DESIGN FIRST :** pistahx follows the **openapi** specification. creating and modifying your api is done using **yaml language**
 
 - **MOCK YOUR TESTS IN THE SPEC DESCRIPTION :** simply mock some test cases (a request and its response) in the **yaml specification** file  and let **mocha** do the magic !
 
@@ -52,26 +52,26 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 - **AUTOMATIC CODEGEN :** API server code (routing, server core...) is **automatically generated** from the spec file
 
-- **CORE / BUSINESS CODE LOGIC SEPARATION :** your business logic **is separated from** orms server core are during the whole life af your project.
+- **CORE / BUSINESS CODE LOGIC SEPARATION :** your business logic **is separated from** pistahx server core are during the whole life af your project.
 
 - **STRONGLY TYPED CODE :** Write your business logic using **Haxe language** (type checking helps the code to stay clean and secure). target is nodejs for now
 
-- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :** ORMS can be set up (within minutes), modified and deployed **anywhere nodejs can run** : Unix/Linux, Windows, OSx, ...
+- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :** pistahx can be set up (within minutes), modified and deployed **anywhere nodejs can run** : Unix/Linux, Windows, OSx, ...
 
-- **MULTIDB :** ORMS uses **Sequelize** : connect to mssql, mysql, pgsql, sqlite,... databases
+- **MULTIDB :** pistahx uses **Sequelize** : connect to mssql, mysql, pgsql, sqlite,... databases
 
 - **PROMISES-FULL :** Use the great power of promises using a simple Haxe ( **Promhx, Thx.*,..** ) workflow
 
-- **DB PROMISES :** ORMS handles **parallel db querying strategies**
+- **DB PROMISES :** pistahx handles **parallel db querying strategies**
 
-- **CONTAINER READY :** ORMS comes with a **native docker container environment** for your app. You can now trully **deploy anywhere !**
+- **CONTAINER READY :** pistahx comes with a **native docker container environment** for your app. You can now trully **deploy anywhere !**
 
-# BUILD YOUR API USING ORMS
-**remider: ORMS is meant to be used as a dependency !!**
+# BUILD YOUR API USING pistahx
+**remider: pistahx is meant to be used as a dependency !!**
 
 **STEP BY STEP :**
 
-**1 .Fork https://github.com/mebyz/orms-sample-app to bootstrap you own orms app !**
+**1 .Fork https://github.com/mebyz/pistahx-app to bootstrap you own pistahx app !**
  
 2 . You'll need **Haxe** installed on your system
 
@@ -93,7 +93,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 
 **- or deploy a local docker container and run your api from here :** `./docker.sh`
 
-# ORMS INSIGHTS : code
+# pistahx INSIGHTS : code
 
 **SAMPLE CODE : OPEN API YAML ROUTE DEFINITION**
 
@@ -126,7 +126,7 @@ paths:
 **YAML CONFIGURATION : example here : ./app/conf/local.yaml**
 
 ```yaml
-APP_NAME: orms_sample_app
+APP_NAME: pistahx_sample_app
 ENV_NAME: local
 #ELK_SERVER: to be defined
 #JWT_SECRET: local_secret_key
