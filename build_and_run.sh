@@ -60,11 +60,11 @@ haxelib run dox -i xml -o ./out/pages
 cd ..
 fi
 
-if [ "$mode" = "run" ] ; then
-echo "$VERT" "#PISTAHX: trying to start API" "$NORMAL"
-cd $prj/distrib/out
-node app.js
-fi
+#if [ "$mode" = "run" ] ; then
+#echo "$VERT" "#PISTAHX: trying to start API" "$NORMAL"
+#cd $prj/distrib/out
+#node app.js
+#fi
 
 if [ "$mode" = "docker" ] ; then
 echo "$VERT" "#PISTAHX: trying to dockerise, and start API" "$NORMAL"

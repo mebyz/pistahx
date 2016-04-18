@@ -12,5 +12,5 @@
 -cp ../app/Business/models
 -main Main
 -D nodejs
--js api.js
+-js app.js
 -xml xml
