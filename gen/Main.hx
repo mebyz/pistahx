@@ -214,6 +214,28 @@ class Main {
           prefix : 'cacheout:'+conf.get('APP_NAME')+':'
       });
   }
+  
+  public static function initCORS (conf : Dynamic, app: Dynamic) {
+      switch (getConfKey(conf, 'API_CORS_ALLOWED')) {
+        case None: {
+          trace("#app : CORS not set, allowing in/out hits for *");
+          app.use(function(req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+          });
+        }
+        case Some(s): {
+          trace('#app : using CORS settings');
+          var cors = conf.get('API_CORS_ALLOWED');
+          app.use(function(req, res, next) {
+            res.header("Access-Control-Allow-Origin", cors);
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+          });
+        }
+    }
+  }
 
   public static function initSession (conf : Dynamic, app: Dynamic, redisClient : Dynamic) {
       switch (getConfKey(conf, 'SESSION_TTL')) {
@@ -421,6 +443,9 @@ class Main {
       
       // INIT SESSION (optionnal)
       initSession(conf, app, redisClient);
+
+      // INIT CORS (optionnal)
+      initCORS(conf, app);
 
       // INIT JWT (optionnal)
       initJWT(conf, app, redisClient);
