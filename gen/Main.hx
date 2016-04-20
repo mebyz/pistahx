@@ -214,22 +214,18 @@ class Main {
           prefix : 'cacheout:'+conf.get('APP_NAME')+':'
       });
   }
-  
+
   public static function initCORS (conf : Dynamic, app: Dynamic) {
       switch (getConfKey(conf, 'API_CORS_ALLOWED')) {
         case None: {
-          trace("#app : CORS not set, allowing in/out hits for *");
-          app.use(function(req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-          });
+          trace("#app : CORS not set, disabling all calls from *");
         }
         case Some(s): {
           trace('#app : using CORS settings');
-          var cors = conf.get('API_CORS_ALLOWED');
           app.use(function(req, res, next) {
-            res.header("Access-Control-Allow-Origin", cors);
+            var cors = conf.get('API_CORS_ALLOWED');
+            var origin = Lambda.has(cors, req.header("host")) ? req.headers.origin : Lambda.array(cors)[0];
+            res.header("Access-Control-Allow-Origin", origin);
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
           });
@@ -505,7 +501,7 @@ class Main {
                     }
                 ]
             );           
-      });	
+      }); 
       
       //LEGACY API BOOSTER
       if (apiBind.legacyDomain!='') { 
@@ -544,7 +540,7 @@ class ApiOperation {
 
   public function new(t : Dynamic){
     original = t;
-	path =  original.operation.path;     
+    path =  original.operation.path;     
     summary = haxe.Json.parse(StringTools.replace(original.operation.summary,"'",'"'));
     
     var r = ~/\{([^}]+)\}/g;
