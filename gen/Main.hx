@@ -224,7 +224,7 @@ class Main {
           trace('#app : using CORS settings');
           app.use(function(req, res, next) {
             var cors = conf.get('API_CORS_ALLOWED');
-            var origin = Lambda.has(cors, req.header("host")) ? req.headers.origin : Lambda.array(cors)[0];
+            var origin = Lambda.has(cors, req.headers.origin) ? req.headers.origin : Lambda.array(cors)[0];
             res.header("Access-Control-Allow-Origin", origin);
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
