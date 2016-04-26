@@ -337,35 +337,31 @@ class Main {
       process.env['AWS_SECRET_ACCESS_KEY'] = skey;
 
       var sbucket = conf.get('S3_BUCKET');
-      aws.config.region = conf.get('S3_REGION');
+      var sfolder = conf.get('S3_FOLDER');
+      var sregion = conf.get('S3_REGION');
+      aws.config.region = sregion;
 
       app.use(busboy());
 
       app.post('/upload', untyped function (req, res, next) {
-          var fstream;
-          req.pipe(req.busboy);
-          req.busboy.on('file', function (fieldname, file, filename) {
+        req.pipe(req.busboy);
+        req.busboy.on('file', function (fieldname, file, filename) {
 
-                var s3bucket = untyped __js__('new Main.aws.S3({params: {Bucket: sbucket}})');
-                s3bucket.createBucket(function() {
-                  var params = { Key: filename, Body: file };
-                  s3bucket.upload(params, function(err, data) {
-                    if (err) {
-                      console.log("Error uploading data: ", err);
-                    } else {
-                      console.log("Successfully uploaded");
-                    }
-                  });
-                
-
-                trace("Upload Finished of " + filename);              
-                res.redirect('/');
-              });
-          });
-      });
-
+              var s3bucket = untyped __js__('new Main.aws.S3({params: {Bucket: sbucket}})');
+              s3bucket.createBucket(function() {
+                var params = { Key: sfolder+filename, Body: file, ACL: 'public-read'};
+                s3bucket.upload(params, function(err, data) {
+                  if (err) {
+                    console.log("Error uploading data: ", err);
+                  } else {
+                    console.log("Successfully uploaded");
+                  }
+                });        
+                res.send('https://s3-'+sregion+'.amazonaws.com/'+sbucket+'/'+sfolder+filename);
+            });
+        });
+    });
   }
-
 
   public static function initGAuth (conf : Dynamic, app: Dynamic, redisClient : Dynamic, apiBind : ApiBinding) : Dynamic {
 
@@ -489,7 +485,7 @@ class Main {
 
       // INIT JWT (optionnal)
       initJWT(conf, app, redisClient);
-            
+      
       // INIT S3 UPLOAD (optionnal)
       initS3(conf, app);
 
