@@ -37,15 +37,18 @@ typedef Operation = {
   
 class Main {
 
-  private static var initDbCache    = Node.require('sequelize-redis-cache');
+  private static var initDbCache  = Node.require('sequelize-redis-cache');
   private static var redis        = Node.require('redis');
   private static var session      = Node.require('express-session');
   private static var vm           = Node.require('vm');
   private static var swaggerTools = Node.require('swagger-tools');
   private static var jsyaml       = Node.require('js-yaml');
   private static var passport     = Node.require('passport');
+  private static var aws          = Node.require('aws-sdk');
 
-
+  private static var busboy       = require('connect-busboy');
+  private static var path         = require('path');
+ 
   private static var options = {
     controllers: './',
     useStubs: false
@@ -323,6 +326,47 @@ class Main {
     }
   }
 
+
+  public static function initS3 (conf : Dynamic, app: Dynamic) {
+      trace('#app : using S3');    
+
+
+      var sid = conf.get('S3_ID');
+      var skey = conf.get('S3_KEY');
+      process.env['AWS_ACCESS_KEY_ID'] = sid;
+      process.env['AWS_SECRET_ACCESS_KEY'] = skey;
+
+      var sbucket = conf.get('S3_BUCKET');
+      aws.config.region = conf.get('S3_REGION');
+
+      app.use(busboy());
+
+      app.post('/upload', untyped function (req, res, next) {
+          var fstream;
+          req.pipe(req.busboy);
+          req.busboy.on('file', function (fieldname, file, filename) {
+
+                var s3bucket = untyped __js__('new Main.aws.S3({params: {Bucket: sbucket}})');
+                s3bucket.createBucket(function() {
+                  var params = { Key: filename, Body: file };
+                  s3bucket.upload(params, function(err, data) {
+                    if (err) {
+                      console.log("Error uploading data: ", err);
+                    } else {
+                      console.log("Successfully uploaded");
+                    }
+                  });
+                
+
+                trace("Upload Finished of " + filename);              
+                res.redirect('/');
+              });
+          });
+      });
+
+  }
+
+
   public static function initGAuth (conf : Dynamic, app: Dynamic, redisClient : Dynamic, apiBind : ApiBinding) : Dynamic {
 
       switch (getConfKey(conf, 'GOOGLE_CLIENT_ID')) {
@@ -429,7 +473,7 @@ class Main {
 
     //    OUTPUT CACHE
     var cacheo = initOutputCache(conf, redisClient);
-    
+
     // INIT SWAGGER MIDDLEWARE
     var swaggerDoc = jsyaml.safeLoad(spec);
     swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
@@ -445,7 +489,10 @@ class Main {
 
       // INIT JWT (optionnal)
       initJWT(conf, app, redisClient);
-      
+            
+      // INIT S3 UPLOAD (optionnal)
+      initS3(conf, app);
+
       // PASSPORT / GOOGLE TOKEN AUTH (optionnal). 
       // otherwise websiteAuth will be an empty middleware (only containing next();)
       var websiteAuth = initGAuth(conf, app, redisClient, apiBind);
@@ -502,7 +549,7 @@ class Main {
                 ]
             );           
       }); 
-      
+
       //LEGACY API BOOSTER
       if (apiBind.legacyDomain!='') { 
         // !TODO: we set a ridiculously long default caching time : 10 days. 
