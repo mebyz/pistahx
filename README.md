@@ -1,25 +1,39 @@
 # pistahx.io : Design-First Type-Safe Haxe Web API Framework 
 
-> ---
-
-> * We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! 
-> 
+* We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! 
+ 
 ![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
-> * We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)
+ * We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)
 
-> ---
+-
 
-- **pistahx Building blocks :**
-
+>
+# bootstrap a sample pistahx based web api
+```yaml
+git clone git@github.com:mebyz/pistahx-app.git
+cd pistahx-app
+npm install --only=dev
+gulp
 ```
+-
+>
 
-Haxe, Nodejs, Mustache, Yaml, Bash scripts, 
-Haxe/Node gems including thx.*, PromHx, Express, Sequelize, Tedious, 
-Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
+**PREREQUISTES & TIPS:**
+ 
+- You'll need **Haxe** installed on your system
 
-```
+- Design and implement your api : 
 
+- Define your api spec in the **./app/api.yaml** file
+
+- Code your business logic in the **./app/Business/** folder
+
+- Use the **./app/conf/[env].yaml** file to set your configuration (db user/pass, ...)
+
+- you'll need a running **redis server**
+
+# pistahx Building blocks :
 ![] (https://raw.githubusercontent.com/mebyz/pistahx/master/pistahx-stack-mini.png)
 
 - **PERFORMANCE :** pistahx heavily relies on **many cache layers**, and let you define your own **cache invalidation strategies**
@@ -65,34 +79,7 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 - **DB PROMISES :** pistahx handles **parallel db querying strategies**
 
 - **CONTAINER READY :** pistahx comes with a **native docker container environment** for your app. You can now trully **deploy anywhere !**
-
-# BUILD YOUR API USING pistahx
-**remider: pistahx is meant to be used as a dependency !!**
-
-**STEP BY STEP :**
-
-**1 .Fork https://github.com/mebyz/pistahx-app to bootstrap you own pistahx app !**
  
-2 . You'll need **Haxe** installed on your system
-
-3 . Design and implement your api : 
-
- - Define your api spec in the **./app/api.yaml** file
-
- - Code your business logic in the **./app/Business/** folder
-
- - Use the **./app/conf/[env].yaml** file to set your configuration (db user/pass, ...)
-
-4 . you'll need a running database server
-
-5 . you'll need a running **redis server** ( locally : `redis-server` )
- 
-**=> compile using :** `./build.sh`
-
-**- You can then simply run your api using :** `./run.sh`
-
-**- or deploy a local docker container and run your api from here :** `./docker.sh`
-
 # pistahx INSIGHTS : code
 
 **SAMPLE CODE : OPEN API YAML ROUTE DEFINITION**
@@ -262,8 +249,6 @@ paths:
 2 . You will need a running api (local)
 
 3 . Run the test suite using mocha **(run this from the project's root folder, NOT from the ./distrib/ folder !)** :
-
-`npm install`
 
 `mocha test.js`
 
