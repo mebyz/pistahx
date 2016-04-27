@@ -500,7 +500,14 @@ class Main {
       app.use(BodyParser.urlencoded({extended: true}));
       
       // SWAGGER API DOC
-      app.use('/doc', new js.npm.express.Static(dn+'/doc'));
+      app.use(
+        '/doc', 
+        function(req : Request, res : Response){ 
+          res.redirect('/openapi/?url=../api.yaml');
+        }
+      );
+
+      app.use('/openapi', new js.npm.express.Static(dn+'/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/api.yaml'));
  
