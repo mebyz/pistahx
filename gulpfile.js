@@ -20,6 +20,11 @@ gulp.task('build', function(done) {
 			'npm install\n'+
 			'echo "$VERT" "#PISTAHX: updating nodejs dependencies" "$NORMAL"\n'+
 			'npm update\n'+
+			
+                        'echo "$VERT" "#PISTAHX: setting OpenApi Doc UI folder" "$NORMAL"\n'+
+			'mkdir -p ./doc\n'+
+			'cp -rf ./node_modules/swagger-ui/dist/* ./doc/\n'+
+
 			'echo "$VERT" "#PISTAHX: cleaning workspace" "$NORMAL"\n'+
 			'rm -rf $prj/distrib/promhx\n'+
 			'rm -rf $prj/distrib/haxe-js-kit\n'+

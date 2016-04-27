@@ -1,12 +1,11 @@
 {
   "name": "pistahx",
   "version": "0.0.1",
-  "description": "design-first haxe web api",
+  "description": "Design-first type safe haxe web api",
   "main": "",
   "private": false,
-  "license": "CC-BY-SA-4.0",
-  "scripts": {
-  },
+  "license": "CC BY-SA 4.0 FR",
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mebyz/pistahx.git"
@@ -15,11 +14,11 @@
     "pistahx"
   ],
   "author": "emmanuel.botros@gmail.com",
-  "license": "CC BY-SA 3.0 FR",
   "bugs": {
     "url": "https://github.com/mebyz/pistahx/issues"
   },
   "homepage": "https://github.com/mebyz/pistahx#readme",
   "dependencies": {
+    "swagger-ui": "^2.1.4"
   }
 }
