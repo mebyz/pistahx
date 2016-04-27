@@ -22,9 +22,6 @@
       <h1>
 <a id="pistahxio--design-first-type-safe-haxe-web-api-framework" class="anchor" href="#pistahxio--design-first-type-safe-haxe-web-api-framework" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx.io : Design-First Type-Safe Haxe Web API Framework</h1>
 
-<blockquote>
-<hr>
-
 <ul>
 <li>We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! </li>
 </ul>
@@ -35,19 +32,33 @@
 <li>We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)</li>
 </ul>
 
-<hr>
+<h2></h2>
+
+<blockquote>
+<h1>
+<a id="bootstrap-a-sample-pistahx-based-web-api" class="anchor" href="#bootstrap-a-sample-pistahx-based-web-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>bootstrap a sample pistahx based web api</h1>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">git clone git@github.com</span>:mebyz/pistahx<span class="pl-s">-<span class="pl-s">app.git</span></span>
+cd pistahx<span class="pl-s">-<span class="pl-s">app</span></span>
+npm install <span class="pl-s">-<span class="pl-s">-only=dev</span></span>
+gulp</pre></div>
+
+<h2></h2>
 </blockquote>
 
+<p><strong>PREREQUISTES &amp; TIPS:</strong></p>
+
 <ul>
-<li><strong>pistahx Building blocks :</strong></li>
+<li><p>You'll need <strong>Haxe</strong> installed on your system</p></li>
+<li><p>Design and implement your api : </p></li>
+<li><p>Define your api spec in the <strong>./app/api.yaml</strong> file</p></li>
+<li><p>Code your business logic in the <strong>./app/Business/</strong> folder</p></li>
+<li><p>Use the <strong>./app/conf/[env].yaml</strong> file to set your configuration (db user/pass, ...)</p></li>
+<li><p>you'll need a running <strong>redis server</strong></p></li>
 </ul>
 
-<pre><code>
-Haxe, Nodejs, Mustache, Yaml, Bash scripts, 
-Haxe/Node gems including thx.*, PromHx, Express, Sequelize, Tedious, 
-Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
-
-</code></pre>
+<h1>
+<a id="pistahx-building-blocks-" class="anchor" href="#pistahx-building-blocks-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx Building blocks :</h1>
 
 <p><img src="https://raw.githubusercontent.com/mebyz/pistahx/master/pistahx-stack-mini.png" alt=""></p>
 
@@ -85,35 +96,6 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 <li><p><strong>DB PROMISES :</strong> pistahx handles <strong>parallel db querying strategies</strong></p></li>
 <li><p><strong>CONTAINER READY :</strong> pistahx comes with a <strong>native docker container environment</strong> for your app. You can now trully <strong>deploy anywhere !</strong></p></li>
 </ul>
-
-<h1>
-<a id="build-your-api-using-pistahx" class="anchor" href="#build-your-api-using-pistahx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>BUILD YOUR API USING pistahx</h1>
-
-<p><strong>remider: pistahx is meant to be used as a dependency !!</strong></p>
-
-<p><strong>STEP BY STEP :</strong></p>
-
-<p><strong>1 .Fork <a href="https://github.com/mebyz/pistahx-app">https://github.com/mebyz/pistahx-app</a> to bootstrap you own pistahx app !</strong></p>
-
-<p>2 . You'll need <strong>Haxe</strong> installed on your system</p>
-
-<p>3 . Design and implement your api : </p>
-
-<ul>
-<li><p>Define your api spec in the <strong>./app/api.yaml</strong> file</p></li>
-<li><p>Code your business logic in the <strong>./app/Business/</strong> folder</p></li>
-<li><p>Use the <strong>./app/conf/[env].yaml</strong> file to set your configuration (db user/pass, ...)</p></li>
-</ul>
-
-<p>4 . you'll need a running database server</p>
-
-<p>5 . you'll need a running <strong>redis server</strong> ( locally : <code>redis-server</code> )</p>
-
-<p><strong>=&gt; compile using :</strong> <code>./build.sh</code></p>
-
-<p><strong>- You can then simply run your api using :</strong> <code>./run.sh</code></p>
-
-<p><strong>- or deploy a local docker container and run your api from here :</strong> <code>./docker.sh</code></p>
 
 <h1>
 <a id="pistahx-insights--code" class="anchor" href="#pistahx-insights--code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx INSIGHTS : code</h1>
@@ -278,8 +260,6 @@ Crypto, Dox, Open API (spec,codegen,doc ui,..), Redis, ELK, Passport.js, ...
 <p>2 . You will need a running api (local)</p>
 
 <p>3 . Run the test suite using mocha <strong>(run this from the project's root folder, NOT from the ./distrib/ folder !)</strong> :</p>
-
-<p><code>npm install</code></p>
 
 <p><code>mocha test.js</code></p>
 
