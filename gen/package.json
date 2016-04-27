@@ -40,6 +40,11 @@
     "jwt-redis-session": "1.0.4",
     "aws-sdk": "^2.3",
     "connect-busboy": "0.0.2"
-
-  }
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-prompt": "^0.2.0",
+    "gulp-shell": "^0.5.2",
+    "gulp-util": "^3.0.7"
+   }
 }
