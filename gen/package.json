@@ -42,7 +42,7 @@
     "jwt-redis-session": "1.0.4",
     "pipe": "^1.1.0",
     "request": "^2.69.0",
-    "aws-sdk": "1.2.0",
+    "aws-sdk": "^2.3",
     "connect-busboy": "0.0.2",
     "path": "0.12.7"
 
