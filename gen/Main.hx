@@ -19,6 +19,16 @@ using thx.Functions;
 
 import Business;    // business logic goes and stays here
 
+
+extern class PistahxRequest extends js.npm.express.Request{
+    public function new() : Void;
+    public var session: Dynamic;
+    public var jwtSession: Dynamic;
+    public var pipe: Dynamic;
+    public var busboy: Dynamic;
+    public var url: Dynamic;
+}
+
 typedef ApiBinding = {
     site            : String, 
     localhost       : String, 
@@ -185,10 +195,11 @@ class Main {
 
   public static function initDb (conf : Dynamic) {
 
-    var dbOpts = conf.get('DB_OPTIONS');
+    var dbOpts : Dynamic = conf.get('DB_OPTIONS');
     var poolOpts = dbOpts.get('pool');
     var dialectOps = dbOpts.get('dialectOptions');
-    var opts = {
+
+    var opts:SequelizeOptions = {
         host: dbOpts.get('host'),
         dialect: dbOpts.get('dialect'),
         storage: dbOpts.get('storage'),
@@ -202,7 +213,7 @@ class Main {
         },
         logging: dbOpts.get('logging')
       };
-    return new Sequelize(conf.get('DB_NAME'), conf.get('DB_USER'), conf.get('DB_PASSWORD'), untyped opts);
+    return new Sequelize(conf.get('DB_NAME'), conf.get('DB_USER'), conf.get('DB_PASSWORD'), opts);
   }
 
   public static function initCacheClient (conf : Dynamic) {
@@ -287,11 +298,11 @@ class Main {
               requestArg: "jwtToken"
           }));
 
-          var handleRequest = function(req: Request, res: Response){
+          var handleRequest = function(req: PistahxRequest, res: Response){
 
               var user : Dynamic= { id : 1 };
 
-              untyped req.jwtSession.user = haxe.Json.stringify(user); 
+              req.jwtSession.user = haxe.Json.stringify(user); 
 
               // this will be attached to the JWT
               var claims = {
@@ -299,7 +310,7 @@ class Main {
                   aud: "dummy.com"
               };
 
-              untyped req.jwtSession.create(claims, function(error, token){
+              req.jwtSession.create(claims, function(error, token){
                   res.json({ token: token });
 
               });
@@ -308,15 +319,15 @@ class Main {
 
           app.get('/jwt', handleRequest);
             
-          var handleRequest2 = function(req: Request, res: Response){
+          var handleRequest2 = function(req: PistahxRequest, res: Response){
 
               console.log("Request JWT session data: ", 
-                  untyped req.jwtSession.id, 
-                  untyped req.jwtSession.claims, 
-                  untyped req.jwtSession.jwt
+                  req.jwtSession.id, 
+                  req.jwtSession.claims, 
+                  req.jwtSession.jwt
               );
 
-              res.json(untyped req.jwtSession.toJSON());
+              res.json(req.jwtSession.toJSON());
 
           };
           
@@ -343,7 +354,7 @@ class Main {
 
       app.use(busboy());
 
-      app.post('/upload', untyped function (req, res, next) {
+      app.post('/upload', function (req: PistahxRequest, res: Response, next: MiddlewareNext) {
         req.pipe(req.busboy);
         req.busboy.on('file', function (fieldname, file, filename) {
 
@@ -368,7 +379,7 @@ class Main {
       switch (getConfKey(conf, 'GOOGLE_CLIENT_ID')) {
         case None: {
           trace("#app : no GAuth");
-          return function(req: Request, res: Response, next : MiddlewareNext) { next(); }
+          return function(req: PistahxRequest, res: Response, next : MiddlewareNext) { next(); }
         }
         case Some(s): {
           
@@ -405,31 +416,31 @@ class Main {
           ))");
       
           app.get('/',
-          function(req: Request, res: Response) {
+          function(req: PistahxRequest, res: Response) {
             res.send('<a href="/google">login with google</>');
           });
 
           app.get('/google',
           passport.authenticate('google',{scope: [ 'email', 'profile', 'https://www.googleapis.com/auth/userinfo.email' ]}),
-          function(req: Request, res: Response){
+          function(req: PistahxRequest, res: Response){
           });
 
           app.get('/callback', 
           passport.authenticate('google', untyped { failureRedirect: '/logout' }),
-          function(req: Request, res: Response) {
-            untyped req.session.status = true;
+          function(req: PistahxRequest, res: Response) {
+            req.session.status = true;
             res.redirect('/site');
           });
 
           app.get('/logout',
-          function(req: Request, res: Response) {
-              untyped req.session.status = false;
+          function(req: PistahxRequest, res: Response) {
+              req.session.status = false;
               res.redirect('/');
           });
 
           // ACTIVATE FRONT AUTH
-          return function(req: Request, res: Response, next : MiddlewareNext) {
-            if (untyped req.session.status== true) {
+          return function(req: PistahxRequest, res: Response, next : MiddlewareNext) {
+            if (req.session.status== true) {
               next(); 
             } else {
               res.redirect("/"); 
@@ -528,7 +539,7 @@ class Main {
             var opId = operation.operation.operationId;
             var opMethod = operation.operation.httpMethod + '_' + opId;
             
-            var cacheExpire = function(req : Request, res : Response, next : MiddlewareNext) {
+            var cacheExpire = function(req : PistahxRequest, res : Response, next : MiddlewareNext) {
                 next();
             };
             
@@ -546,7 +557,7 @@ class Main {
                 [
                     conf.get('BASE_URL')+path, 
                     untyped cacheExpire,
-                    function(req : Request, res : Response){ 
+                    function(req : PistahxRequest, res : Response){ 
                         Reflect.callMethod(Business, method, [ db, req, res, dbcacher, cacheo, extra ]);
                     }
                 ]
@@ -557,8 +568,8 @@ class Main {
       if (apiBind.legacyDomain!='') { 
         // !TODO: we set a ridiculously long default caching time : 10 days. 
         //cache invalidation should be done using event subscriptions in your yaml file !
-        var legacyCacheExpire = cacheo.route(untyped { expire: 3600*24*10 });
-        app.use('/api/legacy', untyped legacyCacheExpire, untyped function(req : Request, res : Response){ 
+        var legacyCacheExpire = untyped cacheo.route({ expire: 3600*24*10 });
+        app.use('/api/legacy', untyped legacyCacheExpire, untyped function(req : PistahxRequest, res : Response){ 
           var request = require('request');
           var url= ""+req.url;
           var pipe  = req.pipe(request(url));
