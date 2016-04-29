@@ -24,17 +24,11 @@
 
 <ul>
 <li>We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! </li>
+<li>We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)</li>
 </ul>
 
 <p><img src="http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png" alt=""></p>
 
-<ul>
-<li>We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)</li>
-</ul>
-
-<h2></h2>
-
-<blockquote>
 <h1>
 <a id="bootstrap-a-sample-pistahx-based-web-api" class="anchor" href="#bootstrap-a-sample-pistahx-based-web-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>bootstrap a sample pistahx based web api</h1>
 
@@ -43,59 +37,254 @@ cd pistahx<span class="pl-s">-<span class="pl-s">app</span></span>
 npm install <span class="pl-s">-<span class="pl-s">-only=dev</span></span>
 gulp</pre></div>
 
-<h2></h2>
-</blockquote>
-
-<p><strong>PREREQUISTES &amp; TIPS:</strong></p>
-
+<blockquote>
 <ul>
 <li><p>You'll need <strong>Haxe</strong> installed on your system</p></li>
-<li><p>Design and implement your api : </p></li>
-<li><p>Define your api spec in the <strong>./app/api.yaml</strong> file</p></li>
+<li><p>Design and implement  your api spec in the <strong>./app/api.yaml</strong> file</p></li>
 <li><p>Code your business logic in the <strong>./app/Business/</strong> folder</p></li>
 <li><p>Use the <strong>./app/conf/[env].yaml</strong> file to set your configuration (db user/pass, ...)</p></li>
 <li><p>you'll need a running <strong>redis server</strong></p></li>
 </ul>
+</blockquote>
+
+<h2></h2>
+
+<h1>
+<a id="pistahx-modules-" class="anchor" href="#pistahx-modules-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx modules :</h1>
+
+<blockquote>
+<h4>
+<a id="--httpsgithubcommebyzpistahxgit-core-of-pistahx" class="anchor" href="#--httpsgithubcommebyzpistahxgit-core-of-pistahx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- <a href="https://github.com/mebyz/pistahx.git">https://github.com/mebyz/pistahx.git</a> (Core of pistahx)</h4>
+
+<h4>
+<a id="--httpsgithubcommebyzpistahx-dbgit-pistahxs-db-to-haxe-typedefs" class="anchor" href="#--httpsgithubcommebyzpistahx-dbgit-pistahxs-db-to-haxe-typedefs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- <a href="https://github.com/mebyz/pistahx-db.git">https://github.com/mebyz/pistahx-db.git</a> (pistahx's DB to haxe typedefs)</h4>
+
+<h4>
+<a id="--httpsgithubcommebyzpistahx-specgit-pistahxs-openapi-to-haxe-typedefs" class="anchor" href="#--httpsgithubcommebyzpistahx-specgit-pistahxs-openapi-to-haxe-typedefs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- <a href="https://github.com/mebyz/pistahx-spec.git">https://github.com/mebyz/pistahx-spec.git</a> (pistahx's OpenAPI to Haxe typedefs)</h4>
+
+<h4>
+<a id="--httpsgithubcommebyzpistahx-uigit-pistahxs-ts-angular2-bootstrap4-ui" class="anchor" href="#--httpsgithubcommebyzpistahx-uigit-pistahxs-ts-angular2-bootstrap4-ui" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- <a href="https://github.com/mebyz/pistahx-ui.git">https://github.com/mebyz/pistahx-ui.git</a> (pistahx's TS Angular2 Bootstrap4 UI)</h4>
+
+<h4>
+<a id="--httpsgithubcommebyzpistahx-appgit-pistahx-demo-app" class="anchor" href="#--httpsgithubcommebyzpistahx-appgit-pistahx-demo-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- <a href="https://github.com/mebyz/pistahx-app.git">https://github.com/mebyz/pistahx-app.git</a> (pistahx demo app)</h4>
+</blockquote>
+
+<h2></h2>
 
 <h1>
 <a id="pistahx-building-blocks-" class="anchor" href="#pistahx-building-blocks-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx Building blocks :</h1>
 
+<blockquote>
 <p><img src="https://raw.githubusercontent.com/mebyz/pistahx/master/pistahx-stack-mini.png" alt=""></p>
+</blockquote>
 
+<h2></h2>
+
+<h1>
+<a id="pistahx-promises" class="anchor" href="#pistahx-promises" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx promises:</h1>
+
+<blockquote>
 <ul>
 <li>
-<p><strong>PERFORMANCE :</strong> pistahx heavily relies on <strong>many cache layers</strong>, and let you define your own <strong>cache invalidation strategies</strong></p>
+<strong>PERFORMANCE :</strong> pistahx heavily relies on <strong>many cache layers</strong>, and let you define your own <strong>cache invalidation strategies</strong>
 
 <ul>
-<li><p>Custom output cache for each route based on your api specs</p></li>
-<li><p>Secure Cookie based Session / Auth token Redis store</p></li>
-<li><p>Pro-active cascading cache invalidation strategies</p></li>
-<li><p>Db caching (via Sequelize) : use cache to store entities and queries</p></li>
-<li><p>Define your own caching strategies for fine tuning</p></li>
+<li>Custom output cache for each route based on your api specs</li>
+<li>Secure Cookie based Session / Auth token Redis store</li>
+<li>Pro-active cascading cache invalidation strategies</li>
+<li>Db caching (via Sequelize) : use cache to store entities and queries</li>
+<li>Define your own caching strategies for fine tuning</li>
 </ul>
 </li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
 <li>
-<p><strong>SECURITY :</strong> pistahx offers you <strong>multiple authentication strategies</strong> activate them in your configuration file ./app/conf/[env].yaml </p>
+<strong>SECURITY :</strong> pistahx offers you <strong>multiple authentication strategies</strong> activate them in your configuration file ./app/conf/[env].yaml 
 
 <ul>
-<li><p>JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients</p></li>
-<li><p>Standard but fast and secure sessions strategy if you're setting up a service targeting Web browsers supporting cookies</p></li>
-<li><p>pistahx also implements Passport.js (which includes 300+ more auth strategies) !</p></li>
+<li>JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients</li>
+<li>Standard but fast and secure sessions strategy if you're setting up a service targeting Web browsers supporting cookies</li>
+<li>pistahx also implements Passport.js (which includes 300+ more auth strategies) !</li>
 </ul>
 </li>
-<li><p><strong>MONITORING :</strong> pistahx implements monitoring natively, with the support of the gorgious <strong>ELK stack + appmetrics</strong>. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !</p></li>
-<li><p><strong>DESIGN FIRST :</strong> pistahx follows the <strong>openapi</strong> specification. creating and modifying your api is done using <strong>yaml language</strong></p></li>
-<li><p><strong>MOCK YOUR TESTS IN THE SPEC DESCRIPTION :</strong> simply mock some test cases (a request and its response) in the <strong>yaml specification</strong> file  and let <strong>mocha</strong> do the magic !</p></li>
-<li><p><strong>AUTOMATIC DOCGEN :</strong> an <strong>interactive documentation</strong> is automatically generated from the spec file </p></li>
-<li><p><strong>AUTOMATIC CODEGEN :</strong> API server code (routing, server core...) is <strong>automatically generated</strong> from the spec file</p></li>
-<li><p><strong>CORE / BUSINESS CODE LOGIC SEPARATION :</strong> your business logic <strong>is separated from</strong> pistahx server core are during the whole life af your project.</p></li>
-<li><p><strong>STRONGLY TYPED CODE :</strong> Write your business logic using <strong>Haxe language</strong> (type checking helps the code to stay clean and secure). target is nodejs for now</p></li>
-<li><p><strong>OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :</strong> pistahx can be set up (within minutes), modified and deployed <strong>anywhere nodejs can run</strong> : Unix/Linux, Windows, OSx, ...</p></li>
-<li><p><strong>MULTIDB :</strong> pistahx uses <strong>Sequelize</strong> : connect to mssql, mysql, pgsql, sqlite,... databases</p></li>
-<li><p><strong>PROMISES-FULL :</strong> Use the great power of promises using a simple Haxe ( <strong>Promhx, Thx.*,..</strong> ) workflow</p></li>
-<li><p><strong>DB PROMISES :</strong> pistahx handles <strong>parallel db querying strategies</strong></p></li>
-<li><p><strong>CONTAINER READY :</strong> pistahx comes with a <strong>native docker container environment</strong> for your app. You can now trully <strong>deploy anywhere !</strong></p></li>
 </ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>MONITORING :</strong> 
+
+<ul>
+<li>pistahx implements monitoring natively, with the support of the gorgious <strong>ELK stack + appmetrics</strong>. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>DESIGN FIRST :</strong> 
+
+<ul>
+<li>pistahx follows the <strong>openapi</strong> specification. creating and modifying your api is done using <strong>yaml language</strong>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>MOCK YOUR TESTS IN THE SPEC DESCRIPTION :</strong> 
+
+<ul>
+<li>simply mock some test cases (a request and its response) in the <strong>yaml specification</strong> file  and let <strong>mocha</strong> do the magic !</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>AUTOMATIC DOCGEN :</strong> 
+
+<ul>
+<li>an <strong>interactive documentation</strong> is automatically generated from the spec file </li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>AUTOMATIC CODEGEN :</strong> 
+
+<ul>
+<li>API server code (routing, server core...) is <strong>automatically generated</strong> from the spec file</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>CORE / BUSINESS CODE LOGIC SEPARATION :</strong> 
+
+<ul>
+<li>your business logic <strong>is separated from</strong> pistahx server core are during the whole life af your project.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>STRONGLY TYPED CODE :</strong> 
+
+<ul>
+<li>Write your business logic using <strong>Haxe language</strong> (type checking helps the code to stay clean and secure). target is nodejs for now</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :</strong> 
+
+<ul>
+<li>pistahx can be set up (within minutes), modified and deployed <strong>anywhere nodejs can run</strong> : Unix/Linux, Windows, OSx, ...</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>MULTIDB :</strong> 
+
+<ul>
+<li> pistahx uses <strong>Sequelize</strong> : connect to mssql, mysql, pgsql, sqlite,... databases</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>PROMISES-FULL :</strong> 
+
+<ul>
+<li> Use the great power of promises using a simple Haxe ( <strong>Promhx, Thx.*,..</strong> ) workflow</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>DB PROMISES :</strong> 
+
+<ul>
+<li> pistahx handles <strong>parallel db querying strategies</strong>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h2></h2>
+
+<blockquote>
+<ul>
+<li>
+<strong>CONTAINER READY :</strong> 
+
+<ul>
+<li> pistahx comes with a <strong>native docker container environment</strong> for your app. You can now trully <strong>deploy anywhere !</strong>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
 
 <h1>
 <a id="pistahx-insights--code" class="anchor" href="#pistahx-insights--code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>pistahx INSIGHTS : code</h1>
@@ -114,7 +303,7 @@ gulp</pre></div>
       <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s"><span class="pl-pds">"</span>AccessKeyId<span class="pl-pds">"</span></span></span>
         <span class="pl-s"><span class="pl-ent">in:</span> <span class="pl-s"><span class="pl-pds">"</span>header<span class="pl-pds">"</span></span></span>
         <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>Access Key Id<span class="pl-pds">"</span></span></span>
-        <span class="pl-s"><span class="pl-ent">required:</span> <span class="pl-s">false</span></span>
+        <span class="pl-s"><span class="pl-ent">required:</span> <span class="pl-c1">false</span></span>
         <span class="pl-s"><span class="pl-ent">type:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span></span>
       <span class="pl-s"><span class="pl-ent">responses:</span></span>
         <span class="pl-s"><span class="pl-ent">200:</span></span>
@@ -151,8 +340,8 @@ gulp</pre></div>
     <span class="pl-c1"><span class="pl-ent">min:</span> 0</span>
     <span class="pl-c1"><span class="pl-ent">idle:</span> 10000</span>
   <span class="pl-s"><span class="pl-ent">dialectOptions:</span></span>
-    <span class="pl-s"><span class="pl-ent">encrypt:</span> <span class="pl-s">true</span></span>
-  <span class="pl-s"><span class="pl-ent">logging:</span> <span class="pl-s">false</span></span>
+    <span class="pl-s"><span class="pl-ent">encrypt:</span> <span class="pl-c1">true</span></span>
+  <span class="pl-s"><span class="pl-ent">logging:</span> <span class="pl-c1">false</span></span>
 <span class="pl-c1"><span class="pl-ent">SESSION_TTL:</span> 3600</span>
 <span class="pl-s"><span class="pl-ent">BASE_URL:</span> <span class="pl-s">/api/v1</span></span>
 <span class="pl-c1"><span class="pl-ent">API_PORT:</span> 3000</span></pre></div>
