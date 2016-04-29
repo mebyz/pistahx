@@ -1,14 +1,13 @@
 # pistahx.io : Design-First Type-Safe Haxe Web API Framework 
 
 * We'll be happy to meet you during WWX2016, the WorldWide Haxe conference in Paris (27-30 May 2016) ! 
- 
+* We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)
+
 ![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
- * We are thrilled to give you the opportunity to attend to the first and live full presentation of pistahx (40 min talk)
 
--
 
->
+
 # bootstrap a sample pistahx based web api
 ```yaml
 git clone git@github.com:mebyz/pistahx-app.git
@@ -16,69 +15,115 @@ cd pistahx-app
 npm install --only=dev
 gulp
 ```
--
+
+
 >
-
-**PREREQUISTES & TIPS:**
- 
 - You'll need **Haxe** installed on your system
-
-- Design and implement your api : 
-
-- Define your api spec in the **./app/api.yaml** file
-
+>
+- Design and implement  your api spec in the **./app/api.yaml** file
+>
 - Code your business logic in the **./app/Business/** folder
-
+>
 - Use the **./app/conf/[env].yaml** file to set your configuration (db user/pass, ...)
-
+>
 - you'll need a running **redis server**
 
+-
+
+# pistahx modules :
+>
+####- https://github.com/mebyz/pistahx.git (Core of pistahx)
+>
+####- https://github.com/mebyz/pistahx-db.git (pistahx's DB to haxe typedefs)
+>
+####- https://github.com/mebyz/pistahx-spec.git (pistahx's OpenAPI to Haxe typedefs)
+>
+####- https://github.com/mebyz/pistahx-ui.git (pistahx's TS Angular2 Bootstrap4 UI)
+>
+####- https://github.com/mebyz/pistahx-app.git (pistahx demo app)
+
+-
+
 # pistahx Building blocks :
-![] (https://raw.githubusercontent.com/mebyz/pistahx/master/pistahx-stack-mini.png)
+>![] (https://raw.githubusercontent.com/mebyz/pistahx/master/pistahx-stack-mini.png)
 
-- **PERFORMANCE :** pistahx heavily relies on **many cache layers**, and let you define your own **cache invalidation strategies**
+-
 
+# pistahx promises:
+
+>- **PERFORMANCE :** pistahx heavily relies on **many cache layers**, and let you define your own **cache invalidation strategies**
   - Custom output cache for each route based on your api specs
-
   - Secure Cookie based Session / Auth token Redis store
-   
   - Pro-active cascading cache invalidation strategies
-  
   - Db caching (via Sequelize) : use cache to store entities and queries
-  
   - Define your own caching strategies for fine tuning
 
-- **SECURITY :** pistahx offers you **multiple authentication strategies** activate them in your configuration file ./app/conf/[env].yaml 
+-
 
+>- **SECURITY :** pistahx offers you **multiple authentication strategies** activate them in your configuration file ./app/conf/[env].yaml 
   - JSON Web Tokens (JWT) : if you want to build RestFULL APIs or if you have to deal with cookie-less clients
-
   - Standard but fast and secure sessions strategy if you're setting up a service targeting Web browsers supporting cookies
-
   - pistahx also implements Passport.js (which includes 300+ more auth strategies) !
 
-- **MONITORING :** pistahx implements monitoring natively, with the support of the gorgious **ELK stack + appmetrics**. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !
+-
 
-- **DESIGN FIRST :** pistahx follows the **openapi** specification. creating and modifying your api is done using **yaml language**
+>- **MONITORING :** 
+  - pistahx implements monitoring natively, with the support of the gorgious **ELK stack + appmetrics**. use ELK_SERVER parameter in your ./app/conf/[env].yaml file and you're good to go !
 
-- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION :** simply mock some test cases (a request and its response) in the **yaml specification** file  and let **mocha** do the magic !
+-
 
-- **AUTOMATIC DOCGEN :** an **interactive documentation** is automatically generated from the spec file 
+>- **DESIGN FIRST :** 
+  - pistahx follows the **openapi** specification. creating and modifying your api is done using **yaml language**
 
-- **AUTOMATIC CODEGEN :** API server code (routing, server core...) is **automatically generated** from the spec file
+-
 
-- **CORE / BUSINESS CODE LOGIC SEPARATION :** your business logic **is separated from** pistahx server core are during the whole life af your project.
+>- **MOCK YOUR TESTS IN THE SPEC DESCRIPTION :** 
+  - simply mock some test cases (a request and its response) in the **yaml specification** file  and let **mocha** do the magic !
 
-- **STRONGLY TYPED CODE :** Write your business logic using **Haxe language** (type checking helps the code to stay clean and secure). target is nodejs for now
+-
 
-- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :** pistahx can be set up (within minutes), modified and deployed **anywhere nodejs can run** : Unix/Linux, Windows, OSx, ...
+>- **AUTOMATIC DOCGEN :** 
+  - an **interactive documentation** is automatically generated from the spec file 
 
-- **MULTIDB :** pistahx uses **Sequelize** : connect to mssql, mysql, pgsql, sqlite,... databases
+-
 
-- **PROMISES-FULL :** Use the great power of promises using a simple Haxe ( **Promhx, Thx.*,..** ) workflow
+>- **AUTOMATIC CODEGEN :** 
+  - API server code (routing, server core...) is **automatically generated** from the spec file
 
-- **DB PROMISES :** pistahx handles **parallel db querying strategies**
+-
 
-- **CONTAINER READY :** pistahx comes with a **native docker container environment** for your app. You can now trully **deploy anywhere !**
+>- **CORE / BUSINESS CODE LOGIC SEPARATION :** 
+  - your business logic **is separated from** pistahx server core are during the whole life af your project.
+
+-
+
+>- **STRONGLY TYPED CODE :** 
+  - Write your business logic using **Haxe language** (type checking helps the code to stay clean and secure). target is nodejs for now
+
+-
+
+>- **OPEN SOURCE, MULTIOS, FAST BOOTSTRAPPING STACK :** 
+  - pistahx can be set up (within minutes), modified and deployed **anywhere nodejs can run** : Unix/Linux, Windows, OSx, ...
+
+-
+
+>- **MULTIDB :** 
+  -  pistahx uses **Sequelize** : connect to mssql, mysql, pgsql, sqlite,... databases
+
+-
+
+>- **PROMISES-FULL :** 
+  -  Use the great power of promises using a simple Haxe ( **Promhx, Thx.*,..** ) workflow
+
+-
+
+>- **DB PROMISES :** 
+  -  pistahx handles **parallel db querying strategies**
+
+-
+
+>- **CONTAINER READY :** 
+  -  pistahx comes with a **native docker container environment** for your app. You can now trully **deploy anywhere !**
  
 # pistahx INSIGHTS : code
 
