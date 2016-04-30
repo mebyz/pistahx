@@ -521,53 +521,8 @@ class Main {
       app.use('/openapi', new js.npm.express.Static(dn+'/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/api.yaml'));
- /*
-      // ROUTES SCAFOLDING FROM DOC 
-      /**************************************************/
-      // YOU CAN WRITE your BUSINESS CODE IN Business Class
-      // ie : Business.get_method = function(req,res) {...}
-      /**************************************************/
-      // Hacks.. use summary to keep ttl and other stuff
-       
-      apiBind
-      .operations
-      .map( function(operation) {
-            var apiOp = new ApiOperation(operation);
-            var args  = apiOp.getCacheArgs();
-            var extra = apiOp.getExtraParams();
-            var path  = apiOp.getPath();
-            var opId = operation.operation.operationId;
-            var opMethod = operation.operation.httpMethod + '_' + opId;
-            
-            var cacheExpire = function(req : PistahxRequest, res : Response, next : MiddlewareNext) {
-                next();
-            };
-            
-            if (args.ttl != '0') 
-                cacheExpire = cacheo.route({ expire: args.ttl });
-              
-            var verb   = Reflect.field(app, operation.operation.httpMethod );    
-            var method = Reflect.field(Business, opMethod );  
-            
-            trace('publising api route : ' + path + ' binds ' + opMethod);
-            
-            Reflect.callMethod(
-                app, 
-                verb, 
-                [
-                    conf.get('BASE_URL')+path, 
-                    untyped cacheExpire,
-                    function(req : PistahxRequest, res : Response){ 
-                        Reflect.callMethod(Business, method, [ db, req, res, dbcacher, cacheo, extra ]);
-                    }
-                ]
-            );           
-      }); 
-*/
 
-//ROUTES
-
-//input=./app/api.yaml output=./app/Business/Routes.hx type=routes node ./node_modules/pistahx-spec/yaml2hx.js && sed -i -e '/\/\/ROUTES/ r ./app/Business/Routes.hx' ./distrib/src/Main.hx
+      //ROUTES
 
       //LEGACY API BOOSTER
       if (apiBind.legacyDomain!='') { 

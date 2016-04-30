@@ -18,24 +18,4 @@ echo "$VERT" "#PISTAHX: cloning clemos/haxe-js-kit" "$NORMAL"
 rm -rf haxe-js-kit/
 git clone https://github.com/clemos/haxe-js-kit.git haxe-js-kit
 fi
-
-echo "$VERT" "#PISTAHX: Haxe transpilation" "$NORMAL"
-haxe build.hxml
-if [ "$?" != "0" ] ; then
-exit 1
-fi
-cd -
-
-echo "$VERT" "#PISTAHX: your project output will reside in ./distrib/out/" "$NORMAL"
-#rm -rf $prj/distrib/out
-rm -rf $prj/distrib/out/app.js
-mkdir -p $prj/distrib/out 2>/dev/null || :
-cp -rf $prj/app/api.yaml $prj/distrib/out/ 2>/dev/null || :
-cp -rf $prj/distrib/app.js $prj/distrib/out/app.js 2>/dev/null || :
-cp -rf $prj/distrib/node_modules $prj/distrib/out/ 2>/dev/null || :
-cp -rf $prj/node_modules/pistahx/doc $prj/distrib/out/ 2>/dev/null || :
-cp -rf $prj/app/conf $prj/distrib/out/ 2>/dev/null || :
-cp -rf $prj/app/Business/sql $prj/distrib/out/ 2>/dev/null || :
-cp -rf $prj/.ebignore $prj/distrib/out/ 2>/dev/null || :
-ln -fs $prj/node_modules/pistahx/doc $prj/distrib/out/doc
 fi

@@ -50,7 +50,6 @@ gulp.task('build', function(done) {
 
 		'rm -rf $prj/distrib/api.js\n'+
 
-		'echo "$VERT" "#PISTAHX: building from haxe to target" "$NORMAL"\n'+
 		'mode=$mode prj=$prj ./gen/build.sh\n'+
 		
 		'if [ "$?" != "0" ] ; then \n'+
