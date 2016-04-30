@@ -39,7 +39,7 @@ gulp.task('build', function(done) {
 		'\n'+
 
  		'echo "$VERT" "#PISTAHX: generate routes from spec and inject in Main.hx file" "$NORMAL"\n'+
-		'input=$prj/app/api.yaml output=$prj/app/Business/Routes.hx type=routes node $prj/node_modules/pistahx-spec/yaml2hx.js\n'
+		'input=$prj/app/api.yaml output=$prj/app/Business/Routes.hx type=routes node $prj/node_modules/pistahx-spec/yaml2hx.js\n'+
 		"sed -i -e '/\/\/ROUTES/ r ./app/Business/Routes.hx' ./distrib/src/Main.hx\n"+
 		'\n'+
 		
