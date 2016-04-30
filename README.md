@@ -32,15 +32,15 @@ gulp
 
 # pistahx modules :
 >
-####- https://github.com/mebyz/pistahx.git (Core of pistahx)
+####- https://github.com/mebyz/pistahx.git (pistahx's core)
 >
-####- https://github.com/mebyz/pistahx-db.git (pistahx's DB to haxe typedefs)
+####- https://github.com/mebyz/pistahx-db.git (DB to Haxe typedefs generation lib)
 >
-####- https://github.com/mebyz/pistahx-spec.git (pistahx's OpenAPI to Haxe typedefs)
+####- https://github.com/mebyz/pistahx-spec.git (OpenAPI yaml to Haxe typedefs generation lib)
 >
-####- https://github.com/mebyz/pistahx-ui.git (pistahx's TS Angular2 Bootstrap4 UI)
+####- https://github.com/mebyz/pistahx-ui.git (Typescript Angular2 Bootstrap4 UI for pistahx apps)
 >
-####- https://github.com/mebyz/pistahx-app.git (pistahx demo app)
+####- https://github.com/mebyz/pistahx-app.git (pistahx demo api, use it to bootstrap your own api !)
 
 -
 
@@ -93,12 +93,12 @@ gulp
 -
 
 >- **CORE / BUSINESS CODE LOGIC SEPARATION :** 
-  - your business logic **is separated from** pistahx server core are during the whole life af your project.
+  - your business logic **is separated from** pistahx server core during the whole life of your project.
 
 -
 
 >- **STRONGLY TYPED CODE :** 
-  - Write your business logic using **Haxe language** (type checking helps the code to stay clean and secure). target is nodejs for now
+  - Write your business logic using **Haxe language** (type checking helps the code to stay clean and secure). pistahx tranpiles your api to nodejs.
 
 -
 
