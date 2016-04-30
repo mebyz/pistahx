@@ -521,7 +521,7 @@ class Main {
       app.use('/openapi', new js.npm.express.Static(dn+'/doc'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/api.yaml'));
- 
+ /*
       // ROUTES SCAFOLDING FROM DOC 
       /**************************************************/
       // YOU CAN WRITE your BUSINESS CODE IN Business Class
@@ -563,6 +563,11 @@ class Main {
                 ]
             );           
       }); 
+*/
+
+//ROUTES
+
+//input=./app/api.yaml output=./app/Business/Routes.hx type=routes node ./node_modules/pistahx-spec/yaml2hx.js && sed -i -e '/\/\/ROUTES/ r ./app/Business/Routes.hx' ./distrib/src/Main.hx
 
       //LEGACY API BOOSTER
       if (apiBind.legacyDomain!='') { 
