@@ -131,34 +131,61 @@ gulp
 
 ```yaml
 paths:
-  /cars:
+  /employees:
     get:
-      operationId: cars
+      operationId: employees
       tags:
-      - "Stores"
+      - "Employees"
       summary: "{'ttl':3600,'xttl':3600,'cachekey':'','xcachekey':''}"
-      description: "The Cars List returns information about cars"
-      parameters:
-      - name: "AccessKeyId"
-        in: "header"
-        description: "Access Key Id"
-        required: false
-        type: "string"
+      description: "/employees returns a list of employee"
       responses:
         200:
-          description: "An array of cars"
+          description: "An array of employees"
           schema:
-            $ref: "#/definitions/Cars"
-        default:
-          description: "Unexpected error"
+            $ref: "#/definitions/Employees"
+  /employee/{EmployeeId}:
+    get:
+      operationId: employee
+      tags:
+      - "Employees"
+      summary: "{'ttl':3600,'xttl':3600,'cachekey':'','xcachekey':''}"
+      description: "/employee/{EmployeeId} returns an employee"
+      parameters:
+      - name: "EmployeeId"
+        in: "path"
+        description: "EmployeeId"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "An employee"
           schema:
-            $ref: "#/definitions/Error"
+            $ref: "#/definitions/Employee"
+  /employee:
+    put:
+      operationId: employee
+      tags:
+      - "Employees"
+      summary: "{'ttl':0,'xttl':0,'cachekey':'','xcachekey':''}"
+      description: "/employee saves an employee"
+      x-cache-flush: 
+      - "/employees"
+      parameters:
+      - name: "employee"
+        in: "body"
+        description: "Employee to add"
+        required: true
+        schema:
+          $ref: '#/definitions/Employee'
+      responses:
+        200:
+          description: "200 is returned"
 ```
 
 **YAML CONFIGURATION : example here : ./app/conf/local.yaml**
 
 ```yaml
-APP_NAME: pistahx_sample_app
+APP_NAME: pistahx_app
 ENV_NAME: local
 #ELK_SERVER: to be defined
 #JWT_SECRET: local_secret_key
@@ -175,18 +202,47 @@ DB_PASSWORD:
 DB_NAME:
 DB_OPTIONS: 
   dialect: sqlite
-  storage: ../db.sqlite
+  storage: Chinook_Sqlite.sqlite
   pool: 
     max: 5
     min: 0
     idle: 10000
   dialectOptions:
     encrypt: true
-  logging: false
+  logging: true
 SESSION_TTL: 3600
 BASE_URL: /api/v1
 API_PORT: 3000
+API_ROUTE_STATUS: /users/me/status
+#API_CORS_ALLOWED:
+#  - "http://localhost:9000"
+#  - "http://localhost:8080"
+#  - "http://localhost:3000"
+#S3_ID: "to be defined"
+#S3_KEY: "to be defined"
+#S3_BUCKET: "to be defined"
+#S3_REGION: "to be defined"
+#S3_FOLDER: "to be defined"
 ```
+
+**SAMPLE CODE : Sample GET Business method using pistahx-db generated typedefs, and pistahx-spec generated typedefs & mappers**
+```     
+    public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) {
+        
+        var employee : Dynamic = untyped __js__('db.import("models/Employee.js");');
+
+        return employee   
+        .findAll({    
+             limit : 10
+        })    
+        .then(function(emps) {    
+          var vb = map([emps], function(d) {
+              return EmployeeMapper.mapEmployees(d, EmployeeDecorator.decorate);
+          }); 
+          return Lambda.array(vb[0]);
+        });
+      }
+```     
 
 **SAMPLE CODE : HAXE PROMISES**
 
