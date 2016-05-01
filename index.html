@@ -292,32 +292,59 @@ gulp</pre></div>
 <p><strong>SAMPLE CODE : OPEN API YAML ROUTE DEFINITION</strong></p>
 
 <div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">paths:</span></span>
-  <span class="pl-s"><span class="pl-ent">/cars:</span></span>
+  <span class="pl-s"><span class="pl-ent">/employees:</span></span>
     <span class="pl-s"><span class="pl-ent">get:</span></span>
-      <span class="pl-s"><span class="pl-ent">operationId:</span> <span class="pl-s">cars</span></span>
+      <span class="pl-s"><span class="pl-ent">operationId:</span> <span class="pl-s">employees</span></span>
       <span class="pl-s"><span class="pl-ent">tags:</span></span>
-      <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>Stores<span class="pl-pds">"</span></span></span>
+      <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>Employees<span class="pl-pds">"</span></span></span>
       <span class="pl-s"><span class="pl-ent">summary:</span> <span class="pl-s"><span class="pl-pds">"</span>{'ttl':3600,'xttl':3600,'cachekey':'','xcachekey':''}<span class="pl-pds">"</span></span></span>
-      <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>The Cars List returns information about cars<span class="pl-pds">"</span></span></span>
-      <span class="pl-s"><span class="pl-ent">parameters:</span></span>
-      <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s"><span class="pl-pds">"</span>AccessKeyId<span class="pl-pds">"</span></span></span>
-        <span class="pl-s"><span class="pl-ent">in:</span> <span class="pl-s"><span class="pl-pds">"</span>header<span class="pl-pds">"</span></span></span>
-        <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>Access Key Id<span class="pl-pds">"</span></span></span>
-        <span class="pl-s"><span class="pl-ent">required:</span> <span class="pl-c1">false</span></span>
-        <span class="pl-s"><span class="pl-ent">type:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>/employees returns a list of employee<span class="pl-pds">"</span></span></span>
       <span class="pl-s"><span class="pl-ent">responses:</span></span>
         <span class="pl-s"><span class="pl-ent">200:</span></span>
-          <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>An array of cars<span class="pl-pds">"</span></span></span>
+          <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>An array of employees<span class="pl-pds">"</span></span></span>
           <span class="pl-s"><span class="pl-ent">schema:</span></span>
-            <span class="pl-s"><span class="pl-ent">$ref:</span> <span class="pl-s"><span class="pl-pds">"</span>#/definitions/Cars<span class="pl-pds">"</span></span></span>
-        <span class="pl-s"><span class="pl-ent">default:</span></span>
-          <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>Unexpected error<span class="pl-pds">"</span></span></span>
+            <span class="pl-s"><span class="pl-ent">$ref:</span> <span class="pl-s"><span class="pl-pds">"</span>#/definitions/Employees<span class="pl-pds">"</span></span></span>
+  <span class="pl-s"><span class="pl-ent">/employee/{EmployeeId}:</span></span>
+    <span class="pl-s"><span class="pl-ent">get:</span></span>
+      <span class="pl-s"><span class="pl-ent">operationId:</span> <span class="pl-s">employee</span></span>
+      <span class="pl-s"><span class="pl-ent">tags:</span></span>
+      <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>Employees<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">summary:</span> <span class="pl-s"><span class="pl-pds">"</span>{'ttl':3600,'xttl':3600,'cachekey':'','xcachekey':''}<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>/employee/{EmployeeId} returns an employee<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">parameters:</span></span>
+      <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s"><span class="pl-pds">"</span>EmployeeId<span class="pl-pds">"</span></span></span>
+        <span class="pl-s"><span class="pl-ent">in:</span> <span class="pl-s"><span class="pl-pds">"</span>path<span class="pl-pds">"</span></span></span>
+        <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>EmployeeId<span class="pl-pds">"</span></span></span>
+        <span class="pl-s"><span class="pl-ent">required:</span> <span class="pl-c1">true</span></span>
+        <span class="pl-s"><span class="pl-ent">type:</span> <span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">responses:</span></span>
+        <span class="pl-s"><span class="pl-ent">200:</span></span>
+          <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>An employee<span class="pl-pds">"</span></span></span>
           <span class="pl-s"><span class="pl-ent">schema:</span></span>
-            <span class="pl-s"><span class="pl-ent">$ref:</span> <span class="pl-s"><span class="pl-pds">"</span>#/definitions/Error<span class="pl-pds">"</span></span></span></pre></div>
+            <span class="pl-s"><span class="pl-ent">$ref:</span> <span class="pl-s"><span class="pl-pds">"</span>#/definitions/Employee<span class="pl-pds">"</span></span></span>
+  <span class="pl-s"><span class="pl-ent">/employee:</span></span>
+    <span class="pl-s"><span class="pl-ent">put:</span></span>
+      <span class="pl-s"><span class="pl-ent">operationId:</span> <span class="pl-s">employee</span></span>
+      <span class="pl-s"><span class="pl-ent">tags:</span></span>
+      <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>Employees<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">summary:</span> <span class="pl-s"><span class="pl-pds">"</span>{'ttl':0,'xttl':0,'cachekey':'','xcachekey':''}<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>/employee saves an employee<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">x-cache-flush:</span> </span>
+      <span class="pl-s">- <span class="pl-s"><span class="pl-pds">"</span>/employees<span class="pl-pds">"</span></span></span>
+      <span class="pl-s"><span class="pl-ent">parameters:</span></span>
+      <span class="pl-s">- <span class="pl-ent">name:</span> <span class="pl-s"><span class="pl-pds">"</span>employee<span class="pl-pds">"</span></span></span>
+        <span class="pl-s"><span class="pl-ent">in:</span> <span class="pl-s"><span class="pl-pds">"</span>body<span class="pl-pds">"</span></span></span>
+        <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>Employee to add<span class="pl-pds">"</span></span></span>
+        <span class="pl-s"><span class="pl-ent">required:</span> <span class="pl-c1">true</span></span>
+        <span class="pl-s"><span class="pl-ent">schema:</span></span>
+          <span class="pl-s"><span class="pl-ent">$ref:</span> <span class="pl-s"><span class="pl-pds">'</span>#/definitions/Employee<span class="pl-pds">'</span></span></span>
+      <span class="pl-s"><span class="pl-ent">responses:</span></span>
+        <span class="pl-s"><span class="pl-ent">200:</span></span>
+          <span class="pl-s"><span class="pl-ent">description:</span> <span class="pl-s"><span class="pl-pds">"</span>200 is returned<span class="pl-pds">"</span></span></span></pre></div>
 
 <p><strong>YAML CONFIGURATION : example here : ./app/conf/local.yaml</strong></p>
 
-<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">APP_NAME:</span> <span class="pl-s">pistahx_sample_app</span></span>
+<div class="highlight highlight-source-yaml"><pre><span class="pl-s"><span class="pl-ent">APP_NAME:</span> <span class="pl-s">pistahx_app</span></span>
 <span class="pl-s"><span class="pl-ent">ENV_NAME:</span> <span class="pl-s">local</span></span>
 <span class="pl-c">#ELK_SERVER: to be defined</span>
 <span class="pl-c">#JWT_SECRET: local_secret_key</span>
@@ -334,17 +361,46 @@ gulp</pre></div>
 <span class="pl-s"><span class="pl-ent">DB_NAME:</span></span>
 <span class="pl-s"><span class="pl-ent">DB_OPTIONS:</span> </span>
   <span class="pl-s"><span class="pl-ent">dialect:</span> <span class="pl-s">sqlite</span></span>
-  <span class="pl-s"><span class="pl-ent">storage:</span> <span class="pl-s">../db.sqlite</span></span>
+  <span class="pl-s"><span class="pl-ent">storage:</span> <span class="pl-s">Chinook_Sqlite.sqlite</span></span>
   <span class="pl-s"><span class="pl-ent">pool:</span> </span>
     <span class="pl-c1"><span class="pl-ent">max:</span> 5</span>
     <span class="pl-c1"><span class="pl-ent">min:</span> 0</span>
     <span class="pl-c1"><span class="pl-ent">idle:</span> 10000</span>
   <span class="pl-s"><span class="pl-ent">dialectOptions:</span></span>
     <span class="pl-s"><span class="pl-ent">encrypt:</span> <span class="pl-c1">true</span></span>
-  <span class="pl-s"><span class="pl-ent">logging:</span> <span class="pl-c1">false</span></span>
+  <span class="pl-s"><span class="pl-ent">logging:</span> <span class="pl-c1">true</span></span>
 <span class="pl-c1"><span class="pl-ent">SESSION_TTL:</span> 3600</span>
 <span class="pl-s"><span class="pl-ent">BASE_URL:</span> <span class="pl-s">/api/v1</span></span>
-<span class="pl-c1"><span class="pl-ent">API_PORT:</span> 3000</span></pre></div>
+<span class="pl-c1"><span class="pl-ent">API_PORT:</span> 3000</span>
+<span class="pl-s"><span class="pl-ent">API_ROUTE_STATUS:</span> <span class="pl-s">/users/me/status</span></span>
+<span class="pl-c">#API_CORS_ALLOWED:</span>
+<span class="pl-c">#  - "http://localhost:9000"</span>
+<span class="pl-c">#  - "http://localhost:8080"</span>
+<span class="pl-c">#  - "http://localhost:3000"</span>
+<span class="pl-c">#S3_ID: "to be defined"</span>
+<span class="pl-c">#S3_KEY: "to be defined"</span>
+<span class="pl-c">#S3_BUCKET: "to be defined"</span>
+<span class="pl-c">#S3_REGION: "to be defined"</span>
+<span class="pl-c">#S3_FOLDER: "to be defined"</span></pre></div>
+
+<p><strong>SAMPLE CODE : Sample GET Business method using pistahx-db generated typedefs, and pistahx-spec generated typedefs &amp; mappers</strong></p>
+
+<pre><code>    public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) {
+
+        var employee : Dynamic = untyped __js__('db.import("models/Employee.js");');
+
+        return employee   
+        .findAll({    
+             limit : 10
+        })    
+        .then(function(emps) {    
+          var vb = map([emps], function(d) {
+              return EmployeeMapper.mapEmployees(d, EmployeeDecorator.decorate);
+          }); 
+          return Lambda.array(vb[0]);
+        });
+      }
+</code></pre>
 
 <p><strong>SAMPLE CODE : HAXE PROMISES</strong></p>
 
