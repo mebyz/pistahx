@@ -44,10 +44,6 @@ gulp.task('build', function(done) {
 			'cp -rf ./gen/README.md $prj/distrib/README.md\n'+
 		'fi \n'+
 		
-		'echo "$VERT" "#PISTAHX: add Dockerfile and deploy script to application" "$NORMAL"\n'+
-		'cp ./gen/Dockerfile $prj/\n'+
-		'cp ./gen/docker.sh $prj/\n'+
-
 		'rm -rf $prj/distrib/api.js\n'+
 
 		'mode=$mode prj=$prj ./gen/build.sh\n'+
@@ -64,11 +60,6 @@ gulp.task('build', function(done) {
 			'cd ..\n'+
 		'fi\n'+
 
-		'if [ "$mode" = "docker" ] ; then \n'+
-			'echo "$VERT" "#PISTAHX: trying to dockerise, and start API" "$NORMAL"\n'+
-			'cd $prj/\n'+
-			'./docker.sh\n'+
-		'fi\n'+
 		'fi');
 
 
