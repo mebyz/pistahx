@@ -39,7 +39,7 @@ gulp.task('build', function(done) {
 		'\n'+
 		
 		'if [ "$mode" = "build" ] ; then \n'+
-			'cp -rf ./gen/build.hxml $prj/distrib/build.hxml\n'+
+			'cp -rf ./gen/build.hxml $prj/build.hxml\n'+
 			'cp -rf ./gen/package.json $prj/distrib/package.json\n'+
 			'cp -rf ./gen/README.md $prj/distrib/README.md\n'+
 		'fi \n'+
