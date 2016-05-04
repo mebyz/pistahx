@@ -48,18 +48,6 @@ gulp.task('build', function(done) {
 
 		'mode=$mode prj=$prj ./gen/build.sh\n'+
 		
-		'if [ "$?" != "0" ] ; then \n'+
-			'echo "$ROUGE" "#PISTAHX: ERROR when transpiling Haxe code to target" "$NORMAL"\n'+
-			'exit 1\n'+
-		'fi \n'+
-		
-		'if [ "$mode" = "build" ] ; then \n'+
-			'echo "$VERT" "#PISTAHX: generating haxe doc (dox)" "$NORMAL"\n'+
-			'cd $prj/distrib/\n'+
-			'haxelib run dox -i xml -o ./out/pages\n'+
-			'cd ..\n'+
-		'fi\n'+
-
 		'fi');
 
 
