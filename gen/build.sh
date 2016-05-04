@@ -14,8 +14,8 @@ npm install -g sqlite3
 npm install -g git://github.com/RuntimeTools/appmetrics
 npm install -g appmetrics-elk
 
-echo "$VERT" "#PISTAHX: cloning clemos/haxe-js-kit" "$NORMAL"
+echo "$VERT" "#PISTAHX: cloning mebyz/haxe-js-kit (fork of clemo's)" "$NORMAL"
 rm -rf haxe-js-kit/
-git clone https://github.com/clemos/haxe-js-kit.git haxe-js-kit
+git clone https://github.com/mebyz/haxe-js-kit.git haxe-js-kit
 fi
 fi
