@@ -1,6 +1,8 @@
 VERT="\\033[1;32m"
 NORMAL="\\033[0;39m"
 ROUGE="\\033[1;31m"
+mode="build"
+prj="../../"
 
 if [ -z "$prj" ]; then echo "project folder is unset, see README.md file"; else
 
