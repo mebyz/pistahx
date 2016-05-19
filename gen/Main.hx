@@ -23,6 +23,7 @@ import Business;    // business logic goes and stays here
 extern class PistahxRequest extends js.npm.express.Request{
     public function new() : Void;
     public var session: Dynamic;
+    public var headers: Dynamic;
     public var jwtSession: Dynamic;
     public var pipe: Dynamic;
     public var busboy: Dynamic;
