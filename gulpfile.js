@@ -15,8 +15,6 @@ gulp.task('build', function(done) {
     //var tasks = ['echo "$VERT" "#PISTAHX: running in mode:$mode" "$NORMAL"'];
     //
     var tasks = [];
-    console.log('#PISTAHX: install haxelibs'.green);
-    tasks.push('haxelib install gen/libs.hxml');
     console.log('#PISTAHX: running in mode:$mode'.green);
     tasks.push('cross-env root=$root sh ./prepare.sh');
 

@@ -14,6 +14,7 @@ git clone git@github.com:mebyz/pistahx-app.git
 cd pistahx-app
 npm install -g gulp
 npm install --only=dev
+haxelib install ./node_modules/pistahx/gen/libs.hxml
 gulp
 ```
 
