@@ -25,9 +25,12 @@ if [ -z "$root" ]; then echo "project root folder is unset, see README.md file";
 		
 		echo "$VERT" "#PISTAHX: refresh Main.hx file" "$NORMAL"
 		cp -rf ./gen/Main.hx $prj/distrib/src/Main.hx
-		
-		
+				
 		if [ "$mode" = "build" ] ; then 
+
+	                echo "$VERT" "#PISTAHX: install haxelibs" "$NORMAL"
+        	        haxelib install ./gen/libs.hxml
+
 			cp -rf ./gen/build.hxml $prj/build.hxml
 			cp -rf ./gen/package.json $prj/distrib/package.json
 			cp -rf ./gen/README.md $prj/distrib/README.md

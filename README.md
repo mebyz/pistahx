@@ -12,6 +12,7 @@
 ```yaml
 git clone git@github.com:mebyz/pistahx-app.git
 cd pistahx-app
+npm install -g gulp
 npm install --only=dev
 gulp
 ```
