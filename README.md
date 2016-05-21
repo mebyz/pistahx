@@ -277,21 +277,53 @@ API_ROUTE_STATUS: /users/me/status
 
 **SAMPLE CODE : Sample GET Business method using pistahx-db generated typedefs, and pistahx-spec generated typedefs & mappers**
 ```     
-    public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) {
-        
-        var employee : Dynamic = untyped __js__('db.import("models/Employee.js");');
 
-        return employee   
-        .findAll({    
-             limit : 10
-        })    
-        .then(function(emps) {    
-          var vb = map([emps], function(d) {
-              return EmployeeMapper.mapEmployees(d, EmployeeDecorator.decorate);
-          }); 
-          return Lambda.array(vb[0]);
-        });
-      }
+  typedef DBEmployees = {
+    findAll : FindAllOptions -> Promise<Array<DB__Employee>>,
+    find : FindOptions -> Promise<DB__Employee>
+  }
+
+  @:publicFields
+  class DbRepos {
+
+    var dbEmployees : DBEmployees;
+
+    function new(db : Sequelize) {
+      dbEmployees = db.import_("models/Employee.js");
+      untyped dbAlbums.belongsTo(dbArtist, {foreignKey: 'ArtistId'});
+    }
+
+  }
+
+...
+...
+
+  public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) : Promise<Array<Employee>> {    
+
+    var dbr = new DbRepos(db);
+
+    return
+      dbr.dbEmployees.findAll({
+        limit : 5
+      }).then(function (dbEmployeesRes) {
+        return dbEmployeesRes.map(EmployeeMapper.dbEmployeeToEmployee); 
+      });
+
+  }
+
+  public static function get_employee(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) : Promise<Employee> {
+  
+    var dbr = new DbRepos(db);
+
+    return
+      dbr.dbEmployees.find({
+         where: [ { 'EmployeeId' : untyped req.params.EmployeeId } ]
+      }).then(function (dbEmployeeRes) {
+        return EmployeeMapper.dbEmployeeToEmployee(dbEmployeeRes);
+      });
+  }
+
+
 ```     
 
 **SAMPLE CODE : HAXE PROMISES**
