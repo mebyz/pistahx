@@ -32,10 +32,61 @@
 <h1>
 <a id="bootstrap-a-sample-pistahx-based-web-api" class="anchor" href="#bootstrap-a-sample-pistahx-based-web-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>bootstrap a sample pistahx based web api</h1>
 
-<div class="highlight highlight-source-yaml"><pre><span class="pl-ent">git clone git@github.com</span>:mebyz/pistahx<span class="pl-s">-<span class="pl-s">app.git</span></span>
-cd pistahx<span class="pl-s">-<span class="pl-s">app</span></span>
-npm install <span class="pl-s">-<span class="pl-s">-only=dev</span></span>
-gulp</pre></div>
+<p>pistahx-app 
+(sample Haxe api using pistahx, pistahx-db, pistahx-spec)</p>
+
+<h3>
+<a id="1-build-locally" class="anchor" href="#1-build-locally" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. BUILD LOCALLY</h3>
+
+<pre><code>git clone git@github.com:mebyz/pistahx-app.git
+
+cd pistahx-app
+
+npm install -g gulp
+
+npm install --only=dev
+
+haxelib install ./node_modules/pistahx/gen/libs.hxml
+
+gulp build
+
+</code></pre>
+
+<h3>
+<a id="2-run-locally" class="anchor" href="#2-run-locally" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. RUN LOCALLY</h3>
+
+<pre><code>gulp run
+
+</code></pre>
+
+<h1>
+<a id="or" class="anchor" href="#or" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>OR</h1>
+
+<h3>
+<a id="1-build-from-docker" class="anchor" href="#1-build-from-docker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. BUILD FROM DOCKER</h3>
+
+<pre><code>git clone git@github.com:mebyz/pistahx-app.git
+
+cd pistahx-app
+
+docker build -f Dockerfile.build -t pistahx/build .
+
+docker run -d --name pistahx_build pistahx/build tail -f /dev/null
+
+docker cp pistahx_build:/app/distrib/out ./distrib/out
+
+</code></pre>
+
+<p>=&gt; your built app now resides in distrib/out</p>
+
+<h3>
+<a id="2-run-from-docker" class="anchor" href="#2-run-from-docker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. RUN FROM DOCKER</h3>
+
+<pre><code>docker build -f Dockerfile -t pistahx/run .
+
+docker run pistahx/run
+
+</code></pre>
 
 <blockquote>
 <ul>
