@@ -436,21 +436,53 @@ docker run pistahx/run
 
 <p><strong>SAMPLE CODE : Sample GET Business method using pistahx-db generated typedefs, and pistahx-spec generated typedefs &amp; mappers</strong></p>
 
-<pre><code>    public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) {
+<pre><code>
+  typedef DBEmployees = {
+    findAll : FindAllOptions -&gt; Promise&lt;Array&lt;DB__Employee&gt;&gt;,
+    find : FindOptions -&gt; Promise&lt;DB__Employee&gt;
+  }
 
-        var employee : Dynamic = untyped __js__('db.import("models/Employee.js");');
+  @:publicFields
+  class DbRepos {
 
-        return employee   
-        .findAll({    
-             limit : 10
-        })    
-        .then(function(emps) {    
-          var vb = map([emps], function(d) {
-              return EmployeeMapper.mapEmployees(d, EmployeeDecorator.decorate);
-          }); 
-          return Lambda.array(vb[0]);
-        });
-      }
+    var dbEmployees : DBEmployees;
+
+    function new(db : Sequelize) {
+      dbEmployees = db.import_("models/Employee.js");
+      untyped dbAlbums.belongsTo(dbArtist, {foreignKey: 'ArtistId'});
+    }
+
+  }
+
+...
+...
+
+  public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) : Promise&lt;Array&lt;Employee&gt;&gt; {    
+
+    var dbr = new DbRepos(db);
+
+    return
+      dbr.dbEmployees.findAll({
+        limit : 5
+      }).then(function (dbEmployeesRes) {
+        return dbEmployeesRes.map(EmployeeMapper.dbEmployeeToEmployee); 
+      });
+
+  }
+
+  public static function get_employee(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) : Promise&lt;Employee&gt; {
+
+    var dbr = new DbRepos(db);
+
+    return
+      dbr.dbEmployees.find({
+         where: [ { 'EmployeeId' : untyped req.params.EmployeeId } ]
+      }).then(function (dbEmployeeRes) {
+        return EmployeeMapper.dbEmployeeToEmployee(dbEmployeeRes);
+      });
+  }
+
+
 </code></pre>
 
 <p><strong>SAMPLE CODE : HAXE PROMISES</strong></p>
