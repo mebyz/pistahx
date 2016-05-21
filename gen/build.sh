@@ -11,8 +11,8 @@ if [ "$mode" = "build" ] ; then
 echo "$VERT" "#PISTAHX: installing distribution dependencies" "$NORMAL"
 npm install
 
-npm install -g microtime
-npm install -g sqlite3
+#npm install -g microtime
+#npm install -g sqlite3
 #npm install -g git://github.com/RuntimeTools/appmetrics
 #npm install -g appmetrics-elk
 
