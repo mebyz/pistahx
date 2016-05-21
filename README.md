@@ -9,13 +9,61 @@
 
 
 # bootstrap a sample pistahx based web api
-```yaml
+
+pistahx-app 
+(sample Haxe api using pistahx, pistahx-db, pistahx-spec)
+
+### 1. BUILD LOCALLY
+
+
+```
 git clone git@github.com:mebyz/pistahx-app.git
+
 cd pistahx-app
+
 npm install -g gulp
+
 npm install --only=dev
+
 haxelib install ./node_modules/pistahx/gen/libs.hxml
-gulp
+
+gulp build
+
+```
+
+### 2. RUN LOCALLY
+
+```
+gulp run
+
+```
+
+#OR
+
+### 1. BUILD FROM DOCKER
+
+```
+git clone git@github.com:mebyz/pistahx-app.git
+
+cd pistahx-app
+
+docker build -f Dockerfile.build -t pistahx/build .
+
+docker run -d --name pistahx_build pistahx/build tail -f /dev/null
+
+docker cp pistahx_build:/app/distrib/out ./distrib/out
+
+```
+=> your built app now resides in distrib/out
+
+### 2. RUN FROM DOCKER 
+
+
+```
+docker build -f Dockerfile -t pistahx/run .
+
+docker run pistahx/run
+
 ```
 
 
