@@ -6,21 +6,16 @@
 ![] (http://www.silexlabs.org/wp-content/uploads/2016/02/wwx2016-bandeau-blog-18fev2016-687x159.png)
 
 
-
-
 # bootstrap a sample pistahx based web api
 
 pistahx-app 
 (sample Haxe api using pistahx, pistahx-db, pistahx-spec)
 
+
 ### 1. BUILD LOCALLY
 
 
 ```
-git clone git@github.com:mebyz/pistahx-app.git
-
-cd pistahx-app
-
 npm install -g gulp
 
 npm install --only=dev
@@ -43,10 +38,6 @@ gulp run
 ### 1. BUILD FROM DOCKER
 
 ```
-git clone git@github.com:mebyz/pistahx-app.git
-
-cd pistahx-app
-
 docker build -f Dockerfile.build -t pistahx/build .
 
 docker run -d --name pistahx_build pistahx/build tail -f /dev/null
@@ -56,16 +47,14 @@ docker cp pistahx_build:/app/distrib/out ./distrib/out
 ```
 => your built app now resides in distrib/out
 
-### 2. RUN FROM DOCKER 
-
-
-```
-docker build -f Dockerfile -t pistahx/run .
-
-docker run pistahx/run
+### 2. RUN WITH DOCKER-COMPOSE
 
 ```
+docker-compose build
 
+docker-compose up
+
+```
 
 >
 - You'll need **Haxe** installed on your system
