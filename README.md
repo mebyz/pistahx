@@ -16,11 +16,8 @@ pistahx-app
 
 
 ```
-npm install -g gulp
 
-npm install --only=dev
-
-haxelib install ./node_modules/pistahx/gen/libs.hxml
+./prepare.sh
 
 gulp build
 
