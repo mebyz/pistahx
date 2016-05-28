@@ -12,10 +12,13 @@ pistahx-app
 (sample Haxe api using pistahx, pistahx-db, pistahx-spec)
 
 
-### 1. BUILD LOCALLY
+### 1. BUILD LOCALLY ( demo app : mebyz/pistahx-app )
 
 
 ```
+git clone github.com:mebyz/pistahx-app
+
+cd pistax-app/
 
 ./prepare.sh
 
@@ -35,6 +38,10 @@ gulp run
 ### 1. BUILD FROM DOCKER
 
 ```
+git clone github.com:mebyz/pistahx-app
+
+cd pistax-app/
+
 docker build -f Dockerfile.build -t pistahx/build .
 
 docker run -d --name pistahx_build pistahx/build tail -f /dev/null
