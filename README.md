@@ -269,7 +269,7 @@ API_ROUTE_STATUS: /users/me/status
 ```
 
 **SAMPLE CODE : Sample GET Business method using pistahx-db generated typedefs, and pistahx-spec generated typedefs & mappers**
-```     
+```haxe     
 
   typedef DBEmployees = {
     findAll : FindAllOptions -> Promise<Array<DB__Employee>>,
@@ -321,7 +321,7 @@ API_ROUTE_STATUS: /users/me/status
 
 **SAMPLE CODE : HAXE PROMISES**
 
-```			
+```haxe			
     public static function firstPromise(/* some args here, such as "myArg : Int" */) : Promise</* return type here, such as "String"*/>{
       var p = new Deferred<String>();
         some.async.Method(/* some params */, function(err,data){
@@ -369,7 +369,7 @@ API_ROUTE_STATUS: /users/me/status
 
 **SAMPLE CODE : PARALLEL QUERIES USING PROMISES**
 
-```		
+```haxe		
      // PARALLEL CALL SOME QUERIES USING SEQUELIZE PROMISES
       var SPromise = Sequelize.Promise;
       SPromise.map([
