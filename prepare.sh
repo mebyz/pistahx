@@ -2,6 +2,9 @@ root="./"
 mode="build"
 prj="../../"
 
+
+echo "$(ls)"
+
 if [ -z "$root" ]; then echo "project root folder is unset, see README.md file"; else 
 		
 		if [ "$mode" = "build" ] ; then 
@@ -10,9 +13,9 @@ if [ -z "$root" ]; then echo "project root folder is unset, see README.md file";
 			echo "$VERT" "#PISTAHX: updating nodejs dependencies" "$NORMAL"
 			npm update
 			
-            echo "$VERT" "#PISTAHX: setting OpenApi Doc UI folder" "$NORMAL"
-			mkdir -p ./doc
-			cp -rf ./node_modules/swagger-ui/dist/* ./doc/
+            echo "$VERT" "#PISTAHX: setting OpenApi Doc UI folder (${prj}distrib/out/doc/) " "$NORMAL"
+			mkdir -p  $prj/distrib/doc
+			cp -rf ./node_modules/swagger-ui/dist  $prj/distrib/out/doc/
 
 			echo "$VERT" "#PISTAHX: cleaning workspace" "$NORMAL"
 			rm -rf $prj/distrib/promhx
