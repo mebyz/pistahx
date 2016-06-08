@@ -56,6 +56,7 @@ class Main {
   private static var jsyaml       = Node.require('js-yaml');
   private static var passport     = Node.require('passport');
   private static var aws          = Node.require('aws-sdk');
+  private static var http         = Node.require('http');
 
   private static var busboy       = require('connect-busboy');
   private static var path         = require('path');
@@ -452,6 +453,30 @@ class Main {
     }
   }
 
+  public static function initDockerWakeUpHook (conf : Dynamic, app: Dynamic) : Dynamic {
+
+      switch (getConfKey(conf, 'DOCKER_WAKEUP_HOOK')) {
+        case None: {
+          trace("#app : no wakeup hook");
+          return function(req: PistahxRequest, res: Response, next : MiddlewareNext) { next(); }
+        }
+        case Some(s): {
+          
+          trace('#app : wakeup hook !');    
+          var dn = Node.__dirname;
+          var specPath = dn+'/uuid';
+          var uuid= Fs.readFileSync(specPath, 'utf8');
+          var options = {
+            host: conf.get('DOCKER_WAKEUP_HOOK_HOST'),
+            path: conf.get('DOCKER_WAKEUP_HOOK_URL')
+          }; 
+
+          http.request(options, function(response) { }).end();
+          return function(req: PistahxRequest, res: Response, next : MiddlewareNext) { next(); }
+        }
+    }
+  }
+
   public static function main() {
 
     trace('#app : starting');
@@ -501,7 +526,9 @@ class Main {
       
       // INIT S3 UPLOAD (optionnal)
       initS3(conf, app);
-
+      
+      initDockerWakeUpHook(conf, app);
+      
       // PASSPORT / GOOGLE TOKEN AUTH (optionnal). 
       // otherwise websiteAuth will be an empty middleware (only containing next();)
       var websiteAuth = initGAuth(conf, app, redisClient, apiBind);
