@@ -16,7 +16,7 @@ pistahx-app
 
 
 ```
-git clone github.com:mebyz/pistahx-app
+git clone https://github.com/mebyz/pistahx-app.git
 
 cd pistax-app/
 
@@ -38,7 +38,7 @@ gulp run
 ### 1. BUILD FROM DOCKER
 
 ```
-git clone github.com:mebyz/pistahx-app
+git clone https://github.com/mebyz/pistahx-app.git
 
 cd pistax-app/
 
