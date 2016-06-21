@@ -38,7 +38,7 @@
 <h3>
 <a id="1-build-locally--demo-app--mebyzpistahx-app-" class="anchor" href="#1-build-locally--demo-app--mebyzpistahx-app-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. BUILD LOCALLY ( demo app : mebyz/pistahx-app )</h3>
 
-<pre><code>git clone github.com:mebyz/pistahx-app
+<pre><code>git clone https://github.com/mebyz/pistahx-app.git
 
 cd pistax-app/
 
@@ -61,7 +61,7 @@ gulp build
 <h3>
 <a id="1-build-from-docker" class="anchor" href="#1-build-from-docker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. BUILD FROM DOCKER</h3>
 
-<pre><code>git clone github.com:mebyz/pistahx-app
+<pre><code>git clone https://github.com/mebyz/pistahx-app.git
 
 cd pistax-app/
 
@@ -432,116 +432,113 @@ docker-compose up
 
 <p><strong>SAMPLE CODE : Sample GET Business method using pistahx-db generated typedefs, and pistahx-spec generated typedefs &amp; mappers</strong></p>
 
-<pre><code>
-  typedef DBEmployees = {
-    findAll : FindAllOptions -&gt; Promise&lt;Array&lt;DB__Employee&gt;&gt;,
-    find : FindOptions -&gt; Promise&lt;DB__Employee&gt;
+<div class="highlight highlight-source-haxe-2"><pre>
+  <span class="pl-k">typedef</span> <span class="pl-en">DBEmployees</span> <span class="pl-k">=</span> {
+    findAll : <span class="pl-c1">FindAllOptions</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c1">Array</span><span class="pl-k">&lt;</span><span class="pl-c1">DB__Employee</span><span class="pl-k">&gt;&gt;</span>,
+    find : <span class="pl-c1">FindOptions</span> <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c1">DB__Employee</span><span class="pl-k">&gt;</span>
   }
 
-  @:publicFields
-  class DbRepos {
+  @:<span class="pl-k">publicFields</span>
+  <span class="pl-k">class</span> <span class="pl-en">DbRepos</span> {
 
-    var dbEmployees : DBEmployees;
+    <span class="pl-k">var</span> <span class="pl-en">dbEmployees</span> : <span class="pl-c1">DBEmployees</span>;
 
-    function new(db : Sequelize) {
-      dbEmployees = db.import_("models/Employee.js");
-      untyped dbAlbums.belongsTo(dbArtist, {foreignKey: 'ArtistId'});
+    <span class="pl-k">function</span> <span class="pl-en">new</span>(db : <span class="pl-c1">Sequelize</span>) {
+      dbEmployees <span class="pl-k">=</span> db.import_(<span class="pl-s"><span class="pl-pds">"</span>models/Employee.js<span class="pl-pds">"</span></span>);
+      <span class="pl-k">untyped</span> dbAlbums.belongsTo(dbArtist, {foreignKey: <span class="pl-s"><span class="pl-pds">'</span>ArtistId<span class="pl-pds">'</span></span>});
     }
 
   }
 
-...
-...
+<span class="pl-k">...</span>
+<span class="pl-k">...</span>
 
-  public static function get_employees(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) : Promise&lt;Array&lt;Employee&gt;&gt; {    
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">get_employees</span>(db : <span class="pl-c1">Sequelize</span>,req : <span class="pl-c1">ClientRequest</span>, res : <span class="pl-c1">ServerResponse</span>, dbcacher : <span class="pl-c1">Dynamic</span>,outputcacher : <span class="pl-c1">Dynamic</span>, extra : <span class="pl-c1">Dynamic</span>) : <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c1">Array</span><span class="pl-k">&lt;</span><span class="pl-c1">Employee</span><span class="pl-k">&gt;&gt;</span> {    
 
-    var dbr = new DbRepos(db);
+    <span class="pl-k">var</span> dbr <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">DbRepos</span>(db);
 
-    return
+    <span class="pl-k">return</span>
       dbr.dbEmployees.findAll({
-        limit : 5
-      }).then(function (dbEmployeesRes) {
-        return dbEmployeesRes.map(EmployeeMapper.dbEmployeeToEmployee); 
+        limit : <span class="pl-c1">5</span>
+      }).then(<span class="pl-k">function</span> (dbEmployeesRes) {
+        <span class="pl-k">return</span> dbEmployeesRes.map(<span class="pl-c1">EmployeeMapper.</span>dbEmployeeToEmployee); 
       });
 
   }
 
-  public static function get_employee(db : Sequelize,req : ClientRequest, res : ServerResponse, dbcacher : Dynamic,outputcacher : Dynamic, extra : Dynamic) : Promise&lt;Employee&gt; {
+  <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">get_employee</span>(db : <span class="pl-c1">Sequelize</span>,req : <span class="pl-c1">ClientRequest</span>, res : <span class="pl-c1">ServerResponse</span>, dbcacher : <span class="pl-c1">Dynamic</span>,outputcacher : <span class="pl-c1">Dynamic</span>, extra : <span class="pl-c1">Dynamic</span>) : <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c1">Employee</span><span class="pl-k">&gt;</span> {
 
-    var dbr = new DbRepos(db);
+    <span class="pl-k">var</span> dbr <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">DbRepos</span>(db);
 
-    return
+    <span class="pl-k">return</span>
       dbr.dbEmployees.find({
-         where: [ { 'EmployeeId' : untyped req.params.EmployeeId } ]
-      }).then(function (dbEmployeeRes) {
-        return EmployeeMapper.dbEmployeeToEmployee(dbEmployeeRes);
+         where: [ { <span class="pl-s"><span class="pl-pds">'</span>EmployeeId<span class="pl-pds">'</span></span> : <span class="pl-k">untyped</span> <span class="pl-c1">req.params.</span><span class="pl-c1">EmployeeId</span> } ]
+      }).then(<span class="pl-k">function</span> (dbEmployeeRes) {
+        <span class="pl-k">return</span> <span class="pl-c1">EmployeeMapper.</span>dbEmployeeToEmployee(dbEmployeeRes);
       });
   }
 
-
-</code></pre>
+</pre></div>
 
 <p><strong>SAMPLE CODE : HAXE PROMISES</strong></p>
 
-<pre><code>    public static function firstPromise(/* some args here, such as "myArg : Int" */) : Promise&lt;/* return type here, such as "String"*/&gt;{
-      var p = new Deferred&lt;String&gt;();
-        some.async.Method(/* some params */, function(err,data){
+<div class="highlight highlight-source-haxe-2"><pre>    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">firstPromise</span>(<span class="pl-c">/* some args here, such as "myArg : Int" */</span>) : <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c">/* return type here, such as "String"*/</span><span class="pl-k">&gt;</span>{
+      <span class="pl-k">var</span> p <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Deferred</span><span class="pl-k">&lt;</span><span class="pl-c1">String</span><span class="pl-k">&gt;</span>();
+        <span class="pl-c1">some.async.</span><span class="pl-c1">Method</span>(<span class="pl-c">/* some params */</span>, <span class="pl-k">function</span>(err,data){
           p.resolve(data);
         });
-      return p.promise();
+      <span class="pl-k">return</span> p.promise();
     }
 
-    public static function secondPromise(/* some args here, such as "myArg : Int" */) : Promise&lt;/* return type here, such as "String"*/&gt;{
-      var p = new Deferred&lt;String&gt;();
-        some.async.OtherMethod(/* some params */, function(err,data){
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">secondPromise</span>(<span class="pl-c">/* some args here, such as "myArg : Int" */</span>) : <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c">/* return type here, such as "String"*/</span><span class="pl-k">&gt;</span>{
+      <span class="pl-k">var</span> p <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Deferred</span><span class="pl-k">&lt;</span><span class="pl-c1">String</span><span class="pl-k">&gt;</span>();
+        <span class="pl-c1">some.async.</span><span class="pl-c1">OtherMethod</span>(<span class="pl-c">/* some params */</span>, <span class="pl-k">function</span>(err,data){
           p.resolve(data);
         });
-      return p.promise();
+      <span class="pl-k">return</span> p.promise();
     }
 
-    public static function finalPromise(    myArg1 : /* return type of firstPromise */, 
-                    myArg2 : /* return type of secondPromise */
-                   ) : Promise&lt;/* return type here, such as "String"*/&gt; {
-      var p = new Deferred&lt;String&gt;();
-         // do something with the results
-        some.async.FinalMethod(myArg1, myArg2 , function(err,data){
-      // here is our final result
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">function</span> <span class="pl-en">finalPromise</span>(    myArg1 : <span class="pl-c">/* return type of firstPromise */</span>, 
+                    myArg2 : <span class="pl-c">/* return type of secondPromise */</span>
+                   ) : <span class="pl-c1">Promise</span><span class="pl-k">&lt;</span><span class="pl-c">/* return type here, such as "String"*/</span><span class="pl-k">&gt;</span> {
+      <span class="pl-k">var</span> p <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">Deferred</span><span class="pl-k">&lt;</span><span class="pl-c1">String</span><span class="pl-k">&gt;</span>();
+         <span class="pl-c">// do something with the results</span>
+        <span class="pl-c1">some.async.</span><span class="pl-c1">FinalMethod</span>(myArg1, myArg2 , <span class="pl-k">function</span>(err,data){
+      <span class="pl-c">// here is our final result</span>
           p.resolve(data);
         });
-      return p.promise();
+      <span class="pl-k">return</span> p.promise();
     }
 
-    // NOW YOU CAN USE YOUR PROMISES AS FOLLOWS : 
+    <span class="pl-c">// NOW YOU CAN USE YOUR PROMISES AS FOLLOWS : </span>
 
-    // TRIGGER YOUR FIRST PROMISE =&gt; try to fullfill 2 subpromises (parallel)
-    Promise.when(           
-      firstPromise(/* some args for this first promise */), 
-      secondPromise(/* some args for this second promise */)
+    <span class="pl-c">// TRIGGER YOUR FIRST PROMISE =&gt; try to fullfill 2 subpromises (parallel)</span>
+    <span class="pl-c1">Promise.</span>when(           
+      firstPromise(<span class="pl-c">/* some args for this first promise */</span>), 
+      secondPromise(<span class="pl-c">/* some args for this second promise */</span>)
     )
     .then(
-      // WHEN BOTH SUBPROMISES HAVE BEEN FULFILLED :
-      // TRIGGER 2ND PROMISE =&gt; gather fulfilled sub-promises results and process them
-      function(a,b) return finalPromise(a,b)
+      <span class="pl-c">// WHEN BOTH SUBPROMISES HAVE BEEN FULFILLED :</span>
+      <span class="pl-c">// TRIGGER 2ND PROMISE =&gt; gather fulfilled sub-promises results and process them</span>
+      <span class="pl-k">function</span>(a,b) <span class="pl-k">return</span> finalPromise(a,b)
     )
-    .then(function(b) {
-        trace("everything went ok. rainbow.");
-    });
-</code></pre>
+    .then(<span class="pl-k">function</span>(b) {
+        <span class="pl-k">trace</span>(<span class="pl-s"><span class="pl-pds">"</span>everything went ok. rainbow.<span class="pl-pds">"</span></span>);
+    });</pre></div>
 
 <p><strong>SAMPLE CODE : PARALLEL QUERIES USING PROMISES</strong></p>
 
-<pre><code>     // PARALLEL CALL SOME QUERIES USING SEQUELIZE PROMISES
-      var SPromise = Sequelize.Promise;
-      SPromise.map([
+<div class="highlight highlight-source-haxe-2"><pre>     <span class="pl-c">// PARALLEL CALL SOME QUERIES USING SEQUELIZE PROMISES</span>
+      <span class="pl-k">var</span> <span class="pl-en">SPromise</span> <span class="pl-k">=</span> <span class="pl-c1">Sequelize.Promise</span>;
+      <span class="pl-c1">SPromise.</span>map([
           sql1,
           sql2
-      ], function runQuery(query) {
-          return db.query(query);
-      }).then(function(result) {
-            // result now contains data from sql1 AND sql2 execution
-          trace(result);
-      });
-</code></pre>
+      ], <span class="pl-k">function</span> runQuery(query) {
+          <span class="pl-k">return</span> db.query(query);
+      }).then(<span class="pl-k">function</span>(result) {
+            <span class="pl-c">// result now contains data from sql1 AND sql2 execution</span>
+          <span class="pl-k">trace</span>(result);
+      });</pre></div>
 
 <h1>
 <a id="end-to-end-tests" class="anchor" href="#end-to-end-tests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>End-to-End TESTS</h1>
