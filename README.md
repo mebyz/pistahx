@@ -18,7 +18,7 @@ pistahx-app
 ```
 git clone https://github.com/mebyz/pistahx-app.git
 
-cd pistax-app/
+cd pistahx-app/
 
 ./prepare.sh
 
@@ -40,7 +40,7 @@ gulp run
 ```
 git clone https://github.com/mebyz/pistahx-app.git
 
-cd pistax-app/
+cd pistahx-app/
 
 docker build -f Dockerfile.build -t pistahx/build .
 
