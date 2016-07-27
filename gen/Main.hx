@@ -278,6 +278,19 @@ class Main {
     }
   }
 
+  public static function initAuthStrategy (conf : Dynamic, app: Dynamic) {
+  	switch (getConfKey(conf, 'AUTH')) {
+    	case None: {
+    	  trace("#app : no auth strategy defined");
+    	}
+    	case Some(s): {
+  		  var auth = conf.get('AUTH');
+        trace('#app : using auth system :' + auth);
+  		}
+  	}
+
+  }
+
   public static function initJWT (conf : Dynamic, app: Dynamic, redisClient : Dynamic) {
 
       switch (getConfKey(conf, 'JWT_SECRET')) {
@@ -520,6 +533,9 @@ class Main {
 
       // INIT CORS (optionnal)
       initCORS(conf, app);
+
+      // INIT AUTH (optionnal)
+      initAuthStrategy(conf, app);
 
       // INIT JWT (optionnal)
       initJWT(conf, app, redisClient);
