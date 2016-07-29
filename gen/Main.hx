@@ -17,6 +17,9 @@ using Lambda;
 using thx.Nulls;
 using thx.Functions;
 
+
+using Auth;
+
 import Business;    // business logic goes and stays here
 
 
@@ -28,7 +31,14 @@ extern class PistahxRequest extends js.npm.express.Request{
     public var pipe: Dynamic;
     public var busboy: Dynamic;
     public var url: Dynamic;
+    public var login: Dynamic;
+    public var uid : Int;
 }
+
+extern class PistahxResponse extends js.npm.express.Response{
+    public var express_redis_cache_name : String;
+}
+
 
 typedef ApiBinding = {
     site            : String, 
@@ -58,9 +68,13 @@ class Main {
   private static var aws          = Node.require('aws-sdk');
   private static var http         = Node.require('http');
 
-  private static var busboy       = require('connect-busboy');
-  private static var path         = require('path');
+  private static var busboy       = Node.require('connect-busboy');
+  private static var path         = Node.require('path');
+
+  private static var JwtHandler   = Node.require('jwt-simple');
  
+  private static var mauthHandler: Dynamic;
+
   private static var options = {
     controllers: './',
     useStubs: false
@@ -278,17 +292,131 @@ class Main {
     }
   }
 
-  public static function initAuthStrategy (conf : Dynamic, app: Dynamic) {
-  	switch (getConfKey(conf, 'AUTH')) {
-    	case None: {
-    	  trace("#app : no auth strategy defined");
-    	}
-    	case Some(s): {
-  		  var auth = conf.get('AUTH');
-        trace('#app : using auth system :' + auth);
-  		}
-  	}
 
+
+  public static function initAuthStrategy (conf : Dynamic, app: Dynamic, db: Dynamic) {
+
+    var authHandler = function(req: PistahxRequest, res: Response, next: MiddlewareNext) {};
+    switch (getConfKey(conf, 'AUTH')) {
+      case None: {
+        trace("#app : no auth strategy defined");
+      }   
+      case Some(s): {
+        var auth = conf.get('AUTH');
+        trace('#app : using auth system : ' + auth);
+
+        var auth = new Auth(db);
+
+        var BasicStrategy = Node.require('passport-http').BasicStrategy;
+        var JwtStrategy = Node.require('passport-jwt').Strategy;
+        var ExtractJwt = Node.require('passport-jwt').ExtractJwt;
+        
+        var fBasic = function(username, password, done) {
+
+            trace("login : " + username + " " + password);
+
+            var resUser : Dynamic;
+            // AUTH HERE
+            auth.secure(username,password).then(function(r){
+                if (r == false) {
+                  resUser = false;
+                  done(null, resUser);
+
+                } else {
+                  // GENERATE JWT HERE
+                  trace("will generate JWT here");
+                  var payload = { id: '123',
+                                  name: username,
+                                  exp: Date.now().getTime()+3600
+                                };
+                  var secret = conf.get('AUTH_SECRET');
+                   
+                  // encode 
+                  var token = JwtHandler.encode(payload, secret);
+                  var resUser = {id :username,token:token};
+                  trace(resUser);
+                  done(null, resUser);
+                }
+            });
+
+        };
+
+        var fJWT = function(jwt_payload, done) {
+            trace("token:"+jwt_payload);
+            var user = {id :123};
+            done(null, user);
+            
+        };
+
+        passport.use('basic', untyped __js__('new BasicStrategy(fBasic)'));
+        
+        var opts : Dynamic = {};
+        opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+        opts.secretOrKey = conf.get('AUTH_SECRET');
+
+        passport.use('jwt', untyped __js__('new JwtStrategy(opts, fJWT)'));
+
+        app.use(passport.initialize());
+
+        authHandler = function(req: PistahxRequest, res: Response, next: MiddlewareNext) {
+          
+          var err = '';
+
+          if (untyped __js__("req1.headers.authorization == undefined")) {
+            err= 'Unauthorized!';
+          }  
+          
+          if (err != '') {
+            trace(err);
+            res.status(401).send(err);
+            return;
+          }
+
+          if (req.headers.authorization.indexOf("Basic ")!=-1) {
+              
+              // use basic auth and generate JWT
+              passport.authenticate('basic',{ session: false },
+                function(err, user, info) {
+                    trace('basic auth custom callback');
+
+                    if (err) { return next(err); }
+                    if (!user) { 
+                      res.status(401).send(err);
+                      res.end();
+                      return;
+                    } else {
+                      var u : Dynamic = user;
+                      req.uid=u.id;
+                      return next();
+                    }
+                })(req,res,next);
+          } else {
+              // use JWT
+              passport.authenticate('jwt', { session: false },
+                function(err, user, info) {
+                    trace('jwt auth custom callback');
+                    if (err) { return next(err); }
+                    if (!user) { 
+                      res.status(401).send(err);
+                      res.end();
+                      return;
+                    } else {
+                      var u : Dynamic = user;
+                      req.uid=u.id;
+                      return next();
+                    }
+                }
+              )(req,res,next);
+          }          
+        };
+
+
+        app.get('/testauth', authHandler);       
+      }
+    }
+
+    mauthHandler = authHandler;
+  
   }
 
   public static function initJWT (conf : Dynamic, app: Dynamic, redisClient : Dynamic) {
@@ -398,7 +526,9 @@ class Main {
           return function(req: PistahxRequest, res: Response, next : MiddlewareNext) { next(); }
         }
         case Some(s): {
-          
+
+          return function(req: PistahxRequest, res: Response, next : MiddlewareNext) { next(); }
+          /*
           trace('#app : using Passport GAuth');    
           var gClientId = conf.get('GOOGLE_CLIENT_ID');
           var gClientSecret = conf.get('GOOGLE_CLIENT_SECRET');
@@ -462,6 +592,7 @@ class Main {
               res.redirect("/"); 
             }
           };
+          */
         }
     }
   }
@@ -535,7 +666,7 @@ class Main {
       initCORS(conf, app);
 
       // INIT AUTH (optionnal)
-      initAuthStrategy(conf, app);
+      initAuthStrategy(conf, app, db);
 
       // INIT JWT (optionnal)
       initJWT(conf, app, redisClient);
@@ -552,8 +683,8 @@ class Main {
       // COMPANION WEBSITE
       app.use('/site', websiteAuth , new js.npm.express.Static(dn+'/site'));
 
-      app.use(BodyParser.json());
-      app.use(BodyParser.urlencoded({extended: true}));
+      //app.use(BodyParser.json());
+      //app.use(BodyParser.urlencoded({extended: true}));
       
       // SWAGGER API DOC
       app.use(
