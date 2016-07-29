@@ -37,16 +37,17 @@
     "paybox": "0.0.8",
     "passport": "*",
     "passport-google-oauth": "*",
-    "passport-http": "^0.3.0",
-    "passport-jwt": "^2.1.0",
+    "passport-http": "0.3.0",
+    "passport-jwt": "2.1.0",
+    "jwt-simple": "0.5.0",
     "jwt-redis-session": "1.0.4",
-    "aws-sdk": "^2.3",
+    "aws-sdk": "2.3",
     "connect-busboy": "0.0.2"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-prompt": "^0.2.0",
-    "gulp-shell": "^0.5.2",
-    "gulp-util": "^3.0.7"
+    "gulp": "3.9.1",
+    "gulp-prompt": "0.2.0",
+    "gulp-shell": "0.5.2",
+    "gulp-util": "3.0.7"
    }
 }
