@@ -387,6 +387,11 @@ class Main {
                     } else {
                       var u : Dynamic = user;
                       req.uid=u.id;
+                      
+                      // SET TOKEN HERE ! clients should store this token &
+                      // then use it when they quey the api by using header "Authorization: JWT [TOKEN]"
+                      res.setHeader("Token", u.token);
+
                       return next();
                     }
                 })(req,res,next);
