@@ -399,6 +399,7 @@ class Main {
                       // SET TOKEN HERE ! clients should store this token &
                       // then use it when they quey the api by using header "Authorization: JWT [TOKEN]"
                       res.setHeader("Token", u.token);
+                      res.setHeader('access-control-expose-headers','Token');
 
                       return next();
                     }
