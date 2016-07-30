@@ -363,7 +363,15 @@ class Main {
           var err = '';
 
           if (untyped __js__("req1.headers.authorization == undefined")) {
-            err= 'Unauthorized!';
+            switch (getConfKey(conf, 'AUTH_FALLBACK_HEADER')) {
+              case None: {
+                  err= 'Unauthorized!';
+              }   
+              case Some(s): {
+                err= '';
+                req.headers.authorization = Reflect.field(req.headers, s);
+              } 
+            }
           }  
           
           if (err != '') {
