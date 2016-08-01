@@ -56,6 +56,13 @@ typedef Operation = {
     ?operationId    : String
 }
   
+typedef User = {
+    id              : Int,
+    name            : String,
+    ?token          : String,
+    ?regen          : Int
+}
+
 class Main {
 
   private static var initDbCache  = Node.require('sequelize-redis-cache');
@@ -315,11 +322,11 @@ class Main {
 
             trace("login : " + username + " " + password);
 
-            var resUser : Dynamic;
+            var resUser : User;
             // AUTH HERE
             auth.secure(username,password).then(function(r){
                 if (r == -1) {
-                  resUser = false;
+                  resUser = { id: -1, name: ''};
                   done(null, resUser);
 
                 } else {
@@ -334,7 +341,7 @@ class Main {
                    
                   // encode 
                   var token = JwtHandler.encode(payload, secret);
-                  var resUser = {id :r,name:username, token:token};
+                  var resUser = {id :r,name:username, token:token, regen:0};
                   done(null, resUser);
                 }
             });
@@ -342,8 +349,25 @@ class Main {
         };
 
         var fJWT = function(jwt_payload, done) {
-            var user = {id :jwt_payload.id};
-            done(null, user);
+            var user : User = { id :jwt_payload.id, name:jwt_payload.name, regen:0};
+            console.log(Std.parseInt(jwt_payload.exp)-Std.parseInt(Std.string(Date.now().getTime()/1000))+'secs');
+            if (Std.parseInt(jwt_payload.exp)-Std.parseInt(Std.string(Date.now().getTime()/1000)) < 30) {
+                var payload = { id: jwt_payload.id,
+                                  name: jwt_payload.name,
+                                  exp: Std.parseInt(Std.string(Date.now().getTime()/1000))+Std.parseInt(conf.get('AUTH_TTL'))
+                                };
+                  trace(payload);
+                  var secret = conf.get('AUTH_SECRET');
+                   
+                  // encode 
+                  var token = JwtHandler.encode(payload, secret);
+                  var resUser : User = {id :jwt_payload.id, name:jwt_payload.name, token:token, regen:1};
+                  done(null, resUser);
+            }
+            else {
+              done(null, user);
+            }
+            
         };
 
         passport.use('basic', untyped __js__('new BasicStrategy(fBasic)'));
@@ -415,6 +439,11 @@ class Main {
                     } else {
                       var u : Dynamic = user;
                       req.uid=u.id;
+                      // reset token here 
+                      if (u.regen == 1) {
+                        res.setHeader("Token", u.token);
+                        res.setHeader('access-control-expose-headers','Token');
+                      }
                       return next();
                     }
                 }
