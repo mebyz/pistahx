@@ -318,23 +318,23 @@ class Main {
             var resUser : Dynamic;
             // AUTH HERE
             auth.secure(username,password).then(function(r){
-                if (r == false) {
+                if (r == -1) {
                   resUser = false;
                   done(null, resUser);
 
                 } else {
                   // GENERATE JWT HERE
                   trace("will generate JWT here");
-                  var payload = { id: '123',
+                  var payload = { id: r,
                                   name: username,
-                                  exp: Date.now().getTime()+3600
+                                  exp: Std.parseInt(Std.string(Date.now().getTime()/1000))+Std.parseInt(conf.get('AUTH_TTL'))
                                 };
+                  trace(payload);
                   var secret = conf.get('AUTH_SECRET');
                    
                   // encode 
                   var token = JwtHandler.encode(payload, secret);
-                  var resUser = {id :username,token:token};
-                  trace(resUser);
+                  var resUser = {id :r,name:username, token:token};
                   done(null, resUser);
                 }
             });
@@ -342,10 +342,8 @@ class Main {
         };
 
         var fJWT = function(jwt_payload, done) {
-            trace("token:"+jwt_payload);
-            var user = {id :123};
+            var user = {id :jwt_payload.id};
             done(null, user);
-            
         };
 
         passport.use('basic', untyped __js__('new BasicStrategy(fBasic)'));
