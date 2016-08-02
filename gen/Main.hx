@@ -724,8 +724,8 @@ class Main {
       // COMPANION WEBSITE
       app.use('/site', websiteAuth , new js.npm.express.Static(dn+'/site'));
 
-      //app.use(BodyParser.json());
-      //app.use(BodyParser.urlencoded({extended: true}));
+      app.use(BodyParser.json());
+      app.use(BodyParser.urlencoded({extended: true}));
       
       // SWAGGER API DOC
       app.use(
