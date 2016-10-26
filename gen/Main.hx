@@ -736,7 +736,7 @@ class Main {
         }
       );
 
-      app.use('/openapi', new js.npm.express.Static(dn+'/doc'));
+      app.use('/openapi', new js.npm.express.Static(dn+'/doc/dist'));
       app.use('/haxedoc', new js.npm.express.Static(dn+'/pages'));
       app.use('/api.yaml', new js.npm.express.Static(dn+'/api.yaml'));
 
